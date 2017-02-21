@@ -4,7 +4,7 @@
 \alias{sparseAssay}
 \alias{denseAssay}
 \alias{disjointAssay}
-\title{Create a sparse representation of the assay data.}
+\title{Create simplified representation of ragged assay data.}
 \usage{
 sparseAssay(x, i = 1, withDimnames = TRUE)
 
@@ -13,7 +13,7 @@ denseAssay(x, i = 1, withDimnames = TRUE)
 disjointAssay(x, simplify, i = 1, withDimnames = TRUE)
 }
 \arguments{
-\item{x}{RaggedExperiment}
+\item{x}{\code{RaggedExperiment}}
 
 \item{i}{integer(1) or character(1) name of assay to be
 transformed.}
@@ -29,7 +29,7 @@ are always manufactured for \code{denseAssay()} and
     ranges overlapping each disjoint range. For instance, to use
     the \code{simplify=mean} of overlapping ranges, where ranges
     are characterized by integer-valued scores, the entries are
-    calculated as , \preformatted{
+    calculated as \preformatted{
                     a
     original: |-----------|
                         b
@@ -57,7 +57,7 @@ are always manufactured for \code{denseAssay()} and
 }
 \description{
 These methods transform \code{assay()} from the
-    default (i.e., \code{sparseAssay()} representation to various
+    default (i.e., \code{sparseAssay()}) representation to various
     forms of more dense representation. \code{denseAssay()}
     collapses identical ranges across samples into a single
     row. \code{disjoinAssay()} creates disjoint (non-overlapping)

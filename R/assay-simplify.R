@@ -18,10 +18,10 @@
 
 #' @rdname assay-simplify
 #'
-#' @title Create a sparse representation of the assay data.
+#' @title Create simplified representation of ragged assay data.
 #'
 #' @description These methods transform \code{assay()} from the
-#'     default (i.e., \code{sparseAssay()} representation to various
+#'     default (i.e., \code{sparseAssay()}) representation to various
 #'     forms of more dense representation. \code{denseAssay()}
 #'     collapses identical ranges across samples into a single
 #'     row. \code{disjoinAssay()} creates disjoint (non-overlapping)
@@ -29,7 +29,7 @@
 #'     user-specified manner, and returns a matrix of disjoint regions
 #'     x samples.
 #'
-#' @param x RaggedExperiment
+#' @param x \code{RaggedExperiment}
 #'
 #' @param i integer(1) or character(1) name of assay to be
 #'     transformed.
