@@ -3,6 +3,7 @@
 export(RaggedExperiment)
 export(denseAssay)
 export(disjointAssay)
+export(reduceAssay)
 export(sparseAssay)
 exportMethods("[")
 exportMethods(assay)
