@@ -24,7 +24,8 @@ reduceAssay(x, query, weightedmean)
 
     ## TCGA Multi-assay experiment to RaggedExperiment
     url <- "http://s3.amazonaws.com/multiassayexperiments/accMAEO.rds"
-    download.file(url, fl <- tempfile())
+    ## download.file(url, fl <- tempfile())
+    ## fl <- "accMAEO.rds"
     mae <- readRDS(fl)[, , c("RNASeq2GeneNorm", "CNASNP", "Mutations")]
 
     ## genomic coordinates
