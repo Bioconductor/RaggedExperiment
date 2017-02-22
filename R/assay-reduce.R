@@ -50,6 +50,8 @@
 reduceAssay <-
     function(x, query, simplify, i=1, withDimnames=TRUE)
 {
+    if (missing(i) && ncol(.mcols(x)) == 0)
+        return(matrix(NA, 0, 0))
     i <- .assay_i(x, i)
     mcol <- .mcols(x)[[i]][.rowidx(x)]
     dim <- .dim(x)
@@ -69,7 +71,7 @@ reduceAssay <-
     )
     qranges <- query[row]
                    
-    group <- (row - 1L) * max(col) + col
+    group <- (row - 1L) * max(col, 0) + col # 'max(col, 0)' for 0-length col
     group <- match(group, unique(group)) # 'sorted'
 
     result <- simplify(
