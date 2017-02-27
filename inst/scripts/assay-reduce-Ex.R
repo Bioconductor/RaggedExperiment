@@ -7,12 +7,12 @@ query <- GRanges(c("A:1-2", "A:4-5", "B:1-5"))
 weightedmean <- function(scores, ranges, qranges)
     ## weighted average score per query range
     sum(scores * width(ranges)) / sum(width(ranges))
-reduceAssay(x, query, weightedmean)
+qreduceAssay(x, query, weightedmean)
 
 \dontrun{
     ##
-    ## Extended example: non-silent mutations, summarized by
-    ## genic region
+    ## Extended example: non-silent mutations, summarized by genic
+    ## region
     ##
 
     suppressPackageStartupMessages({
@@ -33,13 +33,14 @@ reduceAssay(x, query, weightedmean)
     gn <- keepStandardChromosomes(granges(gn), pruning.mode="coarse")
     seqlevelsStyle(gn) <- "NCBI"
 
-    ## reduce mutations, marking any genomic range with non-silent mutation as FALSE
+    ## reduce mutations, marking any genomic range with non-silent
+    ## mutation as FALSE
     nonsilent <- function(scores, ranges, qranges)
         any(scores != "Silent")
     re <- as(mae[["Mutations"]], "RaggedExperiment")
-    mutations <- reduceAssay(re, gn, nonsilent, "Variant_Classification")
+    mutations <- qreduceAssay(re, gn, nonsilent, "Variant_Classification")
 
     ## reduce copy number
     re <- as(mae[["CNASNP"]], "RaggedExperiment")
-    cn <- reduceAssay(re, gn, weightedmean, "Segment_Mean")
+    cn <- qreduceAssay(re, gn, weightedmean, "Segment_Mean")
 }
