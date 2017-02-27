@@ -1,21 +1,20 @@
-# TODO
+# TODO: Naming
 
-- Implement 'simplify=' argument to assay() (Martin)
-  - disjoint
-  - non-disjoint
-- Implement CNAssay-class (Martin)
-  - No rowData, colData, metadata
-  - Only a single mcol() -- can be treated like a matrix()
-  - To be used in, e.g., SummarizedExperiment()
-- Rename package: 
+- `*Assay()` return matrix-like representations of data
 
-    RaggedExperiment
-    RangedRaggedAssay
-    CopyNumberExperiment
-    IntervalExperiment
-    SparseSummarizedExperiment
-    SparseExperiment
-    CopyNumberIntervals
-    MutationExperiment
+        rowRanges(): concatenated GRanges from each sample
+        nrow(): length(rowRanges())
 
-    RangedAssay
+        sparseAssay(re) -- nrow(re) x ncol(re) (assay(); cannonical representation)
+        compactAssay(re) -- length(unique(rowRanges(re))) x ncol(re)
+            - ranges unique within a sample
+        disjoinAssay(re, simplify) -- length(disjoint(rowRanges(re))) x ncol(re)
+            - any ranges
+        qreduceAssay(re, query, simplify)
+        
+- `*SummarizedExperiment()` return *SummarizedExperiment objects
+
+        sparseSummarizedExperiment(re)
+        compactSummarizedExperiment(re)
+        disjointSummarizedExperiment(re, simplify)
+        qreducedSummarizedExperiment(re, query, simplify)
