@@ -10,10 +10,8 @@ weightedmean <- function(scores, ranges, qranges)
 qreduceAssay(x, query, weightedmean)
 
 \dontrun{
-    ##
     ## Extended example: non-silent mutations, summarized by genic
     ## region
-    ##
 
     suppressPackageStartupMessages({
         library(TxDb.Hsapiens.UCSC.hg19.knownGene)
@@ -23,24 +21,28 @@ qreduceAssay(x, query, weightedmean)
     })
 
     ## TCGA Multi-assay experiment to RaggedExperiment
+
     url <- "http://s3.amazonaws.com/multiassayexperiments/accMAEO.rds"
     ## download.file(url, fl <- tempfile())
     ## fl <- "accMAEO.rds"
     mae <- readRDS(fl)[, , c("RNASeq2GeneNorm", "CNASNP", "Mutations")]
 
     ## genomic coordinates
+
     gn <- genes(TxDb.Hsapiens.UCSC.hg19.knownGene)
     gn <- keepStandardChromosomes(granges(gn), pruning.mode="coarse")
     seqlevelsStyle(gn) <- "NCBI"
 
     ## reduce mutations, marking any genomic range with non-silent
     ## mutation as FALSE
+
     nonsilent <- function(scores, ranges, qranges)
         any(scores != "Silent")
     re <- as(mae[["Mutations"]], "RaggedExperiment")
     mutations <- qreduceAssay(re, gn, nonsilent, "Variant_Classification")
 
     ## reduce copy number
+
     re <- as(mae[["CNASNP"]], "RaggedExperiment")
     cn <- qreduceAssay(re, gn, weightedmean, "Segment_Mean")
 }

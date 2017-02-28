@@ -39,7 +39,7 @@
 #'     manufactured with \code{as.character(rowRanges(x))}; rownames
 #'     are always manufactured for \code{compactAssay()} and
 #'     \code{disjoinAssay()}.
-#' 
+#'
 #' @return \code{sparseAssay()} returns a matrix() with dimensions
 #'     \code{dim(x)}. Elements contain the assay value for the ith
 #'     range and jth sample.
@@ -67,10 +67,10 @@ sparseAssay <- function(x, i = 1, withDimnames = TRUE) {
 }
 
 #' @rdname assay-functions
-#' 
+#'
 #' @return \code{compactAssay()}: Samples with identical range are placed
 #'     in the same row. Non-disjoint ranges are NOT collapsed.
-#' 
+#'
 #' @export
 compactAssay <- function(x, i = 1, withDimnames = TRUE) {
     i <- .assay_i(x, i)
@@ -85,7 +85,7 @@ compactAssay <- function(x, i = 1, withDimnames = TRUE) {
         rev <- match(ugr, gr)
         dimnames[[1]] <- dimnames[[1]][rev]
     }
-    
+
     na <- as(NA, class(mcol))
     m <- matrix(
         na, nrow=length(ugr), ncol=dim[[2]],
@@ -119,7 +119,7 @@ compactAssay <- function(x, i = 1, withDimnames = TRUE) {
 #'     values <- IntegerList(a, c(a, b), b)
 #'     simplify(values)
 #'     }
-#' 
+#'
 #' @return \code{disjoinAssay()}: A matrix with number of rows equal
 #'     to number of disjoint ranges across all samples. Elements of
 #'     the matrix are summarized by applying \code{simplify()} to
@@ -127,6 +127,7 @@ compactAssay <- function(x, i = 1, withDimnames = TRUE) {
 #'
 #' @export
 disjoinAssay <- function(x, simplify, i = 1, withDimnames=TRUE) {
+    stopifnot_simplify_ok(simplify, nargs=1L)
     i <- .assay_i(x, i)
     mcol <- .mcols(x)[[i]][.rowidx(x)]
     dim <- .dim(x)
@@ -189,7 +190,7 @@ disjoinAssay <- function(x, simplify, i = 1, withDimnames=TRUE) {
 #'         \item{\code{qrange}} A \code{GRanges} instance with the
 #'              same length as \code{score}, providing the query range
 #'              to which the corresponding scores apply.
-#' 
+#'
 #'     }
 #'
 #' @return \code{qreduceAssay()} returns a matrix() with dimensions
@@ -197,8 +198,8 @@ disjoinAssay <- function(x, simplify, i = 1, withDimnames=TRUE) {
 #'     values for the ith query range and jth sample, summarized
 #'     according to the function \code{simplify}.
 #'
-#' @example inst/scripts/assay-reduce-Ex.R
-#' 
+#' @example inst/scripts/assay-functions-Ex.R
+#'
 #' @import GenomicRanges
 #' @export
 qreduceAssay <-
@@ -206,10 +207,8 @@ qreduceAssay <-
 {
     if (missing(i) && ncol(.mcols(x)) == 0)
         return(matrix(NA, 0, 0))
+    stopifnot_simplify_ok(simplify, 3L)
     i <- .assay_i(x, i)
-    nms <- names(formals(simplify))
-    if ((length(nms) < 3) && !("..." %in% nms))
-        stop("'simplify()' must accept three arguments")
 
     mcol <- .mcols(x)[[i]][.rowidx(x)]
     dim <- .dim(x)
@@ -230,7 +229,7 @@ qreduceAssay <-
         start=pmax(start(qranges), start(subject)),
         end=pmin(end(qranges), end(subject))
     )
-                   
+
     group <- (row - 1L) * max(col, 0) + col # 'max(col, 0)' for 0-length col
     group <- match(group, unique(group)) # 'sorted'
 
