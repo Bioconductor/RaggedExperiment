@@ -46,13 +46,13 @@ setValidity2("RaggedExperiment", .valid.RaggedExperiment)
 #'    respectively) with optional metadata columns where \code{i} or \code{j}
 #'    can be missing, an NA-free logical, numeric, or character vector.
 #'
-#' @section Coercion: 
+#' @section Coercion:
 #'
 #' Coercion possible from
 #' \link[MultiAssayExperiment]{RangedRaggedAssay} to
 #' RaggedExperiment. Here \code{object} represents a
 #' \code{RangedRaggedAssay}: \code{as(object, "RaggedExperiment")}
-#' 
+#'
 #' @param ... Constructor: GRanges, list of GRanges, or GRangesList OR
 #'     assay: Additional arguments for assay. See details for more information.
 #' @param colData A \code{\link{DataFrame}} describing samples. Length of
@@ -63,6 +63,7 @@ setValidity2("RaggedExperiment", .valid.RaggedExperiment)
 #'
 #' @name RaggedExperiment-class
 #' @export RaggedExperiment
+#' @exportClass RaggedExperiment
 #' @aliases RaggedExperiment-class class:RaggedExperiment RaggedExperiment
 #' @import S4Vectors GenomicRanges SummarizedExperiment
 RaggedExperiment <- function(..., colData=DataFrame()) {
@@ -115,7 +116,7 @@ RaggedExperiment <- function(..., colData=DataFrame()) {
     assays <- .assays(x)
     list(names(unlist(assays, use.names=FALSE)), names(assays))
 }
-        
+
 .rowRanges <- function(x) {
     ranges <- unlist(.assays(x), use.names = FALSE)
     mcols(ranges) <- NULL
