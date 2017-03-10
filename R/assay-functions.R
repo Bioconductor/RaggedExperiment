@@ -16,7 +16,7 @@
     i
 }
 
-#' @rdname assay-functions
+#' @name assay-functions
 #'
 #' @title Create simplified representation of ragged assay data.
 #'
@@ -29,7 +29,7 @@
 #'     user-specified manner, and returns a matrix of disjoint regions
 #'     x samples.
 #'
-#' @param x \code{RaggedExperiment}
+#' @param x A \code{RaggedExperiment} object
 #'
 #' @param i integer(1) or character(1) name of assay to be
 #'     transformed.
@@ -40,11 +40,14 @@
 #'     are always manufactured for \code{compactAssay()} and
 #'     \code{disjoinAssay()}.
 #'
-#' @return \code{sparseAssay()} returns a matrix() with dimensions
-#'     \code{dim(x)}. Elements contain the assay value for the ith
-#'     range and jth sample.
+#' @param background (default NA) A value for the returned matrix after
+#' \code{*Assay} operations (default NA)
+#'
+#' @return \code{sparseAssay()}: A matrix() with dimensions
+#'     \code{dim(x)}. Elements contain the assay value for the \emph{i}th
+#'     range and \emph{j}th sample.
 #' @export
-sparseAssay <- function(x, i = 1, withDimnames = TRUE) {
+sparseAssay <- function(x, i = 1, withDimnames = TRUE, background = NA) {
     i <- .assay_i(x, i)
     mcol <- .mcols(x)[[i]]
     dim <- .dim(x)
@@ -56,7 +59,7 @@ sparseAssay <- function(x, i = 1, withDimnames = TRUE) {
         dimnames <- NULL
     }
 
-    na <- as(NA, class(mcol))
+    na <- as(background, class(mcol))
     m <- matrix(na, nrow = dim[[1]], ncol = dim[[2]], dimnames = dimnames)
     idx <- cbind(
         row = seq_len(dim[[1L]]),
@@ -72,7 +75,7 @@ sparseAssay <- function(x, i = 1, withDimnames = TRUE) {
 #'     in the same row. Non-disjoint ranges are NOT collapsed.
 #'
 #' @export
-compactAssay <- function(x, i = 1, withDimnames = TRUE) {
+compactAssay <- function(x, i = 1, withDimnames = TRUE, background = NA) {
     i <- .assay_i(x, i)
     mcol <- .mcols(x)[[i]][.rowidx(x)]
     dim <- .dim(x)
@@ -86,7 +89,7 @@ compactAssay <- function(x, i = 1, withDimnames = TRUE) {
         dimnames[[1]] <- dimnames[[1]][rev]
     }
 
-    na <- as(NA, class(mcol))
+    na <- as(background, class(mcol))
     m <- matrix(
         na, nrow=length(ugr), ncol=dim[[2]],
         dimnames=list(as.character(ugr), colnames(x))
@@ -102,9 +105,9 @@ compactAssay <- function(x, i = 1, withDimnames = TRUE) {
 
 #' @rdname assay-functions
 #'
-#' @param simplify A function operating on a \code{*List}, where the
-#'     elements of the list are all within-sample assay values from
-#'     ranges overlapping each disjoint range. For instance, to use
+#' @param simplify disjoinAssay: A function operating on a \code{*List},
+#'     where the elements of the list are all within-sample assay values
+#'     from ranges overlapping each disjoint range. For instance, to use
 #'     the \code{simplify=mean} of overlapping ranges, where ranges
 #'     are characterized by integer-valued scores, the entries are
 #'     calculated as \preformatted{
@@ -119,57 +122,8 @@ compactAssay <- function(x, i = 1, withDimnames = TRUE) {
 #'     values <- IntegerList(a, c(a, b), b)
 #'     simplify(values)
 #'     }
-#'
-#' @return \code{disjoinAssay()}: A matrix with number of rows equal
-#'     to number of disjoint ranges across all samples. Elements of
-#'     the matrix are summarized by applying \code{simplify()} to
-#'     assay values of overlapping ranges
-#'
-#' @export
-disjoinAssay <- function(x, simplify, i = 1, withDimnames=TRUE) {
-    stopifnot_simplify_ok(simplify, nargs=1L)
-    i <- .assay_i(x, i)
-    mcol <- .mcols(x)[[i]][.rowidx(x)]
-    dim <- .dim(x)
-
-    dj <- disjoin(rowRanges(x), with.revmap=TRUE)
-    map <- dj$revmap
-
-    mcol_idx <- unlist(map)
-    row <- rep(seq_along(map), lengths(map))
-    col <- rep(seq_len(dim[[2]]), lengths(.assays(x)))[.rowidx(x)][mcol_idx]
-    group <- (row - 1L) * max(col) + col
-    group <- match(group, unique(group)) # 'sorted'
-    result <- simplify(splitAsList(mcol[mcol_idx], group))
-    group <- !duplicated(group)
-
-    na <- as(NA, class(mcol))
-    m <- matrix(
-        na, nrow=length(dj), ncol=dim[[2]],
-        dimnames=list(as.character(dj), colnames(x))
-    )
-    idx <- cbind(row = row[group], col = col[group])
-    m[idx] <- result
-    m[order(dj), .colidx(x), drop=FALSE]
-}
-
-#' @rdname assay-functions
-#'
-#' @title Create a reduced representation of ragged assay data.
-#'
-#' @description This method transforms \code{assay()} from the default
-#'     (i.e., \code{sparseAssay()}) representation to a reduced
-#'     representation summarizing each original range overlapping
-#'     ranges in \code{query}. Reduction in each cell can be tailored
-#'     to indivdual needs using the \code{simplify} argument.
-#'
-#' @param x \code{RaggedExperiment}
-#'
-#' @param query \code{GRanges} providing regions over which reduction
-#'     is to occur.
-#'
-#' @param simply \code{function} accepting arguments \code{score},
-#'     \code{range}, and \code{qrange}:
+#'    qreduceAssay: A \code{function} accepting arguments
+#'     \code{score}, \code{range}, and \code{qrange}:
 #'
 #'     \itemize{
 #'
@@ -192,8 +146,54 @@ disjoinAssay <- function(x, simplify, i = 1, withDimnames=TRUE) {
 #'              to which the corresponding scores apply.
 #'
 #'     }
+#' @return \code{disjoinAssay()}: A matrix with number of rows equal
+#'     to number of disjoint ranges across all samples. Elements of
+#'     the matrix are summarized by applying \code{simplify()} to
+#'     assay values of overlapping ranges
 #'
-#' @return \code{qreduceAssay()} returns a matrix() with dimensions
+#' @export
+disjoinAssay <- function(x, simplify, i = 1, withDimnames = TRUE,
+                         background = NA) {
+    stopifnot_simplify_ok(simplify, nargs=1L)
+    i <- .assay_i(x, i)
+    mcol <- .mcols(x)[[i]][.rowidx(x)]
+    dim <- .dim(x)
+
+    dj <- disjoin(rowRanges(x), with.revmap=TRUE)
+    map <- dj$revmap
+
+    mcol_idx <- unlist(map)
+    row <- rep(seq_along(map), lengths(map))
+    col <- rep(seq_len(dim[[2]]), lengths(.assays(x)))[.rowidx(x)][mcol_idx]
+    group <- (row - 1L) * max(col) + col
+    group <- match(group, unique(group)) # 'sorted'
+    result <- simplify(splitAsList(mcol[mcol_idx], group))
+    group <- !duplicated(group)
+
+    na <- as(background, class(mcol))
+    m <- matrix(
+        na, nrow=length(dj), ncol=dim[[2]],
+        dimnames=list(as.character(dj), colnames(x))
+    )
+    idx <- cbind(row = row[group], col = col[group])
+    m[idx] <- result
+    m[order(dj), .colidx(x), drop=FALSE]
+}
+
+#' @rdname assay-functions
+#'
+#' @title Create a reduced representation of ragged assay data.
+#'
+#' @description This method transforms \code{assay()} from the default
+#'     (i.e., \code{sparseAssay()}) representation to a reduced
+#'     representation summarizing each original range overlapping
+#'     ranges in \code{query}. Reduction in each cell can be tailored
+#'     to indivdual needs using the \code{simplify} argument.
+#'
+#' @param query \code{GRanges} providing regions over which reduction
+#'     is to occur.
+#'
+#' @return \code{qreduceAssay()}: A matrix() with dimensions
 #'     \code{length(query) x ncol(x)}. Elements contain assay
 #'     values for the ith query range and jth sample, summarized
 #'     according to the function \code{simplify}.
@@ -203,7 +203,7 @@ disjoinAssay <- function(x, simplify, i = 1, withDimnames=TRUE) {
 #' @import GenomicRanges
 #' @export
 qreduceAssay <-
-    function(x, query, simplify, i=1, withDimnames=TRUE)
+    function(x, query, simplify, i = 1, withDimnames = TRUE, background = NA)
 {
     if (missing(i) && ncol(.mcols(x)) == 0)
         return(matrix(NA, 0, 0))
@@ -240,7 +240,7 @@ qreduceAssay <-
     )
     group <- !duplicated(group)
 
-    na <- as(NA, class(result))
+    na <- as(background, class(result))
     dimnames <- list(NULL, NULL)
     if (withDimnames)
         dimnames <- list(as.character(query), colnames(x))
