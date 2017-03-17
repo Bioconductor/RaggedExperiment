@@ -128,6 +128,22 @@ RaggedExperiment <- function(..., colData=DataFrame()) {
     mcols(ranges)
 }
 
+#' @describeIn RaggedExperiment set rownames
+#' @export
+setReplaceMethod("dimnames", c("RaggedExperiment", "list"), function(x, value) {
+    assays <- .assays(x)
+    colData <- colData(x)
+    names(assays) <- value[[2]]
+    rowRanges <- unlist(assays, use.names = FALSE)
+    names(rowRanges) <- value[[1]]
+    assays <- relist(rowRanges, assays)
+    rownames(colData) <- value[[2]]
+    mcols(assays) <- colData
+    BiocGenerics:::replaceSlots(x,
+                                assays = assays,
+                                check = FALSE)
+})
+
 #' @describeIn RaggedExperiment rowRanges accessor
 #' @return 'rowRanges' returns a \code{\link{GRanges}} object
 #'     summarizing ranges corresponding to \code{assay()} rows.

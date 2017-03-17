@@ -6,6 +6,7 @@
 \alias{RaggedExperiment-class}
 \alias{RaggedExperiment}
 \alias{class:RaggedExperiment}
+\alias{dimnames<-,RaggedExperiment,list-method}
 \alias{rowRanges,RaggedExperiment-method}
 \alias{dim,RaggedExperiment-method}
 \alias{dimnames,RaggedExperiment-method}
@@ -21,6 +22,8 @@
 \title{RaggedExperiment objects}
 \usage{
 RaggedExperiment(..., colData = DataFrame())
+
+\S4method{dimnames}{RaggedExperiment,list}(x) <- value
 
 \S4method{rowRanges}{RaggedExperiment}(x, ...)
 
@@ -163,6 +166,8 @@ The \code{RaggedExperiment} class is a container for
 }
 \section{Methods (by generic)}{
 \itemize{
+\item \code{dimnames<-}: set rownames
+
 \item \code{rowRanges}: rowRanges accessor
 
 \item \code{dim}: get dimensions (number of sample-specific row
@@ -212,7 +217,7 @@ In the following, 'x' represents a \code{RaggedExperiment} object:
 }
 
 \section{Coercion}{
- 
+
 
 Coercion possible from
 \link[MultiAssayExperiment]{RangedRaggedAssay} to
