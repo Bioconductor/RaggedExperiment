@@ -128,7 +128,8 @@ RaggedExperiment <- function(..., colData=DataFrame()) {
     mcols(ranges)
 }
 
-#' @describeIn RaggedExperiment set rownames
+#' @describeIn RaggedExperiment set dimension names as a \code{list}
+#' @param value A \code{list} of dimension names
 #' @export
 setReplaceMethod("dimnames", c("RaggedExperiment", "list"), function(x, value) {
     assays <- .assays(x)

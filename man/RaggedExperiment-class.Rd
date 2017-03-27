@@ -61,6 +61,8 @@ rowRanges must equal the number of rows in colData}
 
 \item{x}{A RaggedExperiment object.}
 
+\item{value}{A \code{list} of dimension names}
+
 \item{i}{logical(1), integer(1), or character(1) indicating the
 assay to be reported. For \code{[}, \code{i} can be any
 supported \code{Vector} object, e.g., \code{GRanges}.}
@@ -166,7 +168,7 @@ The \code{RaggedExperiment} class is a container for
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{dimnames<-}: set rownames
+\item \code{dimnames<-}: set dimension names as a \code{list}
 
 \item \code{rowRanges}: rowRanges accessor
 
