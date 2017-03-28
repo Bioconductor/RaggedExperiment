@@ -1,0 +1,89 @@
+---
+title: "RaggedExperiment"
+output:
+  BiocStyle::html_document:
+    toc: true
+vignette: |
+  %\VignetteIndexEntry{RaggedExperiment}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+The `r Biocpkg("RaggedExperiment")` package provides a flexible data
+representation for copy number, mutation and other ragged array schema for
+genomic location data. It aims to provide a framework for a set of samples
+that have differing numbers of genomic ranges.
+
+The `RaggedExperiment` class takes a `GRangesList` representation and provides
+a semblance of a rectangular dataset. Dimensions of the `RaggedExperiment`
+correspond to the number of ranges in the entire dataset and the number
+of samples represented in the data.
+
+# Constructing a `RaggedExperiment` object
+
+```{r, echo = FALSE}
+suppressPackageStartupMessages({
+    library(RaggedExperiment)
+    library(GenomicRanges)
+})
+```
+
+```{r, eval = FALSE}
+library(RaggedExperiment)
+```
+
+We start with a couple of `GRanges` objects each representing an individual
+sample: 
+
+```{r}
+sample1 <- GRanges(
+    c(GENEA = "chr1:1-10:-", GENEB = "chr1:11-18:+"),
+    score = 3:4)
+sample2 <- GRanges(
+    c(GENEC = "chr2:1-10:-", GENED = "chr2:11-18:+"),
+    score = 1:2)
+``` 
+
+Include column data `colData` to describe the samples:
+
+```{r}
+colDat <- DataFrame(id = 1:2)
+```
+
+## Using `GRanges` objects
+
+```{r}
+ragexp <- RaggedExperiment(sample1 = sample1,
+                           sample2 = sample2,
+                           colData = colDat)
+```
+
+Access the dimension names
+
+```{r}
+dimnames(ragexp)
+```
+
+## Using a `GRangesList` instance
+
+```{r}
+grl <- GRangesList(sample1 = sample1, sample2 = sample2)
+RaggedExperiment(grl, colData = colDat)
+```
+
+# *Assay methods
+
+It provides several different functions for representing ranged data in
+a rectangular matrix via the `*Assay` methods.
+
+## sparseAssay
+The most straightforward matrix representation of a `RaggedExperiment` will
+return a matrix of dimensions equal to the product of the number of ranges and
+samples.
+
+```{r}
+sparseAssay(ragexp)
+```
+
