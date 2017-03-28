@@ -1,0 +1,11 @@
+# RaggedExperiment
+
+## CHANGES IN VERSION 0.0.21
+
+### New Features
+
+* Software for copy number, mutation, and other ragged array data representations
+* `RaggedExperiment` class and basic methods: subsetting, dimnames, etc.
+* Assay methods expose a particular metadata column and creates a retangular matrix
+* Coerce functions from `RaggedExperiment` to `SummarizedExperiment` class available
+
