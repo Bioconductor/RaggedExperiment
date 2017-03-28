@@ -12,15 +12,17 @@ Description: This package provides a flexible representation of copy
     data provides a rectangular flat table interface to the user with
     range information in the rows and samples/specimen in the columns.
 License: Artistic-2.0
+biocViews: Infrastructure, DataRepresentation
 Depends:
     R (>= 3.4.0),
     GenomicRanges
 Imports:
-    S4Vectors,
-    methods,
-    SummarizedExperiment,
     BiocGenerics,
-    IRanges
+    IRanges,
+    methods,
+    S4Vectors,
+    stats,
+    SummarizedExperiment
 Suggests:
     testthat,
     MultiAssayExperiment
