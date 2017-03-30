@@ -1,18 +1,3 @@
-.assay_se_i <- function(x, i) {
-    if (length(assays(x)) == 0L)
-        stop("'length(assays(x))' is 0")
-    if (is.character(i)) {
-        i <- match(i, assayNames(x))
-    } else if (is.logical(i)) {
-        i <- which(i)
-    }
-    if (!isSingleNumber(i))
-        stop("'i' must be a single number")
-    if (i > length(assays(x)))
-        stop("'i' is greater than 'length(assays(x))'")
-    i
-}
-
 #' @rdname coerce-functions
 #'
 #' @title Create SummarizedExperiment representations by transforming
@@ -57,16 +42,17 @@
 sparseSummarizedExperiment <-
     function(x, i = 1, withDimnames=TRUE)
 {
-    i <- .assay_se_i(x, i)
-    assay <- assays(x)[[i]]
-    colData <- colData(x)
-    if (!withDimnames)
-        rownames(colData) <- NULL
-    rowRanges <- rowRanges(assay)
+    i <- .assay_i(x, i)
     name <- assayNames(x)[[i]]
-    
-    assay <- sparseAssay(assay, withDimnames=withDimnames)
+    assay <- sparseAssay(x, i, withDimnames=withDimnames)
     assay <- setNames(list(assay), name)
+
+    colData <- colData(x)
+    rowRanges <- rowRanges(x)
+    if (!withDimnames) {
+        names(rowRanges) <- rownames(colData) <- NULL
+    }
+
     SummarizedExperiment(assay, rowRanges=rowRanges, colData=colData)
 }
 
@@ -82,18 +68,19 @@ sparseSummarizedExperiment <-
 #' 
 #' @export
 compactSummarizedExperiment <-
-    function(x, i = 1, withDimnames=TRUE)
+    function(x, i = 1L, withDimnames=TRUE)
 {
-    i <- .assay_se_i(x, i)
-    assay <- assays(x)[[i]]
-    colData <- colData(x)
-    if (!withDimnames)
-        rownames(colData) <- NULL
-    rowRanges <- rowRanges(assay)
+    i <- .assay_i(x, i)
     name <- assayNames(x)[[i]]
-
-    assay <- compactAssay(assay, withDimnames=withDimnames)
+    assay <- compactAssay(x, i, withDimnames=withDimnames)
     assay <- setNames(list(assay), name)
+
+    colData <- colData(x)
+    rowRanges <- rowRanges(x)
+    if (!withDimnames) {
+        names(rowRanges) <- rownames(colData) <- NULL
+    }
+
     SummarizedExperiment(assay, rowRanges=rowRanges, colData=colData)
 }
 
@@ -112,16 +99,17 @@ disjoinSummarizedExperiment <-
 {
     stopifnot_simplify_ok(simplify, 1L)
 
-    i <- .assay_se_i(x, i)
-    assay <- assays(x)[[i]]
-    colData <- colData(x)
-    if (!withDimnames)
-        rownames(colData) <- NULL
-    rowRanges <- rowRanges(assay)
+    i <- .assay_i(x, i)
     name <- assayNames(x)[[i]]
-
-    assay <- disjoinAssay(assay, simplify, withDimnames=withDimnames)
+    assay <- disjoinAssay(x, simplify, i, withDimnames=withDimnames)
     assay <- setNames(list(assay), name)
+
+    colData <- colData(x)
+    rowRanges <- rowRanges(x)
+    if (!withDimnames) {
+        names(rowRanges) <- rownames(colData) <- NULL
+    }
+
     SummarizedExperiment(assay, rowRanges=rowRanges, colData=colData)
 }
 
@@ -138,17 +126,19 @@ qreduceSummarizedExperiment <-
     function(x, query, simplify, i = 1L, withDimnames=TRUE)
 {
     stopifnot_simplify_ok(simplify, 3L)
-
-    i <- .assay_se_i(x, i)
-    assay <- assays(x)[[i]]
-    colData <- colData(x)
-    if (!withDimnames)
-        rownames(colData) <- NULL
     if (missing(query))
-        query <- rowRanges(assay)
-    name <- assayNames(x)[[i]]
+        query <- rowRanges(x)
 
-    assay <- qreduceAssay(assay, query, simplify, withDimnames=withDimnames)
+    i <- .assay_i(x, i)
+    name <- assayNames(x)[[i]]
+    assay <- qreduceAssay(x, query, simplify, i, withDimnames=withDimnames)
     assay <- setNames(list(assay), name)
-    SummarizedExperiment(assay, rowRanges=query, colData=colData)
+
+    colData <- colData(x)
+    rowRanges <- rowRanges(x)
+    if (!withDimnames) {
+        names(rowRanges) <- rownames(colData) <- NULL
+    }
+
+    SummarizedExperiment(assay, rowRanges=rowRanges, colData=colData)
 }

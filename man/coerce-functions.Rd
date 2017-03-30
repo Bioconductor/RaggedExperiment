@@ -10,7 +10,7 @@
 \usage{
 sparseSummarizedExperiment(x, i = 1, withDimnames = TRUE)
 
-compactSummarizedExperiment(x, i = 1, withDimnames = TRUE)
+compactSummarizedExperiment(x, i = 1L, withDimnames = TRUE)
 
 disjoinSummarizedExperiment(x, simplify, i = 1L, withDimnames = TRUE)
 
