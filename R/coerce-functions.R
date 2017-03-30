@@ -27,6 +27,9 @@
 #' @param query \code{GRanges} provding regions over which reduction
 #'     is to occur.
 #'
+#' @param withDimnames \code{logical(1)} default TRUE. propagate
+#'     dimnames to SummarizedExperiment.
+#'
 #' @return All functions return \code{RangedSummarizedExperiment}.
 #'
 #' @return \code{sparseSummarizedExperiment} has \code{rowRanges()}
@@ -72,11 +75,13 @@ compactSummarizedExperiment <-
 {
     i <- .assay_i(x, i)
     name <- assayNames(x)[[i]]
-    assay <- compactAssay(x, i, withDimnames=withDimnames)
+    assay <- compactAssay(x, i)
+    rowRanges <- setNames(GRanges(rownames(assay)), rownames(assay))
+    if (!withDimnames)
+        assay <- unname(assay)
     assay <- setNames(list(assay), name)
 
     colData <- colData(x)
-    rowRanges <- rowRanges(x)
     if (!withDimnames) {
         names(rowRanges) <- rownames(colData) <- NULL
     }
@@ -101,11 +106,13 @@ disjoinSummarizedExperiment <-
 
     i <- .assay_i(x, i)
     name <- assayNames(x)[[i]]
-    assay <- disjoinAssay(x, simplify, i, withDimnames=withDimnames)
+    assay <- disjoinAssay(x, simplify, i)
+    rowRanges <- setNames(GRanges(rownames(assay)), rownames(assay))
+    if (!withDimnames)
+        assay <- unname(assay)
     assay <- setNames(list(assay), name)
 
     colData <- colData(x)
-    rowRanges <- rowRanges(x)
     if (!withDimnames) {
         names(rowRanges) <- rownames(colData) <- NULL
     }
@@ -131,11 +138,13 @@ qreduceSummarizedExperiment <-
 
     i <- .assay_i(x, i)
     name <- assayNames(x)[[i]]
-    assay <- qreduceAssay(x, query, simplify, i, withDimnames=withDimnames)
+    assay <- qreduceAssay(x, query, simplify, i)
+    rowRanges <- setNames(GRanges(rownames(assay)), rownames(assay))
+    if (!withDimnames)
+        assay <- unname(assay)
     assay <- setNames(list(assay), name)
 
     colData <- colData(x)
-    rowRanges <- rowRanges(x)
     if (!withDimnames) {
         names(rowRanges) <- rownames(colData) <- NULL
     }

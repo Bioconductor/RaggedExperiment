@@ -22,6 +22,9 @@ qreduceSummarizedExperiment(x, query, simplify, i = 1L, withDimnames = TRUE)
 \item{i}{\code{integer(1)}, \code{character(1)}, or
 \code{logical()} selecting the assay to be transformed.}
 
+\item{withDimnames}{\code{logical(1)} default TRUE. propagate
+dimnames to SummarizedExperiment.}
+
 \item{simplify}{\code{function} of 1 (for
 \code{disjoinSummarizedExperiment}) or 3 (for
 \code{qreduceSummarizedExperiment}) arguments, used to
