@@ -35,7 +35,7 @@ test_that("colData construction works", {
     colData <- DataFrame(x=1:2, row.names=LETTERS[1:2])
     re <- RaggedExperiment(grl, colData=colData)
     expect_true(validObject(re))
-    expect_identical(rownames(colData(re)), NULL) # removed
+    expect_identical(rownames(colData(re)), rownames(colData))
 
     # consistent out-of-order names(assays) / rownames(colData)
     grl <- GRangesList(B=GRanges(), A=GRanges())
@@ -46,10 +46,6 @@ test_that("colData construction works", {
 
     # inconsistent names(assays) / rownames(colData)
     grl <- GRangesList(A=GRanges(), B=GRanges())
-    colData <- DataFrame(x=1:2, row.names=LETTERS[2:3])
-    expect_error(RaggedExperiment(grl, colData=colData))
-
-    grl <- GRangesList(GRanges(), GRanges())
     colData <- DataFrame(x=1:2, row.names=LETTERS[2:3])
     expect_error(RaggedExperiment(grl, colData=colData))
 })

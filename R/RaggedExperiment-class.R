@@ -83,6 +83,8 @@ RaggedExperiment <- function(..., colData=DataFrame()) {
             } else {
                 colData <- colData[names(rowRanges), , drop=FALSE]
             }
+        } else {
+            names(rowRanges) <- rownames(colData)
         }
     }
     ans_colnames <- rownames(colData)
