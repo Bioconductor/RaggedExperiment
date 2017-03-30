@@ -6,10 +6,10 @@
 \alias{RaggedExperiment-class}
 \alias{RaggedExperiment}
 \alias{class:RaggedExperiment}
-\alias{dimnames<-,RaggedExperiment,list-method}
 \alias{rowRanges,RaggedExperiment-method}
 \alias{dim,RaggedExperiment-method}
 \alias{dimnames,RaggedExperiment-method}
+\alias{dimnames<-,RaggedExperiment,list-method}
 \alias{colData,RaggedExperiment-method}
 \alias{assay,RaggedExperiment,missing-method}
 \alias{assay,RaggedExperiment,ANY-method}
@@ -23,13 +23,13 @@
 \usage{
 RaggedExperiment(..., colData = DataFrame())
 
-\S4method{dimnames}{RaggedExperiment,list}(x) <- value
-
 \S4method{rowRanges}{RaggedExperiment}(x, ...)
 
 \S4method{dim}{RaggedExperiment}(x)
 
 \S4method{dimnames}{RaggedExperiment}(x)
+
+\S4method{dimnames}{RaggedExperiment,list}(x) <- value
 
 \S4method{colData}{RaggedExperiment}(x, ...)
 
@@ -168,15 +168,16 @@ The \code{RaggedExperiment} class is a container for
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{dimnames<-}: set dimension names as a \code{list}
-
 \item \code{rowRanges}: rowRanges accessor
 
 \item \code{dim}: get dimensions (number of sample-specific row
 ranges by number of samples)
 
-\item \code{dimnames}: get row (sample-specific) range names and sample
-names
+\item \code{dimnames}: get row (sample-specific) range names
+and sample names
+
+\item \code{dimnames<-}: set row (sample-specific) range names
+and sample names
 
 \item \code{colData}: get column data
 

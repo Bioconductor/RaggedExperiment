@@ -128,23 +128,6 @@ RaggedExperiment <- function(..., colData=DataFrame()) {
     mcols(ranges)
 }
 
-#' @describeIn RaggedExperiment set dimension names as a \code{list}
-#' @param value A \code{list} of dimension names
-#' @export
-setReplaceMethod("dimnames", c("RaggedExperiment", "list"), function(x, value) {
-    assays <- .assays(x)
-    colData <- colData(x)
-    names(assays) <- value[[2]]
-    rowRanges <- unlist(assays, use.names = FALSE)
-    names(rowRanges) <- value[[1]]
-    assays <- relist(rowRanges, assays)
-    rownames(colData) <- value[[2]]
-    mcols(assays) <- colData
-    BiocGenerics:::replaceSlots(x,
-                                assays = assays,
-                                check = FALSE)
-})
-
 #' @describeIn RaggedExperiment rowRanges accessor
 #' @return 'rowRanges' returns a \code{\link{GRanges}} object
 #'     summarizing ranges corresponding to \code{assay()} rows.
@@ -161,12 +144,32 @@ setMethod("dim", "RaggedExperiment", function(x) {
     c(length(.rowidx(x)), length(.colidx(x)))
 })
 
-#' @describeIn RaggedExperiment get row (sample-specific) range names and sample
-#'     names
+#' @describeIn RaggedExperiment get row (sample-specific) range names
+#'     and sample names
 #' @exportMethod dimnames
 setMethod("dimnames", "RaggedExperiment", function(x) {
     dimnames <- .dimnames(x)
     list(dimnames[[1]][.rowidx(x)], dimnames[[2]][.colidx(x)])
+})
+
+#' @describeIn RaggedExperiment set row (sample-specific) range names
+#'     and sample names
+#' @param value A \code{list} of dimension names
+#' @export
+setReplaceMethod("dimnames", c("RaggedExperiment", "list"),
+    function(x, value)
+{
+    assays <- .assays(x)
+    rowRanges <- unlist(assays, use.names = FALSE)
+    names(rowRanges) <- value[[1]]
+    assays <- relist(rowRanges, assays)
+    names(assays) <- value[[2]]
+
+    colData <- colData(x)
+    rownames(colData) <- value[[2]]
+    mcols(assays) <- colData
+
+    BiocGenerics:::replaceSlots(x, assays = assays, check = FALSE)
 })
 
 #' @describeIn RaggedExperiment get column data
