@@ -90,9 +90,11 @@ compactAssay <- function(x, i = 1, withDimnames = TRUE, background = NA) {
     }
 
     na <- as(background, class(mcol))
+    if (withDimnames)
+        dimnames <- list(as.character(ugr), colnames(x))
     m <- matrix(
         na, nrow=length(ugr), ncol=dim[[2]],
-        dimnames=list(as.character(ugr), colnames(x))
+        dimnames=dimnames
     )
     idx <- cbind(
         row = row,
