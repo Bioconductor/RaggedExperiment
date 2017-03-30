@@ -48,6 +48,27 @@ test_that("colData construction works", {
     grl <- GRangesList(A=GRanges(), B=GRanges())
     colData <- DataFrame(x=1:2, row.names=LETTERS[2:3])
     expect_error(RaggedExperiment(grl, colData=colData))
+
+    grl <- GRangesList(GRanges(), GRanges())
+    colData <- DataFrame(x=1:2, row.names=LETTERS[2:3])
+    expect_error(RaggedExperiment(grl, colData=colData))
+})
+
+test_that("colData() works", {
+    sample1 <- GRanges(c("chr1:1-10", "chr1:11-18"), score = 1:2)
+    sample2 <- GRanges(c("chr1:1-10", "chr2:11-18"), score = 3:4)
+    re <- RaggedExperiment(sample1, sample2)
+
+    colData <- DataFrame(x=1:2)[, FALSE]
+    expect_identical(colData(re), colData)
+
+    colData <- DataFrame(x=1:2)
+    re <- RaggedExperiment(sample1, sample2, colData=colData)
+    expect_identical(colData(re), colData)
+
+    colData <- DataFrame(x=1:2, row.names=LETTERS[1:2])
+    re <- RaggedExperiment(list(A=sample1, B=sample2), colData=colData)
+    expect_identical(colData(re), colData)
 })
 
 test_that("rowRanges() works", {
