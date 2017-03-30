@@ -8,19 +8,19 @@
 \title{Create SummarizedExperiment representations by transforming
     ragged assays to rectangular form.}
 \usage{
-sparseSummarizedExperiment(x, i = 1)
+sparseSummarizedExperiment(x, i = 1, withDimnames = TRUE)
 
-compactSummarizedExperiment(x, i = 1)
+compactSummarizedExperiment(x, i = 1, withDimnames = TRUE)
 
-disjoinSummarizedExperiment(x, simplify, i = 1L)
+disjoinSummarizedExperiment(x, simplify, i = 1L, withDimnames = TRUE)
 
-qreduceSummarizedExperiment(x, query, simplify, i = 1L)
+qreduceSummarizedExperiment(x, query, simplify, i = 1L, withDimnames = TRUE)
 }
 \arguments{
 \item{x}{\code{RaggedExperiment}}
 
-\item{i}{\code{integer(1)} or \code{character(1)} selecting the
-assay to be transformed.}
+\item{i}{\code{integer(1)}, \code{character(1)}, or
+\code{logical()} selecting the assay to be transformed.}
 
 \item{simplify}{\code{function} of 1 (for
 \code{disjoinSummarizedExperiment}) or 3 (for
