@@ -173,9 +173,15 @@ disjoinAssay <- function(x, simplify, i = 1, withDimnames = TRUE,
     group <- !duplicated(group)
 
     na <- as(background, class(mcol))
+    if (withDimnames) {
+        dimnames <- list(as.character(dj), colnames(x))
+    } else {
+        dimnames <- list(NULL, NULL)
+    }
+
     m <- matrix(
         na, nrow=length(dj), ncol=dim[[2]],
-        dimnames=list(as.character(dj), colnames(x))
+        dimnames=dimnames
     )
     idx <- cbind(row = row[group], col = col[group])
     m[idx] <- result

@@ -56,6 +56,12 @@ test_that("disjoinAssay() works", {
         )
     )
 
+    ## withDimnames
+    expect_identical(
+        dimnames(disjoinAssay(re, simplify=mean, withDimnames=FALSE)),
+        list(NULL, NULL)
+    )
+
     ## disjoint ranges one sample
     sample1 <- GRanges(c("chr1:1-10", "chr1:6-15"), score=1:2)
     sample2 <- GRanges(c("chr1:1-10"), score=3)
