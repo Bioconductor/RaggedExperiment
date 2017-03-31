@@ -40,8 +40,8 @@
 #'     are always manufactured for \code{compactAssay()} and
 #'     \code{disjoinAssay()}.
 #'
-#' @param background (default NA) A value for the returned matrix after
-#' \code{*Assay} operations (default NA)
+#' @param background A value (default NA) for the returned matrix after
+#' \code{*Assay} operations
 #'
 #' @return \code{sparseAssay()}: A matrix() with dimensions
 #'     \code{dim(x)}. Elements contain the assay value for the \emph{i}th

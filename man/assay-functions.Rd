@@ -29,8 +29,8 @@ manufactured with \code{as.character(rowRanges(x))}; rownames
 are always manufactured for \code{compactAssay()} and
 \code{disjoinAssay()}.}
 
-\item{background}{(default NA) A value for the returned matrix after
-\code{*Assay} operations (default NA)}
+\item{background}{A value (default NA) for the returned matrix after
+\code{*Assay} operations}
 
 \item{simplify}{disjoinAssay: A function operating on a \code{*List},
     where the elements of the list are all within-sample assay values
