@@ -95,6 +95,20 @@ dimnames(ragexp)
 colData(ragexp)
 ```
 
+# Subsetting
+
+## by dimension
+
+Subsetting a `RaggedExperiment` is akin to subsetting a `matrix` object. Rows
+correspond to genomic ranges and columns to samples or specimen. It is possible
+to subset using `integer`, `character`, and `logical` indices.
+
+## by genomic ranges
+
+The `overlapsAny` and `subsetByOverlaps` functionalities are available for use
+for `RaggedExperiment`. Please see the corresponding documentation in
+`RaggedExperiment` and `GenomicRanges`.
+
 # *Assay functions
 
 `RaggedExperiment` package provides several different functions for representing
@@ -141,16 +155,34 @@ _i_ th query range and the _j_ th sample, summarized according to the `simplify`
 functional argument.
 
 First we define our summary function that calculates a weighted average score
-per query range:
+per query range. _Note_ that there are three arguments to this function. Please
+see the documentation `?qreduceAssay` for more details.
 
 ```{r}
 weightedmean <- function(scores, ranges, qranges)
     sum(scores * width(ranges)) / sum(width(ranges))
 ```
 
+A call to `qreduceAssay` involves the `RaggedExperiment`, the `GRanges` query
+and the `simplify` functional argument. 
+
 ```{r}
 qreduceAssay(ragexp,
-             query = GRanges(c("chr1:1-10:-", "chr2:11-18:+")),
-             weightedmean)
+             query = GRanges(c("chr1:1-10:-", "chr2:11-18:+")), 
+             simplify = weightedmean)
 ```
 
+# Coercion
+
+The `RaggedExperiment` provides a family of parallel functions for coercing to
+the `SummarizedExperiment` class. By selecting a particular assay index (`i`), a
+parallel assay coercion method can be achieved. 
+
+Here is the list of function names: 
+
+* `sparseSummarizedExperiment`
+* `compactSummarizedExperiment`
+* `disjoinSummarizedExperiment`
+* `qreduceSummarizedExperiment`
+
+See the documentation for details. 
