@@ -1,5 +1,12 @@
 # RaggedExperiment
 
+## CHANGES IN VERSION 0.0.24
+
+### New features
+
+* `RaggedExperiment` vignette now available.
+* Submission to `Bioconductor/Contributions` issue tracker
+
 ## CHANGES IN VERSION 0.0.21
 
 ### New Features
