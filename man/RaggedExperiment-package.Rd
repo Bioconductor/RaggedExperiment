@@ -17,6 +17,13 @@ RaggedExperiment allows the user to represent, copy
     meaning that there may be a different number of ranges for each
     sample.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item Report bugs at \url{https://github.com/Bioconductor/RaggedExperiment/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Martin Morgan \email{martin.morgan@roswellpark.org}
 

@@ -1,6 +1,6 @@
 Package: RaggedExperiment
 Title: Representation of Sparse Experiments and Assays Across Samples
-Version: 0.0.25
+Version: 0.99.0
 Authors@R: c(
     person("Martin", "Morgan", email = "martin.morgan@roswellpark.org",
         role = c("aut", "cre")),
@@ -14,6 +14,7 @@ Description: This package provides a flexible representation of copy
 License: Artistic-2.0
 biocViews: Infrastructure, DataRepresentation
 BugReports: https://github.com/Bioconductor/RaggedExperiment/issues
+VignetteBuilder: knitr
 Depends:
     R (>= 3.4.0),
     GenomicRanges
@@ -25,6 +26,7 @@ Imports:
     stats,
     SummarizedExperiment
 Suggests:
+    knitr,
     testthat,
     MultiAssayExperiment
 LazyData: true

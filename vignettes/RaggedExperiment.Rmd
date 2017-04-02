@@ -1,12 +1,19 @@
 ---
 title: "RaggedExperiment"
-output:
-  BiocStyle::html_document:
-    toc: true
+author:
+- name: Martin Morgan
+  affiliation: Roswell Park Cancer Institute, Buffalo, NY
+- name: Marcel Ramos
+  affiliation: Roswell Park Cancer Institute, Buffalo, NY
+date: "`r BiocStyle::doc_date()`"
 vignette: |
   %\VignetteIndexEntry{RaggedExperiment}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document2:
+    toc_float: true
+Package: RaggedExperiment
 ---
 
 # Introduction
