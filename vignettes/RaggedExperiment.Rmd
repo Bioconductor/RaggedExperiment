@@ -192,4 +192,11 @@ Here is the list of function names:
 * `disjoinSummarizedExperiment`
 * `qreduceSummarizedExperiment`
 
-See the documentation for details. 
+See the documentation for details.
+
+# Session Information
+
+```{r}
+sessionInfo()
+```
+
