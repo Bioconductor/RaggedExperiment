@@ -16,6 +16,13 @@ output:
 Package: RaggedExperiment
 ---
 
+```{r, echo = FALSE}
+suppressPackageStartupMessages({
+    library(RaggedExperiment)
+    library(GenomicRanges)
+})
+```
+
 # Introduction
 
 The `r Biocpkg("RaggedExperiment")` package provides a flexible data
@@ -28,20 +35,22 @@ provides a semblance of a rectangular dataset. The row and column dimensions of
 the `RaggedExperiment` correspond to the number of ranges in the entire dataset
 and the number of samples represented in the data, respectively.
 
-# Constructing a `RaggedExperiment` object
+# Installation
 
-```{r, echo = FALSE}
-suppressPackageStartupMessages({
-    library(RaggedExperiment)
-    library(GenomicRanges)
-})
+```{r, eval = FALSE}
+source("https://bioconductor.org/biocLite.R")
+BiocInstaller::biocLite("RaggedExperiment")
 ```
+
+Loading the package:
 
 ```{r, eval = FALSE}
 library(RaggedExperiment)
 ```
 
-We start with a couple of `GRanges` objects each representing an individual
+# Constructing a `RaggedExperiment` object
+
+We start with a couple of `GRanges` objects, each representing an individual
 sample: 
 
 ```{r}
@@ -80,6 +89,18 @@ RaggedExperiment(grl, colData = colDat)
 ```{r}
 rangeList <- list(sample1 = sample1, sample2 = sample2)
 RaggedExperiment(rangeList, colData = colDat)
+```
+
+## Using a `List` of `GRanges` with metadata
+
+__Note__: In cases where a `SimpleGenomicRangesList` is provided along with
+accompanying metadata (accessed by `mcols`), the metadata is used as the
+`colData` for the `RaggedExperiment`. 
+
+```{r}
+grList <- List(sample1 = sample1, sample2 = sample2)
+mcols(grList) <- colDat
+RaggedExperiment(grList)
 ```
 
 # Accessors
