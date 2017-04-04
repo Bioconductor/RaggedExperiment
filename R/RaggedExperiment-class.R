@@ -67,7 +67,13 @@ setValidity2("RaggedExperiment", .valid.RaggedExperiment)
 #' @aliases RaggedExperiment-class class:RaggedExperiment RaggedExperiment
 #' @import S4Vectors GenomicRanges SummarizedExperiment
 RaggedExperiment <- function(..., colData=DataFrame()) {
-    rowRanges <- GRangesList(...)
+    inputs <- list(...)
+    if (length(inputs) == 1L && is(inputs[[1L]], "List") && isEmpty(colData)) {
+        GRList <- inputs[[1L]]
+        rowRanges <- relist(unlist(unname(GRList)), PartitioningByEnd(GRList))
+        colData <- mcols(inputs[[1L]])
+    } else
+        rowRanges <- GRangesList(inputs)
     if (missing(colData) && 0L != length(rowRanges)) {
         nms <- names(rowRanges)
         colData <- DataFrame(x = seq_along(rowRanges), row.names = nms)[, FALSE]
