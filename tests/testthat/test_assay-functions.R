@@ -13,6 +13,7 @@ test_that("compactAssay() works", {
         dimnames=list(urownames(re), NULL)
     )
     expect_identical(compactAssay(re), m0)
+    expect_identical(compactAssay(re, withDimnames=FALSE), unname(m0))
 
     ridx <- 3:1
     expect_identical(compactAssay(re[ridx,]), m0[1:2,])
@@ -53,6 +54,12 @@ test_that("disjoinAssay() works", {
             c(1, 2, 3, NA), ncol=2,
             dimnames=list(c("chr1:1-10", "chr1:21-30"), NULL)
         )
+    )
+
+    ## withDimnames
+    expect_identical(
+        dimnames(disjoinAssay(re, simplify=mean, withDimnames=FALSE)),
+        list(NULL, NULL)
     )
 
     ## disjoint ranges one sample

@@ -9,6 +9,7 @@
 \alias{rowRanges,RaggedExperiment-method}
 \alias{dim,RaggedExperiment-method}
 \alias{dimnames,RaggedExperiment-method}
+\alias{dimnames<-,RaggedExperiment,list-method}
 \alias{colData,RaggedExperiment-method}
 \alias{assay,RaggedExperiment,missing-method}
 \alias{assay,RaggedExperiment,ANY-method}
@@ -27,6 +28,8 @@ RaggedExperiment(..., colData = DataFrame())
 \S4method{dim}{RaggedExperiment}(x)
 
 \S4method{dimnames}{RaggedExperiment}(x)
+
+\S4method{dimnames}{RaggedExperiment,list}(x) <- value
 
 \S4method{colData}{RaggedExperiment}(x, ...)
 
@@ -57,6 +60,8 @@ assay: Additional arguments for assay. See details for more information.}
 rowRanges must equal the number of rows in colData}
 
 \item{x}{A RaggedExperiment object.}
+
+\item{value}{A \code{list} of dimension names}
 
 \item{i}{logical(1), integer(1), or character(1) indicating the
 assay to be reported. For \code{[}, \code{i} can be any
@@ -168,8 +173,11 @@ The \code{RaggedExperiment} class is a container for
 \item \code{dim}: get dimensions (number of sample-specific row
 ranges by number of samples)
 
-\item \code{dimnames}: get row (sample-specific) range names and sample
-names
+\item \code{dimnames}: get row (sample-specific) range names
+and sample names
+
+\item \code{dimnames<-}: set row (sample-specific) range names
+and sample names
 
 \item \code{colData}: get column data
 
@@ -212,7 +220,7 @@ In the following, 'x' represents a \code{RaggedExperiment} object:
 }
 
 \section{Coercion}{
- 
+
 
 Coercion possible from
 \link[MultiAssayExperiment]{RangedRaggedAssay} to

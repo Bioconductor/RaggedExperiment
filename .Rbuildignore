@@ -1,0 +1,7 @@
+^\.Rhistory$
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.git$
+^\.gitignore$
+^\.gitattributes$
+^README\.md$

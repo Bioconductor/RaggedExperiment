@@ -35,7 +35,7 @@ test_that("colData construction works", {
     colData <- DataFrame(x=1:2, row.names=LETTERS[1:2])
     re <- RaggedExperiment(grl, colData=colData)
     expect_true(validObject(re))
-    expect_identical(rownames(colData(re)), NULL) # removed
+    expect_identical(rownames(colData(re)), rownames(colData))
 
     # consistent out-of-order names(assays) / rownames(colData)
     grl <- GRangesList(B=GRanges(), A=GRanges())
@@ -48,6 +48,23 @@ test_that("colData construction works", {
     grl <- GRangesList(A=GRanges(), B=GRanges())
     colData <- DataFrame(x=1:2, row.names=LETTERS[2:3])
     expect_error(RaggedExperiment(grl, colData=colData))
+})
+
+test_that("colData() works", {
+    sample1 <- GRanges(c("chr1:1-10", "chr1:11-18"), score = 1:2)
+    sample2 <- GRanges(c("chr1:1-10", "chr2:11-18"), score = 3:4)
+    re <- RaggedExperiment(sample1, sample2)
+
+    colData <- DataFrame(x=1:2)[, FALSE]
+    expect_identical(colData(re), colData)
+
+    colData <- DataFrame(x=1:2)
+    re <- RaggedExperiment(sample1, sample2, colData=colData)
+    expect_identical(colData(re), colData)
+
+    colData <- DataFrame(x=1:2, row.names=LETTERS[1:2])
+    re <- RaggedExperiment(list(A=sample1, B=sample2), colData=colData)
+    expect_identical(colData(re), colData)
 })
 
 test_that("rowRanges() works", {
@@ -133,4 +150,24 @@ test_that("assay() works", {
 
     ridx <- c(2, 1, 3)
     expect_identical(assay(re[ridx,]), assay(re)[ridx,])
+})
+
+test_that("dimnames() and dimnames<-() work", {
+    re <- RaggedExperiment()
+    dimnames(re) = dimnames(re)
+    expect_identical(dimnames(re), list(NULL, NULL))
+
+    sample1 <- GRanges(c("chr1:1-10", "chr1:11-18"), score = 1:2)
+    sample2 <- GRanges(c("chr1:1-10", "chr2:11-18"), score = 3:4)
+
+    re <- RaggedExperiment(sample1, sample2)
+    expect_identical(dimnames(re), list(NULL, NULL))
+
+    nms <- list(letters[1:4], LETTERS[1:2])
+    dimnames(re) <- nms
+    expect_identical(dimnames(re), nms)
+
+    rownames(re) <-  LETTERS[1:4]
+    expect_identical(dimnames(re), list(LETTERS[1:4], LETTERS[1:2]))
+    expect_identical(colnames(re), rownames(colData(re)))
 })

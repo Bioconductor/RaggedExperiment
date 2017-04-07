@@ -46,13 +46,13 @@ setValidity2("RaggedExperiment", .valid.RaggedExperiment)
 #'    respectively) with optional metadata columns where \code{i} or \code{j}
 #'    can be missing, an NA-free logical, numeric, or character vector.
 #'
-#' @section Coercion: 
+#' @section Coercion:
 #'
 #' Coercion possible from
 #' \link[MultiAssayExperiment]{RangedRaggedAssay} to
 #' RaggedExperiment. Here \code{object} represents a
 #' \code{RangedRaggedAssay}: \code{as(object, "RaggedExperiment")}
-#' 
+#'
 #' @param ... Constructor: GRanges, list of GRanges, or GRangesList OR
 #'     assay: Additional arguments for assay. See details for more information.
 #' @param colData A \code{\link{DataFrame}} describing samples. Length of
@@ -63,10 +63,17 @@ setValidity2("RaggedExperiment", .valid.RaggedExperiment)
 #'
 #' @name RaggedExperiment-class
 #' @export RaggedExperiment
+#' @exportClass RaggedExperiment
 #' @aliases RaggedExperiment-class class:RaggedExperiment RaggedExperiment
 #' @import S4Vectors GenomicRanges SummarizedExperiment
 RaggedExperiment <- function(..., colData=DataFrame()) {
-    rowRanges <- GRangesList(...)
+    inputs <- list(...)
+    if (length(inputs) == 1L && is(inputs[[1L]], "List") && isEmpty(colData)) {
+        GRList <- inputs[[1L]]
+        rowRanges <- relist(unlist(unname(GRList)), PartitioningByEnd(GRList))
+        colData <- mcols(inputs[[1L]])
+    } else
+        rowRanges <- GRangesList(inputs)
     if (missing(colData) && 0L != length(rowRanges)) {
         nms <- names(rowRanges)
         colData <- DataFrame(x = seq_along(rowRanges), row.names = nms)[, FALSE]
@@ -82,6 +89,8 @@ RaggedExperiment <- function(..., colData=DataFrame()) {
             } else {
                 colData <- colData[names(rowRanges), , drop=FALSE]
             }
+        } else {
+            names(rowRanges) <- rownames(colData)
         }
     }
     ans_colnames <- rownames(colData)
@@ -115,7 +124,7 @@ RaggedExperiment <- function(..., colData=DataFrame()) {
     assays <- .assays(x)
     list(names(unlist(assays, use.names=FALSE)), names(assays))
 }
-        
+
 .rowRanges <- function(x) {
     ranges <- unlist(.assays(x), use.names = FALSE)
     mcols(ranges) <- NULL
@@ -143,12 +152,32 @@ setMethod("dim", "RaggedExperiment", function(x) {
     c(length(.rowidx(x)), length(.colidx(x)))
 })
 
-#' @describeIn RaggedExperiment get row (sample-specific) range names and sample
-#'     names
+#' @describeIn RaggedExperiment get row (sample-specific) range names
+#'     and sample names
 #' @exportMethod dimnames
 setMethod("dimnames", "RaggedExperiment", function(x) {
     dimnames <- .dimnames(x)
     list(dimnames[[1]][.rowidx(x)], dimnames[[2]][.colidx(x)])
+})
+
+#' @describeIn RaggedExperiment set row (sample-specific) range names
+#'     and sample names
+#' @param value A \code{list} of dimension names
+#' @export
+setReplaceMethod("dimnames", c("RaggedExperiment", "list"),
+    function(x, value)
+{
+    assays <- .assays(x)
+    rowRanges <- unlist(assays, use.names = FALSE)
+    names(rowRanges) <- value[[1]]
+    assays <- relist(rowRanges, assays)
+    names(assays) <- value[[2]]
+
+    colData <- colData(x)
+    rownames(colData) <- value[[2]]
+    mcols(assays) <- colData
+
+    BiocGenerics:::replaceSlots(x, assays = assays, check = FALSE)
 })
 
 #' @describeIn RaggedExperiment get column data
