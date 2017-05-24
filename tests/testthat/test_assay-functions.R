@@ -39,6 +39,18 @@ test_that("compactAssay() works", {
 
     ridx <- c(1, 4, 2, 3)
     expect_identical(compactAssay(re[ridx,]), m0)
+
+    ## after subsetting
+    lgr <- list(
+        A=GRanges(c("chr1:1-10", "chr1:6-15"), score1 = 1:2),
+        B=GRanges(c("chr1:1-10", "chr1:6-15"), score1 = 3:4)
+    )
+    re <- RaggedExperiment(GRangesList(lgr))[,1]
+    m0 <- matrix(
+        c(1L, 2L), ncol = 1,
+        dimnames=list(c("chr1:1-10", "chr1:6-15"), "A")
+    )
+    expect_identical(compactAssay(re), m0)
 })
 
 context("assay-disjoin")
@@ -211,6 +223,18 @@ test_that("qreduceAssay() disjoint ranges works", {
         dimnames=list(as.character(query), colnames(re))
     )
     expect_identical(result, exp)
+
+    ## after subsetting
+    lgr <- list(
+        A=GRanges(c("A:1-10", "A:6-15"), score1 = 1:2),
+        B=GRanges(c("A:1-10", "A:6-15"), score1 = 3:4)
+    )
+    re <- RaggedExperiment(GRangesList(lgr))[,1]
+    m0 <- matrix(
+        c(1L, 2L, 1L, NA), ncol = 1,
+        dimnames=list(c("A:1-5", "A:6-10", "A:11-15", "A:16-20"), "A")
+    )
+    expect_identical(qreduceAssay(re[,1], query, fun1), m0)
 })
 
 test_that("qreduceAssay() on disjoint subset works", {

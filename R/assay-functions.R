@@ -91,7 +91,7 @@ compactAssay <- function(x, i = 1, withDimnames = TRUE, background = NA) {
 
     na <- as(background, class(mcol))
     if (withDimnames)
-        dimnames <- list(as.character(ugr), colnames(x))
+        dimnames <- list(as.character(ugr), .dimnames(x)[[2]])
     m <- matrix(
         na, nrow=length(ugr), ncol=dim[[2]],
         dimnames=dimnames
@@ -251,7 +251,7 @@ qreduceAssay <-
     na <- as(background, class(result))
     dimnames <- list(NULL, NULL)
     if (withDimnames)
-        dimnames <- list(as.character(query), colnames(x))
+        dimnames <- list(as.character(query), .dimnames(x)[[2]])
     m <- matrix(na, nrow=length(query), ncol=dim[[2]], dimnames=dimnames)
     idx <- cbind(row = row[group], col = col[group])
     m[idx] <- result
