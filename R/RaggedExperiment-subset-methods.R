@@ -27,7 +27,7 @@
         if (is.character(j)) {
             j <- match(j, colnames(x))
         } else if (!is.logical(j)) {
-            J <- as.integer(j)
+            j <- as.integer(j)
         }
         j <- .colidx(x)[j]
         if (any(is.na(j)))
