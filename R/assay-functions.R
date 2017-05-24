@@ -174,7 +174,7 @@ disjoinAssay <- function(x, simplify, i = 1, withDimnames = TRUE,
 
     na <- as(background, class(mcol))
     if (withDimnames) {
-        dimnames <- list(as.character(dj), colnames(x))
+        dimnames <- list(as.character(dj), .dimnames(x)[[2]])
     } else {
         dimnames <- list(NULL, NULL)
     }

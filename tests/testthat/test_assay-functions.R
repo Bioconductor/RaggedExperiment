@@ -119,6 +119,18 @@ test_that("disjoinAssay() works", {
         )
     )
     expect_identical(disjoinAssay(re[ridx, ], simplify=mean), m0)
+
+    ## after subsetting
+    lgr <- list(
+        A=GRanges(c("chr1:1-10", "chr1:6-15"), score1 = 1:2),
+        B=GRanges(c("chr1:1-10", "chr1:6-15"), score1 = 3:4)
+    )
+    re <- RaggedExperiment(GRangesList(lgr))[,1]
+    m0 <- matrix(
+        c(1, 1.5, 2), ncol = 1,
+        dimnames=list(c("chr1:1-5", "chr1:6-10", "chr1:11-15"), "A")
+    )
+    expect_identical(disjoinAssay(re, mean), m0)
 })
 
 context("assay-qreduce")
