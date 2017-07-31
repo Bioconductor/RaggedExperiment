@@ -32,12 +32,13 @@ are always manufactured for \code{compactAssay()} and
 \item{background}{A value (default NA) for the returned matrix after
 \code{*Assay} operations}
 
-\item{simplify}{disjoinAssay: A function operating on a \code{*List},
-    where the elements of the list are all within-sample assay values
-    from ranges overlapping each disjoint range. For instance, to use
-    the \code{simplify=mean} of overlapping ranges, where ranges
-    are characterized by integer-valued scores, the entries are
-    calculated as \preformatted{
+\item{simplify}{For \code{disjoinAssay()}: A function operating on a
+    \code{*List}, where the elements of the list are all
+    within-sample assay values from ranges overlapping each
+    disjoint range. For instance, to use the \code{simplify=mean}
+    of overlapping ranges, where ranges are characterized by
+    integer-valued scores, the entries are calculated as \preformatted{
+
                     a
     original: |-----------|
                         b
@@ -49,8 +50,9 @@ are always manufactured for \code{compactAssay()} and
     values <- IntegerList(a, c(a, b), b)
     simplify(values)
     }
-   qreduceAssay: A \code{function} accepting arguments
-    \code{score}, \code{range}, and \code{qrange}:
+
+    For \code{qreduceAssay()}: A \code{function} accepting
+    arguments \code{score}, \code{range}, and \code{qrange}:
 
     \itemize{
 
