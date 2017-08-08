@@ -2,7 +2,7 @@ context("assay-compact")
 
 test_that("compactAssay() works", {
     urownames <- function(x)
-        unique(as.character(rowRanges(x)))
+        unique(as.character(SummarizedExperiment::rowRanges(x)))
 
     sample1 <- GRanges(c("chr1:1-10", "chr1:11-18"), score = 1:2)
     sample2 <- GRanges(c("chr1:1-10", "chr2:11-18"), score = 3:4)
