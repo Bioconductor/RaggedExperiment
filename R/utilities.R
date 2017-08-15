@@ -3,5 +3,5 @@ stopifnot_simplify_ok <-
 {
     nms <- names(formals(simplify))
     if ((length(nms) < nargs) && !("..." %in% nms))
-        stop("'simplify()' must accept three arguments")
+        stop("'simplify*()' must accept ", nargs, " arguments")
 }        
