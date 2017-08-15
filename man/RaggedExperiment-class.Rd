@@ -11,6 +11,7 @@
 \alias{dimnames,RaggedExperiment-method}
 \alias{dimnames<-,RaggedExperiment,list-method}
 \alias{colData,RaggedExperiment-method}
+\alias{colData<-,RaggedExperiment,DataFrame-method}
 \alias{assay,RaggedExperiment,missing-method}
 \alias{assay,RaggedExperiment,ANY-method}
 \alias{assays,RaggedExperiment-method}
@@ -32,6 +33,8 @@ RaggedExperiment(..., colData = DataFrame())
 \S4method{dimnames}{RaggedExperiment,list}(x) <- value
 
 \S4method{colData}{RaggedExperiment}(x, ...)
+
+\S4method{colData}{RaggedExperiment,DataFrame}(x) <- value
 
 \S4method{assay}{RaggedExperiment,missing}(x, i, ...)
 
@@ -180,6 +183,8 @@ and sample names
 and sample names
 
 \item \code{colData}: get column data
+
+\item \code{colData<-}: change the colData
 
 \item \code{assay}: assay missing method uses first metadata column
 

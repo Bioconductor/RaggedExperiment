@@ -186,6 +186,16 @@ setMethod("colData", "RaggedExperiment", function(x, ...) {
     mcols(.assays(x), use.names=TRUE)[.colidx(x), , drop=FALSE]
 })
 
+#' @describeIn RaggedExperiment change the colData
+#' @exportMethod colData<-
+setReplaceMethod("colData", c("RaggedExperiment", "DataFrame"),
+    function(x, value) {
+        ranges <- .assays(x)
+        mcols(ranges) <- value
+        x@assays <- ranges
+        x
+    })
+
 #' @describeIn RaggedExperiment assay missing method uses first metadata column
 #' @exportMethod assay
 setMethod("assay", c("RaggedExperiment", "missing"), function(x, i, ...) {
