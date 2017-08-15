@@ -12,9 +12,10 @@ sparseAssay(x, i = 1, withDimnames = TRUE, background = NA)
 
 compactAssay(x, i = 1, withDimnames = TRUE, background = NA)
 
-disjoinAssay(x, simplify, i = 1, withDimnames = TRUE, background = NA)
+disjoinAssay(x, simplifyDisjoin, i = 1, withDimnames = TRUE,
+  background = NA)
 
-qreduceAssay(x, query, simplify, i = 1, withDimnames = TRUE,
+qreduceAssay(x, query, simplifyReduce, i = 1, withDimnames = TRUE,
   background = NA)
 }
 \arguments{
@@ -32,12 +33,12 @@ are always manufactured for \code{compactAssay()} and
 \item{background}{A value (default NA) for the returned matrix after
 \code{*Assay} operations}
 
-\item{simplify}{disjoinAssay: A function operating on a \code{*List},
-    where the elements of the list are all within-sample assay values
-    from ranges overlapping each disjoint range. For instance, to use
-    the \code{simplify=mean} of overlapping ranges, where ranges
-    are characterized by integer-valued scores, the entries are
-    calculated as \preformatted{
+\item{simplifyDisjoin}{A \code{function} / functional operating on a
+    \code{*List}, where the elements of the list are all within-sample
+    assay values from ranges overlapping each disjoint range. For
+    instance, to use the \code{simplifyDisjoin=mean} of overlapping ranges,
+    where ranges are characterized by integer-valued scores, the
+    entries are calculated as \preformatted{
                     a
     original: |-----------|
                         b
@@ -47,9 +48,13 @@ are always manufactured for \code{compactAssay()} and
     disjoint: |----|------|---|
 
     values <- IntegerList(a, c(a, b), b)
-    simplify(values)
-    }
-   qreduceAssay: A \code{function} accepting arguments
+    simplifyDisjoin(values)
+    }}
+
+\item{query}{\code{GRanges} providing regions over which reduction
+is to occur.}
+
+\item{simplifyReduce}{A \code{function} / functional accepting arguments
     \code{score}, \code{range}, and \code{qrange}:
 
     \itemize{
@@ -59,7 +64,7 @@ are always manufactured for \code{compactAssay()} and
             \code{qreduceAssay}. Vector elements correspond to
             ranges overlapping query. The \code{*List} objects
             support many vectorized mathematical operations, so
-            \code{simplify} can be implemented efficiently.
+            \code{simplifyReduce} can be implemented efficiently.
 
         \item{\code{range}} A \code{GRangesList} instance,
             'parallel' to \code{score}. Each element of the list
@@ -73,9 +78,6 @@ are always manufactured for \code{compactAssay()} and
              to which the corresponding scores apply.
 
     }}
-
-\item{query}{\code{GRanges} providing regions over which reduction
-is to occur.}
 }
 \value{
 \code{sparseAssay()}: A matrix() with dimensions
@@ -87,13 +89,13 @@ is to occur.}
 
 \code{disjoinAssay()}: A matrix with number of rows equal
     to number of disjoint ranges across all samples. Elements of
-    the matrix are summarized by applying \code{simplify()} to
+    the matrix are summarized by applying \code{simplifyDisjoin()} to
     assay values of overlapping ranges
 
 \code{qreduceAssay()}: A matrix() with dimensions
     \code{length(query) x ncol(x)}. Elements contain assay
     values for the ith query range and jth sample, summarized
-    according to the function \code{simplify}.
+    according to the function \code{simplifyReduce}.
 }
 \description{
 These methods transform \code{assay()} from the
@@ -109,7 +111,7 @@ This method transforms \code{assay()} from the default
     (i.e., \code{sparseAssay()}) representation to a reduced
     representation summarizing each original range overlapping
     ranges in \code{query}. Reduction in each cell can be tailored
-    to indivdual needs using the \code{simplify} argument.
+    to indivdual needs using the \code{simplifyReduce} functional argument.
 }
 \examples{
 x <- RaggedExperiment(GRangesList(
