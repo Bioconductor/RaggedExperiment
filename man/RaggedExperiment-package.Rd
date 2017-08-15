@@ -17,10 +17,10 @@
     }
     The \link{rowRanges} method will return the internal
     \code{GRangesList} representation of the dataset. A distinction
-    between the \code{GRangesList} and the \code{RaggedExperiment}
-    classes is that the \link{RaggedExperiment} class allows for
-    ragged ranges, meaning that there may be a different number
-    of ranges for each sample.
+    between the \linkS4class{SummarizedExperiment} and the
+    \code{RaggedExperiment} classes is that the \link{RaggedExperiment}
+    class allows for ragged ranges, meaning that there may be a
+    different number of ranges or rows per sample.
 }
 \seealso{
 Useful links:
