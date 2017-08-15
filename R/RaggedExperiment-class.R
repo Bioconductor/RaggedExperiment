@@ -269,3 +269,7 @@ setMethod("show", "RaggedExperiment", function(object) {
 
     scat("colData names(%d): %s\n", names(colData(object)))
 })
+
+setAs("RaggedExperiment", "GRangesList", function(from) {
+    .assays(from)[.colidx(from)]
+})
