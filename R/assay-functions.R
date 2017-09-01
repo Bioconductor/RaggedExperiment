@@ -145,7 +145,7 @@ compactAssay <- function(x, i = 1, withDimnames = TRUE, background = NA) {
 #'
 #'         \item{\code{qrange}} A \code{GRanges} instance with the
 #'              same length as \code{score}, providing the query range
-#'              to which the corresponding scores apply.
+#'              window to which the corresponding scores apply.
 #'
 #'     }
 #' @return \code{disjoinAssay()}: A matrix with number of rows equal

@@ -55,10 +55,10 @@ sample:
 
 ```{r}
 sample1 <- GRanges(
-    c(GENEA = "chr1:1-10:-", GENEB = "chr2:15-18:+"),
-    score = 3:4)
+    c(A = "chr1:1-10:-", B = "chr1:8-14:+", C = "chr2:15-18:+"),
+    score = 3:5)
 sample2 <- GRanges(
-    c(GENEC = "chr1:1-10:-", GENED = "chr2:11-18:+"),
+    c(D = "chr1:1-10:-", E = "chr2:11-18:+"),
     score = 1:2)
 ``` 
 
@@ -182,22 +182,48 @@ dimensions `length(query)` by `ncol(x)`. Elements contain assay values for the
 _i_ th query range and the _j_ th sample, summarized according to the
 `simplifyReduce` functional argument.
 
-First we define our summary function that calculates a weighted average score
-per query range. _Note_ that there are three arguments to this function. Please
-see the documentation `?qreduceAssay` for more details.
+For demonstration purposes, we can have a look at the original `GRangesList`
+and the associated scores from which the current `ragexp` object is derived:
+
+```{r}
+unlist(grl, use.names = FALSE)
+```
+
+This data is represented as `rowRanges` and `assays` in `RaggedExperiment`:
+
+```{r}
+rowRanges(ragexp)
+assay(ragexp, "score")
+```
+
+Here we provide the "query" region of interest:
+
+```{r}
+(query <- GRanges(c("chr1:1-14:-", "chr2:11-18:+")))
+```
+
+ The `simplifyReduce` argument in `qreduceAssay` allows the user to summarize
+overlapping regions with a custom method for the given "query" region of
+interest. We provide one for calculating a weighted average score per
+query range, where the weight is proportional to the overlap widths between
+overlapping ranges and a query range.
+
+_Note_ that there are three arguments to this function. See the documentation
+for additional details.
 
 ```{r}
 weightedmean <- function(scores, ranges, qranges)
-    sum(scores * width(ranges)) / sum(width(ranges))
+{
+    isects <- pintersect(ranges, qranges)
+    sum(scores * width(isects)) / sum(width(isects))
+}
 ```
 
 A call to `qreduceAssay` involves the `RaggedExperiment`, the `GRanges` query
 and the `simplifyReduce` functional argument. 
 
 ```{r}
-qreduceAssay(ragexp,
-             query = GRanges(c("chr1:1-10:-", "chr2:11-18:+")), 
-             simplifyReduce = weightedmean)
+qreduceAssay(ragexp, query, simplifyReduce = weightedmean)
 ```
 
 # Coercion
