@@ -51,9 +51,9 @@ RaggedExperiment(..., colData = DataFrame())
 \S4method{overlapsAny}{RaggedExperiment,Vector}(query, subject, maxgap = 0L,
   minoverlap = 1L, type = c("any", "start", "end", "within", "equal"), ...)
 
-\S4method{subsetByOverlaps}{RaggedExperiment,Vector}(query, subject,
-  maxgap = 0L, minoverlap = 1L, type = c("any", "start", "end", "within",
-  "equal"), invert = FALSE, ...)
+\S4method{subsetByOverlaps}{RaggedExperiment,Vector}(x, ranges, maxgap = 0L,
+  minoverlap = 1L, type = c("any", "start", "end", "within", "equal"),
+  invert = FALSE, ...)
 }
 \arguments{
 \item{...}{Constructor: GRanges, list of GRanges, or GRangesList OR
@@ -85,15 +85,19 @@ columns from RaggedExperiment}
 \item{subject}{
     Each of them can be a \link{Ranges}, \link{Views}, \link{RangesList},
     \link{ViewsList}, or \link{RangedData} object.
-    In addition, if \code{subject} is a \link{Ranges} object, \code{query}
-    can be an  integer vector to be converted to length-one ranges.
+    In addition, if \code{subject} or \code{ranges} is a \link{Ranges} object,
+    \code{query} or \code{x} can be an integer vector to be converted to
+    length-one ranges.
 
-    If \code{query} is a \link{RangesList} or \link{RangedData},
-    \code{subject} must be a \link{RangesList} or \link{RangedData}.
-    If both lists have names, each element from the subject is paired
-    with the element from the query with the matching name, if any.
-    Otherwise, elements are paired by position. The overlap is then
-    computed between the pairs as described below.
+    If \code{query} or \code{x} is a \link{RangesList} or
+    \link{RangedData}, \code{subject} or \code{ranges} must be a
+    \link{RangesList} or \link{RangedData}.
+
+    If both arguments are list-like objects with names, each list element
+    from the 2nd argument is paired with the list element from the 1st
+    argument with the matching name, if any. Otherwise, list elements are
+    paired by position. The overlap is then computed between the pairs as
+    described below.
 
     If \code{subject} is omitted, \code{query} is queried against
     itself. In this case, and only this case, the \code{drop.self}
@@ -142,9 +146,36 @@ columns from RaggedExperiment}
     the subject may be wider than the query.
   }
 
+\item{ranges}{
+    Each of them can be a \link{Ranges}, \link{Views}, \link{RangesList},
+    \link{ViewsList}, or \link{RangedData} object.
+    In addition, if \code{subject} or \code{ranges} is a \link{Ranges} object,
+    \code{query} or \code{x} can be an integer vector to be converted to
+    length-one ranges.
+
+    If \code{query} or \code{x} is a \link{RangesList} or
+    \link{RangedData}, \code{subject} or \code{ranges} must be a
+    \link{RangesList} or \link{RangedData}.
+
+    If both arguments are list-like objects with names, each list element
+    from the 2nd argument is paired with the list element from the 1st
+    argument with the matching name, if any. Otherwise, list elements are
+    paired by position. The overlap is then computed between the pairs as
+    described below.
+
+    If \code{subject} is omitted, \code{query} is queried against
+    itself. In this case, and only this case, the \code{drop.self}
+    and \code{drop.redundant} arguments are allowed. By default,
+    the result will contain hits for each range against itself, and if
+    there is a hit from A to B, there is also a hit for B to A. If
+    \code{drop.self} is \code{TRUE}, all self matches are dropped. If
+    \code{drop.redundant} is \code{TRUE}, only one of A->B and B->A
+    is returned.
+  }
+
 \item{invert}{
-    If \code{TRUE}, keep only the query ranges that do \emph{not}
-    overlap the subject.
+    If \code{TRUE}, keep only the ranges in \code{x} that do \emph{not}
+    overlap \code{ranges}.
   }
 }
 \value{
