@@ -79,7 +79,7 @@ setMethod("overlapsAny", c("RaggedExperiment", "Vector"),
 #'     only copy number regions overlapping \code{subject}.
 #' @exportMethod subsetByOverlaps
 setMethod("subsetByOverlaps", c("RaggedExperiment", "Vector"),
-    function(x, ranges, maxgap = 0L, minoverlap = 1L,
+    function(x, ranges, maxgap = -1L, minoverlap = 0L,
         type = c("any", "start", "end", "within", "equal"), invert = FALSE, ...)
 {
     o <- overlapsAny(query = x, subject = ranges, maxgap = maxgap,
