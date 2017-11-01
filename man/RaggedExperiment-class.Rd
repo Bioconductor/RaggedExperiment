@@ -51,8 +51,8 @@ RaggedExperiment(..., colData = DataFrame())
 \S4method{overlapsAny}{RaggedExperiment,Vector}(query, subject, maxgap = 0L,
   minoverlap = 1L, type = c("any", "start", "end", "within", "equal"), ...)
 
-\S4method{subsetByOverlaps}{RaggedExperiment,Vector}(x, ranges, maxgap = 0L,
-  minoverlap = 1L, type = c("any", "start", "end", "within", "equal"),
+\S4method{subsetByOverlaps}{RaggedExperiment,Vector}(x, ranges, maxgap = -1L,
+  minoverlap = 0L, type = c("any", "start", "end", "within", "equal"),
   invert = FALSE, ...)
 }
 \arguments{
@@ -84,14 +84,13 @@ columns from RaggedExperiment}
 
 \item{subject}{
     Each of them can be a \link{Ranges}, \link{Views}, \link{RangesList},
-    \link{ViewsList}, or \link{RangedData} object.
+    or \link{ViewsList} object.
     In addition, if \code{subject} or \code{ranges} is a \link{Ranges} object,
     \code{query} or \code{x} can be an integer vector to be converted to
     length-one ranges.
 
-    If \code{query} or \code{x} is a \link{RangesList} or
-    \link{RangedData}, \code{subject} or \code{ranges} must be a
-    \link{RangesList} or \link{RangedData}.
+    If \code{query} (or \code{x}) is a \link{RangesList} object, then
+    \code{subject} (or \code{ranges}) must also be a \link{RangesList} object.
 
     If both arguments are list-like objects with names, each list element
     from the 2nd argument is paired with the list element from the 1st
@@ -110,19 +109,29 @@ columns from RaggedExperiment}
   }
 
 \item{maxgap}{
-    Intervals with a separation of \code{maxgap} or less and a minimum
-    of \code{minoverlap} overlapping positions, allowing for
-    \code{maxgap}, are considered to be overlapping.  \code{maxgap}
-    should be a scalar, non-negative, integer. \code{minoverlap}
-    should be a scalar, positive integer.
+    A single integer >= -1.
+
+    If \code{type} is set to \code{"any"}, \code{maxgap} is interpreted as
+    the maximum \emph{gap} that is allowed between 2 ranges for the ranges
+    to be considered as overlapping. The \emph{gap} between 2 ranges
+    is the number of positions that separate them. The \emph{gap} between
+    2 adjacent ranges is 0. By convention when one range has its start or
+    end strictly inside the other (i.e. non-disjoint ranges), the \emph{gap}
+    is considered to be -1.
+
+    If \code{type} is set to anything else, \code{maxgap} has a special
+    meaning that depends on the particular \code{type}. See \code{type}
+    below for more information.
   }
 
 \item{minoverlap}{
-    Intervals with a separation of \code{maxgap} or less and a minimum
-    of \code{minoverlap} overlapping positions, allowing for
-    \code{maxgap}, are considered to be overlapping.  \code{maxgap}
-    should be a scalar, non-negative, integer. \code{minoverlap}
-    should be a scalar, positive integer.
+    A single non-negative integer.
+
+    Only ranges with a minimum of \code{minoverlap} overlapping positions
+    are considered to be overlapping.
+
+    When \code{type} is \code{"any"}, at least one of \code{maxgap} and
+    \code{minoverlap} must be set to its default value.
   }
 
 \item{type}{
@@ -131,9 +140,7 @@ columns from RaggedExperiment}
     correspond to operations in Allen's Interval Algebra (see
     references). If \code{type} is \code{start} or \code{end}, the
     intervals are required to have matching starts or ends,
-    respectively. While this operation seems trivial, the naive
-    implementation using \code{outer} would be much less
-    efficient. Specifying \code{equal} as the type returns the
+    respectively. Specifying \code{equal} as the type returns the
     intersection of the \code{start} and \code{end} matches. If
     \code{type} is \code{within}, the query interval must be wholly
     contained within the subject interval. Note that all matches must
@@ -143,19 +150,19 @@ columns from RaggedExperiment}
     overlap types. For \code{start}, \code{end}, and \code{equal},
     it specifies the maximum difference in the starts, ends or both,
     respectively. For \code{within}, it is the maximum amount by which
-    the subject may be wider than the query.
+    the subject may be wider than the query. If \code{maxgap} is set to -1
+    (the default), it's replaced internally by 0.
   }
 
 \item{ranges}{
     Each of them can be a \link{Ranges}, \link{Views}, \link{RangesList},
-    \link{ViewsList}, or \link{RangedData} object.
+    or \link{ViewsList} object.
     In addition, if \code{subject} or \code{ranges} is a \link{Ranges} object,
     \code{query} or \code{x} can be an integer vector to be converted to
     length-one ranges.
 
-    If \code{query} or \code{x} is a \link{RangesList} or
-    \link{RangedData}, \code{subject} or \code{ranges} must be a
-    \link{RangesList} or \link{RangedData}.
+    If \code{query} (or \code{x}) is a \link{RangesList} object, then
+    \code{subject} (or \code{ranges}) must also be a \link{RangesList} object.
 
     If both arguments are list-like objects with names, each list element
     from the 2nd argument is paired with the list element from the 1st
