@@ -49,9 +49,11 @@ setValidity2("RaggedExperiment", .valid.RaggedExperiment)
 #' @section Coercion:
 #'
 #' Coercion possible from
-#' \link[MultiAssayExperiment]{RangedRaggedAssay} to
-#' RaggedExperiment. Here \code{object} represents a
-#' \code{RangedRaggedAssay}: \code{as(object, "RaggedExperiment")}
+#' \linkS4class{GRangesList} to RaggedExperiment and vice versa.
+#' Here \code{object} represents a
+#' \code{GRangesList}: \code{as(object, "RaggedExperiment")}. Here
+#' \code{object} represents a \code{RaggedExperiment}:
+#' \code{as(object, "GRangesList")}.
 #'
 #' @param ... Constructor: GRanges, list of GRanges, or GRangesList OR
 #'     assay: Additional arguments for assay. See details for more information.

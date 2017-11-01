@@ -266,9 +266,11 @@ In the following, 'x' represents a \code{RaggedExperiment} object:
 
 
 Coercion possible from
-\link[MultiAssayExperiment]{RangedRaggedAssay} to
-RaggedExperiment. Here \code{object} represents a
-\code{RangedRaggedAssay}: \code{as(object, "RaggedExperiment")}
+\linkS4class{GRangesList} to RaggedExperiment and vice versa.
+Here \code{object} represents a
+\code{GRangesList}: \code{as(object, "RaggedExperiment")}. Here
+\code{object} represents a \code{RaggedExperiment}:
+\code{as(object, "GRangesList")}.
 }
 
 \examples{
