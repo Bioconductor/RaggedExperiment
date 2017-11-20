@@ -156,7 +156,7 @@ compactAssay <- function(x, i = 1, withDimnames = TRUE, background = NA_integer_
 #'
 #' @export
 disjoinAssay <- function(x, simplifyDisjoin, i = 1, withDimnames = TRUE,
-                         background = NA) {
+                         background = NA_integer_) {
     stopifnot_simplify_ok(simplifyDisjoin, nargs=1L)
     i <- .assay_i(x, i)
     mcol <- .mcols(x)[[i]][.rowidx(x)]

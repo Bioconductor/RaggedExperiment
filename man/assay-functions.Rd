@@ -10,13 +10,13 @@
 \usage{
 sparseAssay(x, i = 1, withDimnames = TRUE, background = NA_integer_)
 
-compactAssay(x, i = 1, withDimnames = TRUE, background = NA)
+compactAssay(x, i = 1, withDimnames = TRUE, background = NA_integer_)
 
 disjoinAssay(x, simplifyDisjoin, i = 1, withDimnames = TRUE,
-  background = NA)
+  background = NA_integer_)
 
 qreduceAssay(x, query, simplifyReduce, i = 1, withDimnames = TRUE,
-  background = NA)
+  background = NA_integer_)
 }
 \arguments{
 \item{x}{A \code{RaggedExperiment} object}
