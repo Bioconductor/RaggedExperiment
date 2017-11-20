@@ -76,7 +76,7 @@ sparseAssay <- function(x, i = 1, withDimnames = TRUE, background = NA_integer_)
 #'     in the same row. Non-disjoint ranges are NOT collapsed.
 #'
 #' @export
-compactAssay <- function(x, i = 1, withDimnames = TRUE, background = NA) {
+compactAssay <- function(x, i = 1, withDimnames = TRUE, background = NA_integer_) {
     i <- .assay_i(x, i)
     mcol <- .mcols(x)[[i]][.rowidx(x)]
     dim <- .dim(x)
@@ -212,7 +212,7 @@ disjoinAssay <- function(x, simplifyDisjoin, i = 1, withDimnames = TRUE,
 #' @import GenomicRanges
 #' @export
 qreduceAssay <-
-    function(x, query, simplifyReduce, i = 1, withDimnames = TRUE, background = NA)
+    function(x, query, simplifyReduce, i = 1, withDimnames = TRUE, background = NA_integer_)
 {
     if (missing(i) && ncol(.mcols(x)) == 0)
         return(matrix(NA, 0, 0))
