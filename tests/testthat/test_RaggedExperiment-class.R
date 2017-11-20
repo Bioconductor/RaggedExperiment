@@ -150,6 +150,16 @@ test_that("assay() works", {
 
     ridx <- c(2, 1, 3)
     expect_identical(assay(re[ridx,]), assay(re)[ridx,])
+
+    sample3 <- GRanges(c(a = "chr1:1-10", b = "chr1:11-18"),
+        score = factor(1:2))
+    retst <- RaggedExperiment(sample3 = sample3)
+
+    m1 <- matrix(
+        as.character(1:2), ncol = 1L,
+        dimnames = list(c("a", "b"), "sample3"))
+
+    expect_identical(assay(retst), m1)
 })
 
 test_that("dimnames() and dimnames<-() work", {
