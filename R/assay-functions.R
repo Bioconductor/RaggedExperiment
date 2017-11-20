@@ -47,7 +47,8 @@
 #'     \code{dim(x)}. Elements contain the assay value for the \emph{i}th
 #'     range and \emph{j}th sample.
 #' @export
-sparseAssay <- function(x, i = 1, withDimnames = TRUE, background = NA) {
+sparseAssay <- function(x, i = 1, withDimnames = TRUE, background = NA_integer_)
+{
     i <- .assay_i(x, i)
     mcol <- .mcols(x)[[i]]
     dim <- .dim(x)

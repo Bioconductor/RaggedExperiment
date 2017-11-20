@@ -8,7 +8,7 @@
 \alias{qreduceAssay}
 \title{Create simplified representation of ragged assay data.}
 \usage{
-sparseAssay(x, i = 1, withDimnames = TRUE, background = NA)
+sparseAssay(x, i = 1, withDimnames = TRUE, background = NA_integer_)
 
 compactAssay(x, i = 1, withDimnames = TRUE, background = NA)
 
