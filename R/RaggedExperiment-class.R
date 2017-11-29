@@ -182,6 +182,13 @@ setReplaceMethod("dimnames", c("RaggedExperiment", "list"),
     BiocGenerics:::replaceSlots(x, assays = assays, check = FALSE)
 })
 
+#' @describeIn RaggedExperiment get the length of row vectors in the object,
+#'     similar to \linkS4class{SummarizedExperiment}
+#' @exportMethod length
+setMethod("length", "RaggedExperiment", function(x) {
+    length(.rowidx(x))
+})
+
 #' @describeIn RaggedExperiment get column data
 #' @exportMethod colData
 setMethod("colData", "RaggedExperiment", function(x, ...) {
