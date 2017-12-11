@@ -84,5 +84,5 @@ setMethod("subsetByOverlaps", c("RaggedExperiment", "Vector"),
 {
     o <- overlapsAny(query = x, subject = ranges, maxgap = maxgap,
                      minoverlap = minoverlap, type = match.arg(type), ...)
-    ranges[xor(o, invert),]
+    x[xor(o, invert),]
 })

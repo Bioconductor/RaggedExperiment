@@ -90,3 +90,22 @@ test_that("[ subsetting works", {
         )
     )
 })
+
+test_that("subsetByOverlaps works", {
+    sample1 <- GRanges(
+        c(A = "chr1:1-10:-", B = "chr1:8-14:+", C = "chr2:15-18:+"),
+        score = 3:5)
+    sample2 <- GRanges(
+        c(D = "chr1:1-10:-", E = "chr2:11-18:+"),
+        score = 1:2)
+    colDat <- DataFrame(id = 1:2)
+    re <- RaggedExperiment(
+        sample1 = sample1,
+        sample2 = sample2,
+        colData = colDat)
+    range <- GRanges("chr1:3-10")
+    identical(
+        subsetByOverlaps(rowRanges(re), range),
+        rowRanges(subsetByOverlaps(re, range))
+    )
+})
