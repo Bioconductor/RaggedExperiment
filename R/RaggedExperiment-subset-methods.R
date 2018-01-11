@@ -60,7 +60,7 @@ setMethod("[", c("RaggedExperiment", "ANY", "ANY"), .bracketSubsetRE)
 #' @describeIn RaggedExperiment Determine whether copy number ranges
 #'     defined by \code{query} overlap ranges of \code{subject}.
 #' @param query A RaggedExperiment instance.
-#' @return \code{overlapsAny} returns a logical vector of length equal
+#' @return 'overlapsAny' returns a logical vector of length equal
 #'     to the number of rows in the \code{query}; \code{TRUE} when the
 #'     copy number region overlaps the \code{subject}.
 #' @exportMethod overlapsAny
@@ -75,7 +75,7 @@ setMethod("overlapsAny", c("RaggedExperiment", "Vector"),
 #' @describeIn RaggedExperiment Subset the RaggedExperiment to contain only
 #'     copy number ranges overlapping ranges of \code{subject}.
 #' @inheritParams IRanges::subsetByOverlaps
-#' @return \code{subsetByOverlaps} returns a RaggedExperiment containing
+#' @return 'subsetByOverlaps' returns a RaggedExperiment containing
 #'     only copy number regions overlapping \code{subject}.
 #' @exportMethod subsetByOverlaps
 setMethod("subsetByOverlaps", c("RaggedExperiment", "Vector"),

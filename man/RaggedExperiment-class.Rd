@@ -196,11 +196,11 @@ constructor returns a \code{RaggedExperiment} object
 
 'assays' returns a \code{\link{SimpleList}}
 
-\code{overlapsAny} returns a logical vector of length equal
+'overlapsAny' returns a logical vector of length equal
     to the number of rows in the \code{query}; \code{TRUE} when the
     copy number region overlaps the \code{subject}.
 
-\code{subsetByOverlaps} returns a RaggedExperiment containing
+'subsetByOverlaps' returns a RaggedExperiment containing
     only copy number regions overlapping \code{subject}.
 }
 \description{
