@@ -38,8 +38,8 @@
 #'     representation of ragged data.
 #'
 #' @example inst/scripts/coerce-functions-Ex.R
-#' 
-#' @importFrom SummarizedExperiment SummarizedExperiment
+#'
+#' @importFrom SummarizedExperiment SummarizedExperiment rowData
 #'
 #' @export
 sparseSummarizedExperiment <-
@@ -68,7 +68,7 @@ sparseSummarizedExperiment <-
 #'     composed of different ranges.
 #'
 #' @importFrom GenomicRanges GRanges
-#' 
+#'
 #' @export
 compactSummarizedExperiment <-
     function(x, i = 1L, withDimnames=TRUE)
@@ -96,8 +96,6 @@ compactSummarizedExperiment <-
 #'     \code{disjoint(rowRanges(x))}, and \code{assay()} data as
 #'     \code{disjoinAssay()}.
 #'
-#' @importFrom GenomicRanges GRanges
-#' 
 #' @export
 disjoinSummarizedExperiment <-
     function(x, simplify, i = 1L, withDimnames=TRUE)
@@ -126,8 +124,6 @@ disjoinSummarizedExperiment <-
 #'     identical to \code{query}, and \code{assay()} data as
 #'     \code{qreduceAssay()}.
 #'
-#' @importFrom GenomicRanges GRanges
-#' 
 #' @export
 qreduceSummarizedExperiment <-
     function(x, query, simplify, i = 1L, withDimnames=TRUE)

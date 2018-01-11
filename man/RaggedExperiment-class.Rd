@@ -5,8 +5,13 @@
 \name{RaggedExperiment-class}
 \alias{RaggedExperiment-class}
 \alias{RaggedExperiment}
-\alias{class:RaggedExperiment}
+\alias{coerce,RaggedExperiment,GRangesList-method}
+\alias{coerce,GRangesList,RaggedExperiment-method}
 \alias{rowRanges,RaggedExperiment-method}
+\alias{mcols,RaggedExperiment-method}
+\alias{mcols<-,RaggedExperiment-method}
+\alias{rowData,RaggedExperiment-method}
+\alias{rowData<-,RaggedExperiment-method}
 \alias{dim,RaggedExperiment-method}
 \alias{dimnames,RaggedExperiment-method}
 \alias{dimnames<-,RaggedExperiment,list-method}
@@ -26,6 +31,14 @@
 RaggedExperiment(..., colData = DataFrame())
 
 \S4method{rowRanges}{RaggedExperiment}(x, ...)
+
+\S4method{mcols}{RaggedExperiment}(x, use.names = FALSE, ...)
+
+\S4method{mcols}{RaggedExperiment}(x, ...) <- value
+
+\S4method{rowData}{RaggedExperiment}(x, ...)
+
+\S4method{rowData}{RaggedExperiment}(x, ...) <- value
 
 \S4method{dim}{RaggedExperiment}(x)
 
@@ -67,7 +80,14 @@ rowRanges must equal the number of rows in colData}
 
 \item{x}{A RaggedExperiment object.}
 
-\item{value}{A \code{list} of dimension names}
+\item{use.names}{(logical default FALSE) whether to propagate rownames from
+the object to rownames of metadata \code{DataFrame}}
+
+\item{value}{\itemize{
+\item{dimnames}: A \code{list} of dimension names
+\item{mcols}: A \code{\link[S4Vectors]{DataFrame}} representing the
+assays
+}}
 
 \item{i}{logical(1), integer(1), or character(1) indicating the
 assay to be reported. For \code{[}, \code{i} can be any
@@ -194,6 +214,9 @@ constructor returns a \code{RaggedExperiment} object
 'rowRanges' returns a \code{\link{GRanges}} object
     summarizing ranges corresponding to \code{assay()} rows.
 
+'mcols' returns a \code{\link{DataFrame}} object
+    of the metadata columns
+
 'assays' returns a \code{\link{SimpleList}}
 
 'overlapsAny' returns a logical vector of length equal
@@ -213,6 +236,16 @@ The \code{RaggedExperiment} class is a container for
 \section{Methods (by generic)}{
 \itemize{
 \item \code{rowRanges}: rowRanges accessor
+
+\item \code{mcols}: get the metadata columns of the ranges,
+rectangular representation of the 'assays'
+
+\item \code{mcols<-}: set the metadata columns of the ranges
+corresponding to the assays
+
+\item \code{rowData}: get the rowData or metadata for the ranges
+
+\item \code{rowData<-}: set the rowData or metadata for the ranges
 
 \item \code{dim}: get dimensions (number of sample-specific row
 ranges by number of samples)
@@ -258,25 +291,64 @@ of \code{GRanges} objects.  Additional column data may be provided
 as a \code{DataFrame} object.
 }
 
-\section{Subsetting}{
+\section{Accessors}{
 
 
 In the following, 'x' represents a \code{RaggedExperiment} object:
 
-   \code{x[i, j]}: Get ranges or elements (\code{i} and \code{j},
-   respectively) with optional metadata columns where \code{i} or \code{j}
-   can be missing, an NA-free logical, numeric, or character vector.
+    \code{rowRanges(x)}:
+
+    Get the ranged data. Value is a \code{GenomicRanges} object.
+
+    \code{assays(x)}:
+
+    Get the assays. Value is a \code{\link[S4Vectors]{SimpleList}}.
+
+    \code{assay(x, i)}:
+
+    An alternative to \code{assays(x)[[i]]} to get the \emph{i}th
+    (default first) assay element.
+
+    \code{mcols(x), mcols(x) <- value}:
+
+    Get or set the metadata columns. For \code{RaggedExperiment}, the
+    columns correspond to the assay \emph{i}th elements.
+
+    \code{rowData(x), rowData(x) <- value}:
+
+    Get or set the row data. Value is a \code{\link[S4Vectors]{DataFrame}}
+    object. Also corresponds to the \code{mcols} data.
+
+    \strong{\emph{Note}} for advanced users and developers. Both
+    \code{mcols} and \code{rowData} setters may reduce the size of the
+    internal \code{RaggedExperiment} data representation. Particularly after
+    subsetting, the internal row index is modified and such setter
+    operations will use the index to subset the data and reduce the
+    "rows" of the internal data representation.
+}
+
+\section{Subsetting}{
+
+
+   \code{x[i, j]}:
+   Get ranges or elements (\code{i} and \code{j}, respectively) with
+   optional metadata columns where \code{i} or \code{j} can be missing,
+   an NA-free logical, numeric, or character vector.
 }
 
 \section{Coercion}{
 
 
-Coercion possible from
-\linkS4class{GRangesList} to RaggedExperiment and vice versa.
-Here \code{object} represents a
-\code{GRangesList}: \code{as(object, "RaggedExperiment")}. Here
-\code{object} represents a \code{RaggedExperiment}:
-\code{as(object, "GRangesList")}.
+In the following, 'object' represents a \code{RaggedExperiment} object:
+
+\code{as(object, "GRangesList")}:
+
+Creates a \linkS4class{GRangesList} object from a \code{RaggedExperiment}.
+
+\code{as(from, "RaggedExperiment")}:
+
+Creates a \code{RaggedExperiment} object from a \linkS4class{GRangesList},
+or \linkS4class{GRanges} object.
 }
 
 \examples{
