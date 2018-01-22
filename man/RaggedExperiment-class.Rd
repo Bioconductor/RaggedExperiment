@@ -106,14 +106,15 @@ columns from RaggedExperiment}
 \item{query}{A RaggedExperiment instance.}
 
 \item{subject}{
-    Each of them can be a \link{Ranges}, \link{Views}, \link{RangesList},
-    or \link{ViewsList} object.
-    In addition, if \code{subject} or \code{ranges} is a \link{Ranges} object,
-    \code{query} or \code{x} can be an integer vector to be converted to
-    length-one ranges.
+    Each of them can be a \link{IntegerRanges}, \link{Views},
+    \link{IntegerRangesList}, or \link{ViewsList} object.
+    In addition, if \code{subject} or \code{ranges} is a \link{IntegerRanges}
+    object, \code{query} or \code{x} can be an integer vector to be converted
+    to length-one ranges.
 
-    If \code{query} (or \code{x}) is a \link{RangesList} object, then
-    \code{subject} (or \code{ranges}) must also be a \link{RangesList} object.
+    If \code{query} (or \code{x}) is a \link{IntegerRangesList} object, then
+    \code{subject} (or \code{ranges}) must also be a \link{IntegerRangesList}
+    object.
 
     If both arguments are list-like objects with names, each list element
     from the 2nd argument is paired with the list element from the 1st
@@ -178,14 +179,15 @@ columns from RaggedExperiment}
   }
 
 \item{ranges}{
-    Each of them can be a \link{Ranges}, \link{Views}, \link{RangesList},
-    or \link{ViewsList} object.
-    In addition, if \code{subject} or \code{ranges} is a \link{Ranges} object,
-    \code{query} or \code{x} can be an integer vector to be converted to
-    length-one ranges.
+    Each of them can be a \link{IntegerRanges}, \link{Views},
+    \link{IntegerRangesList}, or \link{ViewsList} object.
+    In addition, if \code{subject} or \code{ranges} is a \link{IntegerRanges}
+    object, \code{query} or \code{x} can be an integer vector to be converted
+    to length-one ranges.
 
-    If \code{query} (or \code{x}) is a \link{RangesList} object, then
-    \code{subject} (or \code{ranges}) must also be a \link{RangesList} object.
+    If \code{query} (or \code{x}) is a \link{IntegerRangesList} object, then
+    \code{subject} (or \code{ranges}) must also be a \link{IntegerRangesList}
+    object.
 
     If both arguments are list-like objects with names, each list element
     from the 2nd argument is paired with the list element from the 1st
