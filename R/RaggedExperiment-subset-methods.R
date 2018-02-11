@@ -68,7 +68,7 @@ setMethod("overlapsAny", c("RaggedExperiment", "Vector"),
     function(query, subject, maxgap = 0L, minoverlap = 1L,
         type = c("any", "start", "end", "within", "equal"), ...)
 {
-    overlapsAny(unlist(rowRanges(query), use.names=FALSE), subject,
+    overlapsAny(rowRanges(query), subject,
         maxgap = maxgap, minoverlap = minoverlap, type = type, ...)
 })
 
