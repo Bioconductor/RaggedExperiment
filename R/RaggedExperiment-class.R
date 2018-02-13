@@ -113,7 +113,8 @@ setValidity2("RaggedExperiment", .valid.RaggedExperiment)
 #' @import S4Vectors GenomicRanges SummarizedExperiment
 RaggedExperiment <- function(..., colData=DataFrame()) {
     inputs <- list(...)
-    if (length(inputs) == 1L && is(inputs[[1L]], "GenomicRangesList") && isEmpty(colData)) {
+    if (length(inputs) == 1L &&
+            is(inputs[[1L]], "GenomicRangesList") && isEmpty(colData)) {
         GRList <- inputs[[1L]]
         rowRanges <- relist(unlist(unname(GRList)), PartitioningByEnd(GRList))
         colData <- mcols(inputs[[1L]])
