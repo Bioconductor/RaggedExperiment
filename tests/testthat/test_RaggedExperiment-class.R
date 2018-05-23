@@ -67,6 +67,25 @@ test_that("colData() works", {
     expect_identical(colData(re), colData)
 })
 
+test_that("rowData() works", {
+    grl <- GRangesList(
+        sample1 = GRanges( c("chr1:1-10", "chr2:15-18", "chr2:25-34") ),
+        sample2 = GRanges( c("chr1:1-10", "chr2:11-18" , "chr2:25-36") ),
+        sample3 = GRanges( c("chr1:2-11", "chr2:14-18", "chr2:26-36") ),
+        sample4 = GRanges( c("chr1:1-12", "chr2:18-35" ) ),
+        sample5 = GRanges( c("chr1:1-12", "chr2:11-17" , "chr2:26-34") ) ,
+        sample6 = GRanges( c("chr1:1-12", "chr2:12-18" , "chr2:25-35") )
+    )
+
+    ra <- RaggedExperiment(grl)
+    rowannote <- DataFrame(labels = letters[1:17], numbers = 1:17)
+    mcols(ra) <- rowannote
+    expect_identical(rowannote, rowData(ra))
+    expect_identical(rowannote, mcols(ra))
+
+    expect_equal(length(assays(ra)), ncol(rowannote))
+})
+
 test_that("rowRanges() works", {
     re <- RaggedExperiment()
     expect_identical(rowRanges(re), GRanges())

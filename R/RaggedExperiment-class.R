@@ -219,6 +219,7 @@ setMethod("mcols", "RaggedExperiment", function(x, use.names = FALSE, ...) {
 #' @exportMethod mcols<-
 setReplaceMethod("mcols", "RaggedExperiment", function(x, ..., value) {
     ranges <- .uranges(x)
+    assays <- .assays(x)
 
     mcols(ranges) <- value
     assays <- relist(ranges, assays)
