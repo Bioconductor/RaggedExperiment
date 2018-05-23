@@ -76,7 +76,8 @@ sparseAssay <- function(x, i = 1, withDimnames = TRUE, background = NA_integer_)
 #'     in the same row. Non-disjoint ranges are NOT collapsed.
 #'
 #' @export
-compactAssay <- function(x, i = 1, withDimnames = TRUE, background = NA_integer_) {
+compactAssay <-
+    function(x, i = 1, withDimnames = TRUE, background = NA_integer_) {
     i <- .assay_i(x, i)
     mcol <- .mcols(x)[[i]][.rowidx(x)]
     dim <- .dim(x)
@@ -113,7 +114,8 @@ compactAssay <- function(x, i = 1, withDimnames = TRUE, background = NA_integer_
 #'     assay values from ranges overlapping each disjoint range. For
 #'     instance, to use the \code{simplifyDisjoin=mean} of overlapping ranges,
 #'     where ranges are characterized by integer-valued scores, the
-#'     entries are calculated as \preformatted{
+#'     entries are calculated as
+#'     \preformatted{
 #'                     a
 #'     original: |-----------|
 #'                         b
@@ -156,7 +158,8 @@ compactAssay <- function(x, i = 1, withDimnames = TRUE, background = NA_integer_
 #'
 #' @export
 disjoinAssay <- function(x, simplifyDisjoin, i = 1, withDimnames = TRUE,
-                         background = NA_integer_) {
+        background = NA_integer_)
+{
     stopifnot_simplify_ok(simplifyDisjoin, nargs=1L)
     i <- .assay_i(x, i)
     mcol <- .mcols(x)[[i]][.rowidx(x)]
@@ -212,7 +215,8 @@ disjoinAssay <- function(x, simplifyDisjoin, i = 1, withDimnames = TRUE,
 #' @import GenomicRanges
 #' @export
 qreduceAssay <-
-    function(x, query, simplifyReduce, i = 1, withDimnames = TRUE, background = NA_integer_)
+    function(x, query, simplifyReduce, i = 1, withDimnames = TRUE,
+        background = NA_integer_)
 {
     if (missing(i) && ncol(.mcols(x)) == 0)
         return(matrix(NA, 0, 0))

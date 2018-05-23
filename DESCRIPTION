@@ -1,6 +1,6 @@
 Package: RaggedExperiment
 Title: Representation of Sparse Experiments and Assays Across Samples
-Version: 1.5.1
+Version: 1.5.2
 Authors@R: c(
     person("Martin", "Morgan", email = "martin.morgan@roswellpark.org",
         role = c("aut", "cre")),
@@ -16,7 +16,7 @@ biocViews: Infrastructure, DataRepresentation
 BugReports: https://github.com/Bioconductor/RaggedExperiment/issues
 VignetteBuilder: knitr
 Depends:
-    R (>= 3.4.0),
+    R (>= 3.5.0),
     GenomicRanges
 Imports:
     BiocGenerics,

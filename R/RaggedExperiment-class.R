@@ -299,7 +299,7 @@ setReplaceMethod("colData", c("RaggedExperiment", "DataFrame"),
 #' @describeIn RaggedExperiment assay missing method uses first metadata column
 #' @exportMethod assay
 setMethod("assay", c("RaggedExperiment", "missing"), function(x, i, ...) {
-   assay(x, i=1L, ...)
+    assay(x, i=1L, ...)
 })
 
 #' @describeIn RaggedExperiment assay numeric method.

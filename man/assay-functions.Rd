@@ -38,7 +38,8 @@ are always manufactured for \code{compactAssay()} and
     assay values from ranges overlapping each disjoint range. For
     instance, to use the \code{simplifyDisjoin=mean} of overlapping ranges,
     where ranges are characterized by integer-valued scores, the
-    entries are calculated as \preformatted{
+    entries are calculated as
+    \preformatted{
                     a
     original: |-----------|
                         b
