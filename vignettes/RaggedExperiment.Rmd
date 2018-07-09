@@ -38,8 +38,9 @@ and the number of samples represented in the data, respectively.
 # Installation
 
 ```{r, eval = FALSE}
-source("https://bioconductor.org/biocLite.R")
-BiocInstaller::biocLite("RaggedExperiment")
+if (!require("BiocManager"))
+    install.packages("BiocManager")
+BiocManager::install("RaggedExperiment")
 ```
 
 Loading the package:
