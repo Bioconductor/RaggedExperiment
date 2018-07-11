@@ -19,10 +19,11 @@
 #' @param i \code{integer(1)}, \code{character(1)}, or
 #'     \code{logical()} selecting the assay to be transformed.
 #'
-#' @param simplify \code{function} of 1 (for
-#'     \code{disjoinSummarizedExperiment}) or 3 (for
-#'     \code{qreduceSummarizedExperiment}) arguments, used to
+#' @param simplifyDisjoin \code{function} of 1 argument, used to
 #'     transform assays. See \code{\link{assay-functions}}.
+#'
+#' @param simplifyReduce \code{function} of 3 arguments used to transform
+#'     assays. See \code{\link{assay-functions}}.
 #'
 #' @param query \code{GRanges} provding regions over which reduction
 #'     is to occur.
@@ -98,13 +99,13 @@ compactSummarizedExperiment <-
 #'
 #' @export
 disjoinSummarizedExperiment <-
-    function(x, simplify, i = 1L, withDimnames=TRUE)
+    function(x, simplifyDisjoin, i = 1L, withDimnames=TRUE)
 {
-    stopifnot_simplify_ok(simplify, 1L)
+    stopifnot_simplify_ok(simplifyDisjoin, 1L)
 
     i <- .assay_i(x, i)
     name <- assayNames(x)[[i]]
-    assay <- disjoinAssay(x, simplify, i)
+    assay <- disjoinAssay(x, simplifyDisjoin, i)
     rowRanges <- setNames(GRanges(rownames(assay)), rownames(assay))
     if (!withDimnames)
         assay <- unname(assay)
@@ -126,15 +127,15 @@ disjoinSummarizedExperiment <-
 #'
 #' @export
 qreduceSummarizedExperiment <-
-    function(x, query, simplify, i = 1L, withDimnames=TRUE)
+    function(x, query, simplifyReduce, i = 1L, withDimnames=TRUE)
 {
-    stopifnot_simplify_ok(simplify, 3L)
+    stopifnot_simplify_ok(simplifyReduce, 3L)
     if (missing(query))
         query <- rowRanges(x)
 
     i <- .assay_i(x, i)
     name <- assayNames(x)[[i]]
-    assay <- qreduceAssay(x, query, simplify, i)
+    assay <- qreduceAssay(x, query, simplifyReduce, i)
     rowRanges <- setNames(GRanges(rownames(assay)), rownames(assay))
     if (!withDimnames)
         assay <- unname(assay)

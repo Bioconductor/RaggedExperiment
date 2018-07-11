@@ -12,9 +12,10 @@ sparseSummarizedExperiment(x, i = 1, withDimnames = TRUE)
 
 compactSummarizedExperiment(x, i = 1L, withDimnames = TRUE)
 
-disjoinSummarizedExperiment(x, simplify, i = 1L, withDimnames = TRUE)
+disjoinSummarizedExperiment(x, simplifyDisjoin, i = 1L, withDimnames = TRUE)
 
-qreduceSummarizedExperiment(x, query, simplify, i = 1L, withDimnames = TRUE)
+qreduceSummarizedExperiment(x, query, simplifyReduce, i = 1L,
+  withDimnames = TRUE)
 }
 \arguments{
 \item{x}{\code{RaggedExperiment}}
@@ -25,13 +26,14 @@ qreduceSummarizedExperiment(x, query, simplify, i = 1L, withDimnames = TRUE)
 \item{withDimnames}{\code{logical(1)} default TRUE. propagate
 dimnames to SummarizedExperiment.}
 
-\item{simplify}{\code{function} of 1 (for
-\code{disjoinSummarizedExperiment}) or 3 (for
-\code{qreduceSummarizedExperiment}) arguments, used to
+\item{simplifyDisjoin}{\code{function} of 1 argument, used to
 transform assays. See \code{\link{assay-functions}}.}
 
 \item{query}{\code{GRanges} provding regions over which reduction
 is to occur.}
+
+\item{simplifyReduce}{\code{function} of 3 arguments used to transform
+assays.  See \code{\link{assay-functions}}.}
 }
 \value{
 All functions return \code{RangedSummarizedExperiment}.
