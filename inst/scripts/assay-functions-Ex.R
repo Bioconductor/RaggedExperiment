@@ -1,13 +1,25 @@
-x <- RaggedExperiment(GRangesList(
-    GRanges(c("A:1-3", "A:4-5", "A:10-15"), score=1:3),
-    GRanges(c("A:4-5", "B:1-3"), score=4:5)
-))
+sample1 <- GRanges(
+    c(A = "chr1:1-10:-", B = "chr1:8-14:-", C = "chr2:15-18:+"),
+    score = 3:5)
+sample2 <- GRanges(
+    c(D = "chr1:1-10:-", E = "chr2:11-18:+"),
+    score = 1:2)
+
+query <- GRanges(c("chr1:1-14:-", "chr2:11-18:+"))
+colDat <- DataFrame(id = 1:2)
+
+re4 <- RaggedExperiment(
+    sample1 = sample1,
+    sample2 = sample2,
+    colData = colDat)
+
 query <- GRanges(c("A:1-2", "A:4-5", "B:1-5"))
 
 weightedmean <- function(scores, ranges, qranges)
     ## weighted average score per query range
-    sum(scores * width(ranges)) / sum(width(ranges))
-qreduceAssay(x, query, weightedmean)
+    sum(scores * width(ranges)) / sum(width(qranges))
+
+qreduceAssay(re4, query, weightedmean)
 
 \dontrun{
     ## Extended example: non-silent mutations, summarized by genic

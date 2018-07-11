@@ -33,7 +33,7 @@ transform assays. See \code{\link{assay-functions}}.}
 is to occur.}
 
 \item{simplifyReduce}{\code{function} of 3 arguments used to transform
-assays.  See \code{\link{assay-functions}}.}
+assays. See \code{\link{assay-functions}}.}
 }
 \value{
 All functions return \code{RangedSummarizedExperiment}.
