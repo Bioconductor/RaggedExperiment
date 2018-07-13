@@ -25,7 +25,7 @@ suppressPackageStartupMessages({
 
 # Introduction
 
-The `r Biocpkg("RaggedExperiment")` package provides a flexible data
+The `r BiocStyle::Biocpkg("RaggedExperiment")` package provides a flexible data
 representation for copy number, mutation and other ragged array schema for
 genomic location data. It aims to provide a framework for a set of samples
 that have differing numbers of genomic ranges.
@@ -215,8 +215,7 @@ for additional details.
 ```{r}
 weightedmean <- function(scores, ranges, qranges)
 {
-    isects <- pintersect(ranges, qranges)
-    sum(scores * width(isects)) / sum(width(qranges))
+    sum(scores * width(ranges)) / sum(width(qranges))
 }
 ```
 

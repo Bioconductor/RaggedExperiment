@@ -1,19 +1,10 @@
-sample1 <- GRanges(
-    c(A = "chr1:1-10:-", B = "chr1:8-14:-", C = "chr2:15-18:+"),
-    score = 3:5)
-sample2 <- GRanges(
-    c(D = "chr1:1-10:-", E = "chr2:11-18:+"),
-    score = 1:2)
+re4 <- RaggedExperiment(GRangesList(
+    GRanges(c(A = "chr1:1-10:-", B = "chr1:8-14:-", C = "chr2:15-18:+"),
+        score = 3:5),
+    GRanges(c(D = "chr1:1-10:-", E = "chr2:11-18:+"), score = 1:2)
+), colData = DataFrame(id = 1:2))
 
 query <- GRanges(c("chr1:1-14:-", "chr2:11-18:+"))
-colDat <- DataFrame(id = 1:2)
-
-re4 <- RaggedExperiment(
-    sample1 = sample1,
-    sample2 = sample2,
-    colData = colDat)
-
-query <- GRanges(c("A:1-2", "A:4-5", "B:1-5"))
 
 weightedmean <- function(scores, ranges, qranges)
     ## weighted average score per query range
