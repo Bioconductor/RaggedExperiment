@@ -7,6 +7,8 @@
 \alias{RaggedExperiment}
 \alias{coerce,RaggedExperiment,GRangesList-method}
 \alias{coerce,GRangesList,RaggedExperiment-method}
+\alias{seqinfo,RaggedExperiment-method}
+\alias{seqinfo<-,RaggedExperiment-method}
 \alias{rowRanges,RaggedExperiment-method}
 \alias{mcols,RaggedExperiment-method}
 \alias{mcols<-,RaggedExperiment-method}
@@ -30,13 +32,18 @@
 \usage{
 RaggedExperiment(..., colData = DataFrame())
 
+\S4method{seqinfo}{RaggedExperiment}(x)
+
+\S4method{seqinfo}{RaggedExperiment}(x, new2old = NULL,
+  pruning.mode = c("error", "coarse", "fine", "tidy")) <- value
+
 \S4method{rowRanges}{RaggedExperiment}(x, ...)
 
 \S4method{mcols}{RaggedExperiment}(x, use.names = FALSE, ...)
 
 \S4method{mcols}{RaggedExperiment}(x, ...) <- value
 
-\S4method{rowData}{RaggedExperiment}(x, ...)
+\S4method{rowData}{RaggedExperiment}(x, use.names = TRUE, ...)
 
 \S4method{rowData}{RaggedExperiment}(x, ...) <- value
 
@@ -64,12 +71,13 @@ RaggedExperiment(..., colData = DataFrame())
 
 \S4method{[}{RaggedExperiment,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
 
-\S4method{overlapsAny}{RaggedExperiment,Vector}(query, subject, maxgap = 0L,
-  minoverlap = 1L, type = c("any", "start", "end", "within", "equal"), ...)
+\S4method{overlapsAny}{RaggedExperiment,Vector}(query, subject,
+  maxgap = 0L, minoverlap = 1L, type = c("any", "start", "end",
+  "within", "equal"), ...)
 
-\S4method{subsetByOverlaps}{RaggedExperiment,Vector}(x, ranges, maxgap = -1L,
-  minoverlap = 0L, type = c("any", "start", "end", "within", "equal"),
-  invert = FALSE, ...)
+\S4method{subsetByOverlaps}{RaggedExperiment,Vector}(x, ranges,
+  maxgap = -1L, minoverlap = 0L, type = c("any", "start", "end",
+  "within", "equal"), invert = FALSE, ...)
 }
 \arguments{
 \item{...}{Constructor: GRanges, list of GRanges, or GRangesList OR
@@ -80,14 +88,90 @@ rowRanges must equal the number of rows in colData}
 
 \item{x}{A RaggedExperiment object.}
 
-\item{use.names}{(logical default FALSE) whether to propagate rownames from
-the object to rownames of metadata \code{DataFrame}}
+\item{new2old}{
+    The \code{new2old} argument allows the user to rename, drop, add and/or
+    reorder the "sequence levels" in \code{x}.
+
+    \code{new2old} can be \code{NULL} or an integer vector with one element
+    per row in \link{Seqinfo} object \code{value} (i.e. \code{new2old} and
+    \code{value} must have the same length) describing how the "new" sequence
+    levels should be mapped to the "old" sequence levels, that is, how the
+    rows in \code{value} should be mapped to the rows in \code{seqinfo(x)}.
+    The values in \code{new2old} must be >= 1 and <= \code{length(seqinfo(x))}.
+    \code{NA}s are allowed and indicate sequence levels that are being added.
+    Old sequence levels that are not represented in \code{new2old} will be
+    dropped, but this will fail if those levels are in use (e.g. if \code{x}
+    is a \link[GenomicRanges]{GRanges} object with ranges defined on those
+    sequence levels) unless a pruning mode is specified via the
+    \code{pruning.mode} argument (see below).
+
+    If \code{new2old=NULL}, then sequence levels can only be added to the
+    existing ones, that is, \code{value} must have at least as many rows
+    as \code{seqinfo(x)} (i.e. \code{length(values) >= length(seqinfo(x))})
+    and also \code{seqlevels(values)[seq_len(length(seqlevels(x)))]} must be
+    identical to \code{seqlevels(x)}.
+  }
+
+\item{pruning.mode}{
+    When some of the seqlevels to drop from \code{x} are in use (i.e. have
+    ranges on them), the ranges on these sequences need to be removed before
+    the seqlevels can be dropped. We call this \emph{pruning}. The
+    \code{pruning.mode} argument controls how to \emph{prune} \code{x}.
+    Four pruning modes are currently defined: \code{"error"}, \code{"coarse"},
+    \code{"fine"}, and \code{"tidy"}. \code{"error"} is the default. In this
+    mode, no pruning is done and an error is raised. The other pruning modes
+    do the following:
+    \itemize{
+        \item \code{"coarse"}: Remove the elements in \code{x} where the
+              seqlevels to drop are in use. Typically reduces the length of
+              \code{x}. Note that if \code{x} is a list-like object (e.g.
+              \link[GenomicRanges]{GRangesList},
+              \link[GenomicAlignments]{GAlignmentPairs}, or
+              \link[GenomicAlignments]{GAlignmentsList}), then any list
+              element in \code{x} where at least one of the sequence levels
+              to drop is in use is \emph{fully} removed. In other words,
+              when \code{pruning.mode="coarse"}, the \code{seqlevels} setter
+              will keep or remove \emph{full list elements} and not try to
+              change their content. This guarantees that the exact ranges
+              (and their order) inside the individual list elements are
+              preserved. This can be a desirable property when the list
+              elements represent compound features like exons grouped by
+              transcript (stored in a \link[GenomicRanges]{GRangesList}
+              object as returned by
+              \code{\link[GenomicFeatures]{exonsBy}( , by="tx")}),
+              or paired-end or fusion reads, etc...
+
+        \item \code{"fine"}: Supported on list-like objects only. Removes
+              the ranges that are on the sequences to drop. This removal is
+              done within each list element of the original object \code{x}
+              and doesn't affect its length or the order of its list elements.
+              In other words, the pruned object is guaranteed to be
+              \emph{parallel} to the original object.
+
+        \item \code{"tidy"}: Like the \code{"fine"} pruning above but also
+              removes the list elements that become empty as the result of
+              the pruning. Note that this pruning mode is particularly well
+              suited on a \link[GenomicRanges]{GRangesList} object that
+              contains transcripts grouped by gene, as returned by
+              \code{\link[GenomicFeatures]{transcriptsBy}( , by="gene")}.
+              Finally note that, as a convenience, this pruning mode is
+              supported on non list-like objects (e.g.
+              \link[GenomicRanges]{GRanges} or
+              \link[GenomicAlignments]{GAlignments} objects) and, in this
+              case, is equivalent to the \code{"coarse"} mode.
+    }
+    See the "B. DROP SEQLEVELS FROM A LIST-LIKE OBJECT" section in the examples
+    below for an extensive illustration of these pruning modes.
+  }
 
 \item{value}{\itemize{
 \item{dimnames}: A \code{list} of dimension names
 \item{mcols}: A \code{\link[S4Vectors]{DataFrame}} representing the
 assays
 }}
+
+\item{use.names}{(logical default FALSE) whether to propagate rownames from
+the object to rownames of metadata \code{DataFrame}}
 
 \item{i}{logical(1), integer(1), or character(1) indicating the
 assay to be reported. For \code{[}, \code{i} can be any
@@ -239,6 +323,10 @@ The \code{RaggedExperiment} class is a container for
 }
 \section{Methods (by generic)}{
 \itemize{
+\item \code{seqinfo}: seqinfo accessor
+
+\item \code{seqinfo<-}: Replace seqinfo metadata of the ranges
+
 \item \code{rowRanges}: rowRanges accessor
 
 \item \code{mcols}: get the metadata columns of the ranges,

@@ -12,7 +12,8 @@ sparseSummarizedExperiment(x, i = 1, withDimnames = TRUE)
 
 compactSummarizedExperiment(x, i = 1L, withDimnames = TRUE)
 
-disjoinSummarizedExperiment(x, simplifyDisjoin, i = 1L, withDimnames = TRUE)
+disjoinSummarizedExperiment(x, simplifyDisjoin, i = 1L,
+  withDimnames = TRUE)
 
 qreduceSummarizedExperiment(x, query, simplifyReduce, i = 1L,
   withDimnames = TRUE)

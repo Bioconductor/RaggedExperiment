@@ -3,6 +3,7 @@
 #' @importClassesFrom GenomicRanges GRangesList
 #' @importFrom S4Vectors mcols
 #' @importFrom BiocGenerics relist
+#' @importFrom GenomeInfoDb seqinfo seqinfo<-
 #' @importFrom stats setNames
 .RaggedExperiment <- setClass("RaggedExperiment",
     slots = c(
@@ -186,6 +187,23 @@ RaggedExperiment <- function(..., colData=DataFrame()) {
     assays <- .assays(x)
     unlist(assays, use.names = FALSE)[.rowidx(x), ]
 }
+
+#' @describeIn RaggedExperiment seqinfo accessor
+#' @exportMethod seqinfo
+setMethod("seqinfo", "RaggedExperiment", function(x) {
+    seqinfo(.assays(x))
+})
+
+#' @describeIn RaggedExperiment Replace seqinfo metadata of the ranges
+#' @exportMethod seqinfo<-
+#' @inheritParams GenomeInfoDb::`seqinfo<-`
+setReplaceMethod("seqinfo", "RaggedExperiment",
+    function(x, new2old=NULL, pruning.mode=c("error", "coarse", "fine", "tidy"),
+        value) {
+        newAssay <- `seqinfo<-`(.assays(x), new2old = new2old,
+            pruning.mode = pruning.mode, value = value)
+        BiocGenerics:::replaceSlots(x, assays = newAssay)
+})
 
 #' @describeIn RaggedExperiment rowRanges accessor
 #' @return 'rowRanges' returns a \code{\link{GRanges}} object
