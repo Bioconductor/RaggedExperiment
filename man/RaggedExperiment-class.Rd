@@ -10,6 +10,7 @@
 \alias{seqinfo,RaggedExperiment-method}
 \alias{seqinfo<-,RaggedExperiment-method}
 \alias{rowRanges,RaggedExperiment-method}
+\alias{rowRanges<-,RaggedExperiment,GRanges-method}
 \alias{mcols,RaggedExperiment-method}
 \alias{mcols<-,RaggedExperiment-method}
 \alias{rowData,RaggedExperiment-method}
@@ -38,6 +39,8 @@ RaggedExperiment(..., colData = DataFrame())
   pruning.mode = c("error", "coarse", "fine", "tidy")) <- value
 
 \S4method{rowRanges}{RaggedExperiment}(x, ...)
+
+\S4method{rowRanges}{RaggedExperiment,GRanges}(x, ...) <- value
 
 \S4method{mcols}{RaggedExperiment}(x, use.names = FALSE, ...)
 
@@ -302,6 +305,9 @@ constructor returns a \code{RaggedExperiment} object
 'rowRanges' returns a \code{\link{GRanges}} object
     summarizing ranges corresponding to \code{assay()} rows.
 
+'rowRanges<-' returns a \code{\link{RaggedExperiment}} object
+    with replaced ranges
+
 'mcols' returns a \code{\link{DataFrame}} object
     of the metadata columns
 
@@ -328,6 +334,8 @@ The \code{RaggedExperiment} class is a container for
 \item \code{seqinfo<-}: Replace seqinfo metadata of the ranges
 
 \item \code{rowRanges}: rowRanges accessor
+
+\item \code{rowRanges<-}: rowRanges replacement
 
 \item \code{mcols}: get the metadata columns of the ranges,
 rectangular representation of the 'assays'

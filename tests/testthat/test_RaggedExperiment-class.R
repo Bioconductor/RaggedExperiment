@@ -90,13 +90,21 @@ test_that("rowRanges() works", {
     re <- RaggedExperiment()
     expect_identical(rowRanges(re), GRanges())
 
+    rowRanges(re) <- GRanges()
+    expect_identical(rowRanges(re), GRanges())
+
     re <- RaggedExperiment(GRanges(), GRanges())
     expect_identical(rowRanges(re), GRanges())
 
     rng <- GRanges(c("A:1-5", "B:1-5"))
+    rng2 <- rng + 1
+
     re <- RaggedExperiment(rng)
     expect_identical(dim(re), c(2L, 1L))
     expect_identical(rowRanges(re), rng)
+
+    rowRanges(re) <- rng2
+    expect_identical(rowRanges(re), rng2)
 
     re <- RaggedExperiment(split(rng, letters[1:2]))
     expect_identical(dim(re), c(2L, 2L))

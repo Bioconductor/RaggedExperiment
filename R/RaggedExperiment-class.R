@@ -213,6 +213,19 @@ setMethod("rowRanges", "RaggedExperiment", function(x, ...) {
     .rowRanges(x)[.rowidx(x)]
 })
 
+#' @describeIn RaggedExperiment rowRanges replacement
+#' @return 'rowRanges<-' returns a \code{\link{RaggedExperiment}} object
+#'     with replaced ranges
+#' @exportMethod rowRanges<-
+setReplaceMethod("rowRanges", c("RaggedExperiment", "GRanges"),
+    function(x, ..., value) {
+        if (isEmpty(mcols(value)))
+            mcols(value) <- .mcols(x)
+        value <- relist(value, .assays(x))
+        BiocGenerics:::replaceSlots(x, assays = value, check = FALSE)
+    }
+)
+
 #' @describeIn RaggedExperiment get the metadata columns of the ranges,
 #'     rectangular representation of the 'assays'
 #' @return 'mcols' returns a \code{\link{DataFrame}} object
