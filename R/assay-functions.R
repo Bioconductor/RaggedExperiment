@@ -147,8 +147,9 @@ compactAssay <-
 #'             element applies.
 #'
 #'         \item{\code{qrange}} A \code{GRanges} instance with the
-#'              same length as \code{score}, providing the query range
-#'              window to which the corresponding scores apply.
+#'              same length as \code{unlist(score)}, providing the
+#'              query range window to which the corresponding scores
+#'              apply.
 #'
 #'     }
 #' @return \code{disjoinAssay()}: A matrix with number of rows equal
