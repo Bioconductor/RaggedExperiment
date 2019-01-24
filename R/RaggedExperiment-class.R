@@ -295,11 +295,11 @@ setReplaceMethod("dimnames", c("RaggedExperiment", "list"),
     rowRanges <- unlist(assays, use.names = FALSE)
     names(rowRanges) <- value[[1]]
     assays <- relist(rowRanges, assays)
-    names(assays) <- value[[2]]
+    names(assays)[.colidx(x)] <- value[[2]]
 
     colData <- colData(x)
     rownames(colData) <- value[[2]]
-    mcols(assays) <- colData
+    mcols(assays)[.colidx(x), ] <- colData
 
     BiocGenerics:::replaceSlots(x, assays = assays, check = FALSE)
 })
