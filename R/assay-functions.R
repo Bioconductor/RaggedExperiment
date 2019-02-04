@@ -247,12 +247,13 @@ qreduceAssay <-
     group <- (row - 1L) * max(col, 0) + col # 'max(col, 0)' for 0-length col
     group <- match(group, unique(group)) # 'sorted'
 
+    ugroup <- !duplicated(group)
     result <- simplifyReduce(
         unname(splitAsList(score, group)),
         unname(splitAsList(ranges, group)),
-        unname(qranges)
+        unname(qranges)[ugroup]
     )
-    group <- !duplicated(group)
+    group <- ugroup
 
     na <- as(background, class(result))
     dimnames <- list(NULL, NULL)
