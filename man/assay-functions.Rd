@@ -125,8 +125,13 @@ re4 <- RaggedExperiment(GRangesList(
 query <- GRanges(c("chr1:1-14:-", "chr2:11-18:+"))
 
 weightedmean <- function(scores, ranges, qranges)
+{
     ## weighted average score per query range
-    sum(scores * width(ranges)) / sum(width(qranges))
+    ## the weight corresponds to the size of the overlap of each 
+    ## overlapping subject range with the corresponding query range  
+    isects <- pintersect(ranges, qranges)
+    sum(scores * width(isects)) / sum(width(isects))
+}
 
 qreduceAssay(re4, query, weightedmean)
 

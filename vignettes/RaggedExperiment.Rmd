@@ -215,7 +215,8 @@ for additional details.
 ```{r}
 weightedmean <- function(scores, ranges, qranges)
 {
-    sum(scores * width(ranges)) / sum(width(qranges))
+    isects <- pintersect(ranges, qranges)
+    sum(scores * width(isects)) / sum(width(isects))
 }
 ```
 
