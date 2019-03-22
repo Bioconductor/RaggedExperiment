@@ -31,8 +31,13 @@ x <- RaggedExperiment(GRangesList(
 query <- GRanges(c("A:1-2", "A:4-5", "B:1-5"))
 
 weightedmean <- function(scores, ranges, qranges)
+{
     ## weighted average score per query range
-    sum(scores * width(ranges)) / sum(width(ranges))
+    ## the weight corresponds to the size of the overlap of each
+    ## overlapping subject range with the corresponding query range
+    isects <- pintersect(ranges, qranges)
+    sum(scores * width(isects)) / sum(width(isects))
+}
 
 qreduceAssay(x, query, weightedmean)
 qse <- qreduceSummarizedExperiment(x, query, weightedmean)
