@@ -49,6 +49,20 @@ Loading the package:
 library(RaggedExperiment)
 ```
 
+# `RaggedExperiment` class overview
+
+A schematic showing the class geometry and supported transformations of the
+`RaggedExperiment` class is show below. There are three main operations for
+transforming the `RaggedExperiment` representation:
+
+1) `sparseAssay`
+2) `compactAssay`
+3) `qreduceAssay`
+
+```{r, echo = FALSE, fig.cap = "RaggedExperiment object schematic. Rows and columns represent genomic ranges and samples, respectively. Assay operations can be performed with (from left to right) compactAssay, qreduceAssay, and sparseAssay.", out.width = "\\maxwidth"}
+knitr::include_graphics("RaggedExperiment.svg")
+```
+
 # Constructing a `RaggedExperiment` object
 
 We start with a couple of `GRanges` objects, each representing an individual
@@ -227,13 +241,8 @@ and the `simplifyReduce` functional argument.
 qreduceAssay(ragexp, query, simplifyReduce = weightedmean)
 ```
 
-The following graphic provides a visual representation of the operations
-discussed above.
-
-```{r, echo = FALSE, fig.cap = "RaggedExperiment object schematic. Rows and columns represent genomic ranges and samples, respectively. Assay operations can be performed with (from left to right) compactAssay, qreduceAssay, and sparseAssay.", out.width = "\\maxwidth"}
-download.file("https://docs.google.com/feeds/download/drawings/Export?id=1l__7EzJSMKuee8ss4BcS_LKclmJXYhzoWhzpupCLbZI&exportFormat=svg", "RaggedExperiment.svg")
-knitr::include_graphics("RaggedExperiment.svg")
-```
+See the schematic for a visual representation.
+<p style="text-align: right;"> <a href="#header">back to top</a> </p>
 
 # Coercion
 
