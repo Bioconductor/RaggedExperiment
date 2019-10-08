@@ -125,7 +125,8 @@ RaggedExperiment <- function(..., colData=DataFrame()) {
         nms <- names(rowRanges)
         colData <- DataFrame(x = seq_along(rowRanges), row.names = nms)[, FALSE]
     } else if (!missing(colData)) {
-        colData <- as(colData, "DataFrame")
+        if (!is(colData, "DataFrame"))
+            colData <- as(colData, "DataFrame")
         if (length(rowRanges) != nrow(colData))
             stop("length() of 'rowRanges' is not equal to nrow() of 'colData'")
         if (!is.null(names(rowRanges))) {
