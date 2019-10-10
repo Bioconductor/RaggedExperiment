@@ -36,26 +36,5 @@ qreduceAssay(re4, query, weightedmean)
     mae <- curatedTCGAData("ACC", c("RNASeq2GeneNorm", "CNASNP", "Mutation"),
         dry.run = FALSE)
 
-    ## genomic coordinates
-
-    gn <- genes(TxDb.Hsapiens.UCSC.hg19.knownGene)
-    gn <- keepStandardChromosomes(granges(gn), pruning.mode="coarse")
-    seqlevelsStyle(gn) <- "NCBI"
-    gn <- unstrand(gn)
-
-    ## reduce mutations, marking any genomic range with non-silent
-    ## mutation as FALSE
-
-    nonsilent <- function(scores, ranges, qranges)
-        any(scores != "Silent")
-    re <- mae[["ACC_Mutation-20160128"]]
-    genome(re) <- rep(TCGAutils::translateBuild(genome(re)[[1L]]),
-        length(genome(re)))
-
-    mutations <- qreduceAssay(re, gn, nonsilent, "Variant_Classification")
-
-    ## reduce copy number
-
-    re <- mae[["ACC_CNASNP-20160128"]]
-    cn <- qreduceAssay(re, gn, weightedmean, "Segment_Mean")
+    simplifyTCGA(mae)
 }
