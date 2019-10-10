@@ -9,8 +9,8 @@ query <- GRanges(c("chr1:1-14:-", "chr2:11-18:+"))
 weightedmean <- function(scores, ranges, qranges)
 {
     ## weighted average score per query range
-    ## the weight corresponds to the size of the overlap of each 
-    ## overlapping subject range with the corresponding query range  
+    ## the weight corresponds to the size of the overlap of each
+    ## overlapping subject range with the corresponding query range
     isects <- pintersect(ranges, qranges)
     sum(scores * width(isects)) / sum(width(isects))
 }
@@ -26,31 +26,36 @@ qreduceAssay(re4, query, weightedmean)
         library(org.Hs.eg.db)
         library(GenomeInfoDb)
         library(MultiAssayExperiment)
+        library(curatedTCGAData)
+        library(TCGAutils)
     })
 
     ## TCGA Multi-assay experiment to RaggedExperiment
 
-    url <- "http://s3.amazonaws.com/multiassayexperiments/accMAEO.rds"
-    ## download.file(url, fl <- tempfile())
-    ## fl <- "accMAEO.rds"
-    mae <- readRDS(fl)[, , c("RNASeq2GeneNorm", "CNASNP", "Mutations")]
+
+    mae <- curatedTCGAData("ACC", c("RNASeq2GeneNorm", "CNASNP", "Mutation"),
+        dry.run = FALSE)
 
     ## genomic coordinates
 
     gn <- genes(TxDb.Hsapiens.UCSC.hg19.knownGene)
     gn <- keepStandardChromosomes(granges(gn), pruning.mode="coarse")
     seqlevelsStyle(gn) <- "NCBI"
+    gn <- unstrand(gn)
 
     ## reduce mutations, marking any genomic range with non-silent
     ## mutation as FALSE
 
     nonsilent <- function(scores, ranges, qranges)
         any(scores != "Silent")
-    re <- as(mae[["Mutations"]], "RaggedExperiment")
+    re <- mae[["ACC_Mutation-20160128"]]
+    genome(re) <- rep(TCGAutils::translateBuild(genome(re)[[1L]]),
+        length(genome(re)))
+
     mutations <- qreduceAssay(re, gn, nonsilent, "Variant_Classification")
 
     ## reduce copy number
 
-    re <- as(mae[["CNASNP"]], "RaggedExperiment")
+    re <- mae[["ACC_CNASNP-20160128"]]
     cn <- qreduceAssay(re, gn, weightedmean, "Segment_Mean")
 }
