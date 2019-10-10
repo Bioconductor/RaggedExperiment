@@ -114,12 +114,14 @@ setValidity2("RaggedExperiment", .valid.RaggedExperiment)
 #' @import S4Vectors GenomicRanges SummarizedExperiment
 RaggedExperiment <- function(..., colData=DataFrame()) {
     inputs <- list(...)
-    if (length(inputs) == 1L &&
-            is(inputs[[1L]], "GenomicRangesList") && isEmpty(colData)) {
+    if (length(inputs) == 1L && is(inputs[[1L]], "GenomicRangesList")) {
         GRList <- inputs[[1L]]
         rowRanges <- relist(unlist(unname(GRList)), PartitioningByEnd(GRList))
-        colData <- mcols(inputs[[1L]])
-    } else
+        if (isEmpty(colData))
+            colData <- mcols(inputs[[1L]])
+    } else if (identical(length(inputs), 1L) && is(inputs[[1L]], "list"))
+        rowRanges <- GRangesList(inputs[[1L]])
+    else
         rowRanges <- GRangesList(inputs)
     if (missing(colData) && 0L != length(rowRanges)) {
         nms <- names(rowRanges)
@@ -390,7 +392,7 @@ setMethod("show", "RaggedExperiment", function(object) {
     scat("assays(%d): %s\n", nms)
 
     dimnames <- dimnames(object)
-    dlen <- sapply(dimnames, length)
+    dlen <- vapply(dimnames, length, integer(1L))
     if (dlen[[1]])
         scat("rownames(%d): %s\n", dimnames[[1]])
     else scat("rownames: NULL\n")

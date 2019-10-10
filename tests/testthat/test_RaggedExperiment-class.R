@@ -4,12 +4,17 @@ test_that("constructors work for basic cases", {
     expect_true(validObject(RaggedExperiment()))
     expect_true(validObject(RaggedExperiment(GRanges(), GRanges())))
 
-    lgr <- list(GRanges(), GRanges())
-    expect_true(validObject(RaggedExperiment(lgr)))
+    lgr1 <- list(GRanges(), GRanges())
+    expect_true(validObject(RaggedExperiment(lgr1)))
+
+    lgr2 <- as(list(GRanges(), GRanges()), "GRangesList")
+    expect_true(validObject(RaggedExperiment(lgr2)))
+
+    lgr3 <- as(list(GRanges(), GRanges()), "CompressedGRangesList")
+    expect_true(validObject(RaggedExperiment(lgr3)))
 
     grl <- GRangesList(GRanges(), GRanges())
-    ## FIXME: GRangesList constructor function should take GRangesList
-    expect_true(validObject(RaggedExperiment(as.list(grl))))
+    expect_true(validObject(RaggedExperiment(grl)))
 })
 
 test_that("colData construction works", {
