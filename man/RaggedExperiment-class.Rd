@@ -62,11 +62,12 @@ RaggedExperiment(..., colData = DataFrame())
 
 \S4method{colData}{RaggedExperiment,DataFrame}(x) <- value
 
-\S4method{assay}{RaggedExperiment,missing}(x, i, ...)
+\S4method{assay}{RaggedExperiment,missing}(x, i, withDimnames = TRUE,
+  ...)
 
-\S4method{assay}{RaggedExperiment,ANY}(x, i, ..., withDimnames = TRUE)
+\S4method{assay}{RaggedExperiment,ANY}(x, i, withDimnames = TRUE, ...)
 
-\S4method{assays}{RaggedExperiment}(x, ..., withDimnames = TRUE)
+\S4method{assays}{RaggedExperiment}(x, withDimnames = TRUE, ...)
 
 \S4method{assayNames}{RaggedExperiment}(x, ...)
 

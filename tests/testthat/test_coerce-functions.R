@@ -21,14 +21,14 @@ test_that("SummarizedExperiment coercion works", {
     expect_identical(colData(res), colData(reA))
 
     res <- compactSummarizedExperiment(reA, withDimnames=FALSE)
-    expect_identical(dimnames(assay(res)), list(NULL, NULL))
+    expect_identical(dimnames(assay(res)), NULL)
 
     res <- disjoinSummarizedExperiment(reA, simplify=fun1)
     expect_identical(assay(res), disjoinAssay(reA, simplify=fun1))
     expect_identical(colData(res), colData)
 
     res <- disjoinSummarizedExperiment(reA, simplify=fun1, withDimnames=FALSE)
-    expect_identical(dimnames(assay(res)), list(NULL, NULL))
+    expect_identical(dimnames(assay(res)), NULL)
 
     res <- qreduceSummarizedExperiment(reA, simplify=fun1)
     expect_identical(
@@ -38,9 +38,10 @@ test_that("SummarizedExperiment coercion works", {
     expect_identical(colData(res), colData)
 
     res <- qreduceSummarizedExperiment(reA, simplify=fun1, withDimnames=FALSE)
-    expect_identical(
+    expect_equal(
         assay(res),
-        qreduceAssay(reA, rowRanges(reA), simplify=fun1, withDimnames=FALSE)
+        qreduceAssay(reA, rowRanges(reA), simplify=fun1, withDimnames=FALSE),
+        check.attributes = FALSE
     )
 })
 

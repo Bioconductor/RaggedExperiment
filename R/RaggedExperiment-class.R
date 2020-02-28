@@ -332,9 +332,11 @@ setReplaceMethod("colData", c("RaggedExperiment", "DataFrame"),
 
 #' @describeIn RaggedExperiment assay missing method uses first metadata column
 #' @exportMethod assay
-setMethod("assay", c("RaggedExperiment", "missing"), function(x, i, ...) {
-    assay(x, i=1L, ...)
-})
+setMethod("assay", c("RaggedExperiment", "missing"),
+    function(x, i, withDimnames = TRUE, ...) {
+        assay(x, i=1L, withDimnames = withDimnames, ...)
+    }
+)
 
 #' @describeIn RaggedExperiment assay numeric method.
 #' @param i logical(1), integer(1), or character(1) indicating the
@@ -342,9 +344,9 @@ setMethod("assay", c("RaggedExperiment", "missing"), function(x, i, ...) {
 #'     supported \code{Vector} object, e.g., \code{GRanges}.
 #' @exportMethod assay
 setMethod("assay", c("RaggedExperiment", "ANY"),
-    function(x, i, ..., withDimnames = TRUE)
+    function(x, i, withDimnames = TRUE, ...)
 {
-    sparseAssay(x, i, ..., withDimnames = withDimnames)
+    sparseAssay(x, i, withDimnames = withDimnames, ...)
 })
 
 #' @describeIn RaggedExperiment assays
@@ -353,10 +355,10 @@ setMethod("assay", c("RaggedExperiment", "ANY"),
 #' in the resulting object
 #' @return 'assays' returns a \code{\link{SimpleList}}
 #' @exportMethod assays
-setMethod("assays", "RaggedExperiment", function(x, ..., withDimnames = TRUE) {
+setMethod("assays", "RaggedExperiment", function(x, withDimnames = TRUE, ...) {
     nms <- names(.mcols(x))
     lst <- lapply(nms, function(index, obj) {
-            assay(obj, index, withDimnames = withDimnames)
+            assay(obj, index, withDimnames = withDimnames, ...)
         }, obj = x)
     SimpleList(setNames(lst, nms))
 })
