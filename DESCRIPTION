@@ -1,6 +1,6 @@
 Package: RaggedExperiment
 Title: Representation of Sparse Experiments and Assays Across Samples
-Version: 1.11.1
+Version: 1.11.2
 Authors@R: c(
     person("Martin", "Morgan", email = "martin.morgan@roswellpark.org",
         role = c("aut", "cre")),
@@ -32,4 +32,4 @@ Suggests:
     testthat,
     MultiAssayExperiment
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0

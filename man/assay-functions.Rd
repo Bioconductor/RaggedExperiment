@@ -12,11 +12,22 @@ sparseAssay(x, i = 1, withDimnames = TRUE, background = NA_integer_)
 
 compactAssay(x, i = 1, withDimnames = TRUE, background = NA_integer_)
 
-disjoinAssay(x, simplifyDisjoin, i = 1, withDimnames = TRUE,
-  background = NA_integer_)
+disjoinAssay(
+  x,
+  simplifyDisjoin,
+  i = 1,
+  withDimnames = TRUE,
+  background = NA_integer_
+)
 
-qreduceAssay(x, query, simplifyReduce, i = 1, withDimnames = TRUE,
-  background = NA_integer_)
+qreduceAssay(
+  x,
+  query,
+  simplifyReduce,
+  i = 1,
+  withDimnames = TRUE,
+  background = NA_integer_
+)
 }
 \arguments{
 \item{x}{A \code{RaggedExperiment} object}
@@ -138,7 +149,6 @@ qreduceAssay(re4, query, weightedmean)
 \dontrun{
     ## Extended example: non-silent mutations, summarized by genic
     ## region
-
     suppressPackageStartupMessages({
         library(TxDb.Hsapiens.UCSC.hg19.knownGene)
         library(org.Hs.eg.db)
@@ -148,12 +158,37 @@ qreduceAssay(re4, query, weightedmean)
         library(TCGAutils)
     })
 
-    ## TCGA Multi-assay experiment to RaggedExperiment
-
-
+    ## TCGA MultiAssayExperiment with RaggedExperiment data
     mae <- curatedTCGAData("ACC", c("RNASeq2GeneNorm", "CNASNP", "Mutation"),
         dry.run = FALSE)
 
-    simplifyTCGA(mae)
+    ## genomic coordinates
+    gn <- genes(TxDb.Hsapiens.UCSC.hg19.knownGene)
+    gn <- keepStandardChromosomes(granges(gn), pruning.mode="coarse")
+    seqlevelsStyle(gn) <- "NCBI"
+    gn <- unstrand(gn)
+
+    ## reduce mutations, marking any genomic range with non-silent
+    ## mutation as FALSE
+    nonsilent <- function(scores, ranges, qranges)
+        any(scores != "Silent")
+    mre <- mae[["ACC_Mutation-20160128"]]
+    genome(mre) <- translateBuild(genome(re))
+    mutations <- qreduceAssay(mre, gn, nonsilent, "Variant_Classification")
+
+    ## reduce copy number
+    re <- mae[["ACC_CNASNP-20160128"]]
+    class(re)
+    ## [1] "RaggedExperiment"
+    genome(re) <- "hg19"
+    cn <- qreduceAssay(re, gn, weightedmean, "Segment_Mean")
+
+    ## ALTERNATIVE
+    ##
+    ## TCGAutils helper function to convert RaggedExperiment objects to
+    ## RangedSummarizedExperiment based on annotated gene ranges
+    mae[[1L]] <- re
+    mae[[2L]] <- mre
+    qreduceTCGA(mae)
 }
 }

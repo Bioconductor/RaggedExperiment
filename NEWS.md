@@ -1,3 +1,12 @@
+## Changes in version 1.12.0
+
+### Bug fixes and minor improvements
+
+* Adjust to changes from `SummarizedExperiment::assay` (`withDimnames` argument)
+* Reference `simplifyTCGA` helper function from `TCGAutils` in examples
+* Restore original real-world `qreduceAssay` example and include alternative
+`qreduceTCGA` example
+
 ## Changes in version 1.10.0
 
 ### Bug fixes and minor improvements
