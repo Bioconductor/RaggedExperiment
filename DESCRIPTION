@@ -22,6 +22,7 @@ Imports:
     BiocGenerics,
     GenomeInfoDb,
     IRanges,
+    MatrixGenerics,
     methods,
     S4Vectors,
     stats,
@@ -32,4 +33,4 @@ Suggests:
     testthat,
     MultiAssayExperiment
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

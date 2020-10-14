@@ -4,6 +4,8 @@
 #' @importFrom S4Vectors mcols
 #' @importFrom BiocGenerics relist
 #' @importFrom GenomeInfoDb seqinfo seqinfo<-
+#' @importFrom MatrixGenerics rowRanges
+#' @importFrom SummarizedExperiment rowRanges<-
 #' @importFrom stats setNames
 .RaggedExperiment <- setClass("RaggedExperiment",
     slots = c(
