@@ -1,3 +1,10 @@
+## Changes in version 1.14.0
+
+### Bug fixes and minor improvements
+
+* Update package to changes in `MatrixGenerics` (new location of the
+`rowRanges` generic)
+
 ## Changes in version 1.12.0
 
 ### Bug fixes and minor improvements
