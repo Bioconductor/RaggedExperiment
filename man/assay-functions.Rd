@@ -13,7 +13,7 @@ sparseAssay(
   i = 1,
   withDimnames = TRUE,
   background = NA_integer_,
-  Matrix = FALSE
+  sparse = FALSE
 )
 
 compactAssay(
@@ -21,7 +21,7 @@ compactAssay(
   i = 1,
   withDimnames = TRUE,
   background = NA_integer_,
-  Matrix = FALSE
+  sparse = FALSE
 )
 
 disjoinAssay(
@@ -56,7 +56,7 @@ are always manufactured for \code{compactAssay()} and
 \item{background}{A value (default NA) for the returned matrix after
 \code{*Assay} operations}
 
-\item{Matrix}{logical(1) whether to return a
+\item{sparse}{logical(1) whether to return a
 \code{\link[Matrix]{sparseMatrix}} representation}
 
 \item{simplifyDisjoin}{A \code{function} / functional operating on a
@@ -110,12 +110,12 @@ is to occur.}
 \value{
 \code{sparseAssay()}: A matrix() with dimensions
     \code{dim(x)}. Elements contain the assay value for the \emph{i}th
-    range and \emph{j}th sample. Use 'Matrix=TRUE' to obtain
+    range and \emph{j}th sample. Use 'sparse=TRUE' to obtain
     a \code{\link[Matrix]{sparseMatrix}} assay representation.
 
 \code{compactAssay()}: Samples with identical range are placed
     in the same row. Non-disjoint ranges are NOT collapsed. Use
-    'Matrix=TRUE' to obtain a \code{\link[Matrix]{sparseMatrix}} assay
+    'sparse=TRUE' to obtain a \code{\link[Matrix]{sparseMatrix}} assay
     representation.
 
 \code{disjoinAssay()}: A matrix with number of rows equal

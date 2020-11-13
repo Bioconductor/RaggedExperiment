@@ -22,9 +22,9 @@ test_that("sparseAssay() works", {
     M0 <- Matrix::sparseMatrix(
         i = c(1, 2, 3, 4), j = c(1, 1, 2, 2), x = 1:4, dims = c(4, 2)
     )
-    expect_identical(sparseAssay(re, Matrix = TRUE, withDimnames = FALSE), M0)
+    expect_identical(sparseAssay(re, sparse = TRUE, withDimnames = FALSE), M0)
     dimnames(M0) <- dimnames(m0)
-    expect_identical(sparseAssay(re, Matrix = TRUE), M0)
+    expect_identical(sparseAssay(re, sparse = TRUE), M0)
 })
 
 
@@ -49,9 +49,9 @@ test_that("compactAssay() works", {
     M0 <- Matrix::sparseMatrix(
         i = c(1, 2, 1, 3), j = c(1, 1, 2, 2), x = 1:4, dims = c(3, 2)
     )
-    expect_identical(compactAssay(re, Matrix = TRUE, withDimnames = FALSE), M0)
+    expect_identical(compactAssay(re, sparse = TRUE, withDimnames = FALSE), M0)
     dimnames(M0) <- dimnames(m0)
-    expect_identical(compactAssay(re, Matrix = TRUE), M0)
+    expect_identical(compactAssay(re, sparse = TRUE), M0)
 
     ridx <- 3:1
     expect_identical(compactAssay(re[ridx,]), m0[1:2,])
