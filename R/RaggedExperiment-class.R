@@ -399,7 +399,7 @@ setMethod("show", "RaggedExperiment", function(object) {
     dlen <- vapply(dimnames, length, integer(1L))
     if (dlen[[1]])
         scat("rownames(%d): %s\n", dimnames[[1]])
-    else scat("rownames: NULL\n")
+    else cat("rownames: NULL\n")
     if (dlen[[2]])
         scat("colnames(%d): %s\n", dimnames[[2]])
     else cat("colnames: NULL\n")
