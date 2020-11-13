@@ -41,13 +41,21 @@
 #'     \code{disjoinAssay()}.
 #'
 #' @param background A value (default NA) for the returned matrix after
-#' \code{*Assay} operations
+#'     \code{*Assay} operations
+#'
+#' @param Matrix logical(1) whether to return a
+#'     \code{\link[Matrix]{sparseMatrix}} representation
 #'
 #' @return \code{sparseAssay()}: A matrix() with dimensions
 #'     \code{dim(x)}. Elements contain the assay value for the \emph{i}th
-#'     range and \emph{j}th sample.
+#'     range and \emph{j}th sample. Use 'Matrix=TRUE' to obtain
+#'     a \code{\link[Matrix]{sparseMatrix}} assay representation.
+#'
 #' @export
-sparseAssay <- function(x, i = 1, withDimnames = TRUE, background = NA_integer_)
+sparseAssay <-
+    function(
+        x, i = 1, withDimnames = TRUE, background = NA_integer_, Matrix = FALSE
+    )
 {
     i <- .assay_i(x, i)
     mcol <- .mcols(x)[[i]]
@@ -60,24 +68,37 @@ sparseAssay <- function(x, i = 1, withDimnames = TRUE, background = NA_integer_)
         dimnames <- NULL
     }
 
-    na <- as(background, class(mcol))
-    m <- matrix(na, nrow = dim[[1]], ncol = dim[[2]], dimnames = dimnames)
     idx <- cbind(
         row = seq_len(dim[[1L]]),
         col = rep(seq_len(dim[[2]]), lengths(.assays(x)))
     )
-    m[idx] <- mcol
-    m[.rowidx(x), .colidx(x), drop=FALSE]
+    if (Matrix) {
+        M <- Matrix::sparseMatrix(
+            i = idx[, 1], j = idx[, 2], x = mcol, dims = dim
+        )
+        dimnames(M) <- dimnames
+    } else {
+        na <- as(background, class(mcol))
+        M <- matrix(na, nrow = dim[[1]], ncol = dim[[2]], dimnames = dimnames)
+        M[idx] <- mcol
+        M <- M[.rowidx(x), .colidx(x), drop=FALSE]
+    }
+    M
 }
 
 #' @rdname assay-functions
 #'
 #' @return \code{compactAssay()}: Samples with identical range are placed
-#'     in the same row. Non-disjoint ranges are NOT collapsed.
+#'     in the same row. Non-disjoint ranges are NOT collapsed. Use
+#'     'Matrix=TRUE' to obtain a \code{\link[Matrix]{sparseMatrix}} assay
+#'     representation.
 #'
 #' @export
 compactAssay <-
-    function(x, i = 1, withDimnames = TRUE, background = NA_integer_) {
+    function(
+        x, i = 1, withDimnames = TRUE, background = NA_integer_, Matrix = FALSE
+    )
+{
     i <- .assay_i(x, i)
     mcol <- .mcols(x)[[i]][.rowidx(x)]
     dim <- .dim(x)
@@ -91,20 +112,29 @@ compactAssay <-
         dimnames[[1]] <- dimnames[[1]][rev]
     }
 
-    na <- as(background, class(mcol))
     if (withDimnames)
         dimnames <- list(as.character(ugr), .dimnames(x)[[2]])
-    m <- matrix(
-        na, nrow=length(ugr), ncol=dim[[2]],
-        dimnames=dimnames
-    )
     idx <- cbind(
         row = row,
         col = rep(seq_len(dim[[2]]), lengths(.assays(x)))[.rowidx(x)]
     )
 
-    m[idx] <- mcol
-    m[order(ugr), .colidx(x), drop=FALSE]
+    if (Matrix) {
+        M <- Matrix::sparseMatrix(
+            i = idx[, 1], j = idx[, 2], x = mcol,
+            dims = list(length(ugr), dim[[2]])
+        )
+        dimnames(M) <- dimnames
+    } else {
+        na <- as(background, class(mcol))
+        M <- matrix(
+            na, nrow=length(ugr), ncol=dim[[2]],
+            dimnames=dimnames
+        )
+        M[idx] <- mcol
+        M <- M[order(ugr), .colidx(x), drop=FALSE]
+    }
+    M
 }
 
 #' @rdname assay-functions

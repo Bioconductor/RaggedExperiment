@@ -1,3 +1,33 @@
+context("assay-sparse")
+
+test_that("sparseAssay() works", {
+    urownames <- function(x)
+        unique(as.character(SummarizedExperiment::rowRanges(x)))
+
+    sample1 <- GRanges(c("chr1:1-10", "chr1:11-18"), score = 1:2)
+    sample2 <- GRanges(c("chr1:1-10", "chr2:11-18"), score = 3:4)
+    re <- RaggedExperiment(sample1, sample2)
+
+    m0 <- matrix(
+        c(1L, 2L, NA, NA, NA, NA, 3L, 4L), nrow=length(rowRanges(re))
+    )
+    expect_identical(sparseAssay(re, withDimnames = FALSE), m0)
+
+    dimnames(m0) <- list(
+        as.character(SummarizedExperiment::rowRanges(re)), NULL
+    )
+    expect_identical(sparseAssay(re), m0)
+
+    ## test sparseAssay with sparseMatrix
+    M0 <- Matrix::sparseMatrix(
+        i = c(1, 2, 3, 4), j = c(1, 1, 2, 2), x = 1:4, dims = c(4, 2)
+    )
+    expect_identical(sparseAssay(re, Matrix = TRUE, withDimnames = FALSE), M0)
+    dimnames(M0) <- dimnames(m0)
+    expect_identical(sparseAssay(re, Matrix = TRUE), M0)
+})
+
+
 context("assay-compact")
 
 test_that("compactAssay() works", {
@@ -14,6 +44,14 @@ test_that("compactAssay() works", {
     )
     expect_identical(compactAssay(re), m0)
     expect_identical(compactAssay(re, withDimnames=FALSE), unname(m0))
+
+    ## test compactAssay with sparseMatrix
+    M0 <- Matrix::sparseMatrix(
+        i = c(1, 2, 1, 3), j = c(1, 1, 2, 2), x = 1:4, dims = c(3, 2)
+    )
+    expect_identical(compactAssay(re, Matrix = TRUE, withDimnames = FALSE), M0)
+    dimnames(M0) <- dimnames(m0)
+    expect_identical(compactAssay(re, Matrix = TRUE), M0)
 
     ridx <- 3:1
     expect_identical(compactAssay(re[ridx,]), m0[1:2,])
@@ -196,7 +234,7 @@ test_that("qreduceAssay() null and simple reduction", {
         dimnames=list(as.character(query), colnames(re))
     )
     expect_identical(result, exp)
-    
+
 })
 
 test_that("qreduceAssay() disjoint ranges works", {
@@ -215,7 +253,7 @@ test_that("qreduceAssay() disjoint ranges works", {
         dimnames=list(as.character(query), colnames(re))
     )
     expect_identical(result, exp)
-    
+
     query <- GRanges(c("A:1-5", "A:6-10", "A:11-15", "A:16-20"))
     result <- qreduceAssay(re, query, fun1)
     exp <- matrix(
