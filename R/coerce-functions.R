@@ -31,7 +31,7 @@
 #' @param withDimnames \code{logical(1)} default TRUE. propagate
 #'     dimnames to SummarizedExperiment.
 #'
-#' @param Matrix logical(1) whether to return a
+#' @param sparse logical(1) whether to return a
 #'     \code{\link[Matrix]{sparseMatrix}} representation
 #'
 #' @return All functions return \code{RangedSummarizedExperiment}.
@@ -39,7 +39,7 @@
 #' @return \code{sparseSummarizedExperiment} has \code{rowRanges()}
 #'     identical to the row ranges of \code{x}, and \code{assay()}
 #'     data as \code{sparseAssay()}. This is very space-inefficient
-#'     representation of ragged data. Use 'Matrix=TRUE' to obtain
+#'     representation of ragged data. Use 'sparse=TRUE' to obtain
 #'     a \code{\link[Matrix]{sparseMatrix}} assay representation.
 #'
 #' @example inst/scripts/coerce-functions-Ex.R
@@ -48,11 +48,11 @@
 #'
 #' @export
 sparseSummarizedExperiment <-
-    function(x, i = 1, withDimnames=TRUE, Matrix = FALSE)
+    function(x, i = 1, withDimnames=TRUE, sparse = FALSE)
 {
     i <- .assay_i(x, i)
     name <- assayNames(x)[[i]]
-    assay <- sparseAssay(x, i, withDimnames=withDimnames, Matrix = Matrix)
+    assay <- sparseAssay(x, i, withDimnames=withDimnames, sparse = sparse)
     assay <- setNames(list(assay), name)
 
     colData <- colData(x)
@@ -70,18 +70,18 @@ sparseSummarizedExperiment <-
 #'     identical to the row ranges of \code{x}, and \code{assay()}
 #'     data as \code{compactAssay()}. This is space-inefficient
 #'     representation of ragged data when samples are primarily
-#'     composed of different ranges. Use 'Matrix=TRUE' to obtain
+#'     composed of different ranges. Use 'sparse=TRUE' to obtain
 #'     a \code{\link[Matrix]{sparseMatrix}} assay representation.
 #'
 #' @importFrom GenomicRanges GRanges
 #'
 #' @export
 compactSummarizedExperiment <-
-    function(x, i = 1L, withDimnames=TRUE, Matrix = FALSE)
+    function(x, i = 1L, withDimnames=TRUE, sparse = FALSE)
 {
     i <- .assay_i(x, i)
     name <- assayNames(x)[[i]]
-    assay <- compactAssay(x, i, Matrix = Matrix)
+    assay <- compactAssay(x, i, sparse = sparse)
     rowRanges <- setNames(GRanges(rownames(assay)), rownames(assay))
     if (!withDimnames)
         assay <- unname(assay)

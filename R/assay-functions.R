@@ -43,18 +43,18 @@
 #' @param background A value (default NA) for the returned matrix after
 #'     \code{*Assay} operations
 #'
-#' @param Matrix logical(1) whether to return a
+#' @param sparse logical(1) whether to return a
 #'     \code{\link[Matrix]{sparseMatrix}} representation
 #'
 #' @return \code{sparseAssay()}: A matrix() with dimensions
 #'     \code{dim(x)}. Elements contain the assay value for the \emph{i}th
-#'     range and \emph{j}th sample. Use 'Matrix=TRUE' to obtain
+#'     range and \emph{j}th sample. Use 'sparse=TRUE' to obtain
 #'     a \code{\link[Matrix]{sparseMatrix}} assay representation.
 #'
 #' @export
 sparseAssay <-
     function(
-        x, i = 1, withDimnames = TRUE, background = NA_integer_, Matrix = FALSE
+        x, i = 1, withDimnames = TRUE, background = NA_integer_, sparse = FALSE
     )
 {
     i <- .assay_i(x, i)
@@ -72,7 +72,7 @@ sparseAssay <-
         row = seq_len(dim[[1L]]),
         col = rep(seq_len(dim[[2]]), lengths(.assays(x)))
     )
-    if (Matrix) {
+    if (sparse) {
         M <- Matrix::sparseMatrix(
             i = idx[, 1], j = idx[, 2], x = mcol, dims = dim
         )
@@ -90,13 +90,13 @@ sparseAssay <-
 #'
 #' @return \code{compactAssay()}: Samples with identical range are placed
 #'     in the same row. Non-disjoint ranges are NOT collapsed. Use
-#'     'Matrix=TRUE' to obtain a \code{\link[Matrix]{sparseMatrix}} assay
+#'     'sparse=TRUE' to obtain a \code{\link[Matrix]{sparseMatrix}} assay
 #'     representation.
 #'
 #' @export
 compactAssay <-
     function(
-        x, i = 1, withDimnames = TRUE, background = NA_integer_, Matrix = FALSE
+        x, i = 1, withDimnames = TRUE, background = NA_integer_, sparse = FALSE
     )
 {
     i <- .assay_i(x, i)
@@ -119,7 +119,7 @@ compactAssay <-
         col = rep(seq_len(dim[[2]]), lengths(.assays(x)))[.rowidx(x)]
     )
 
-    if (Matrix) {
+    if (sparse) {
         M <- Matrix::sparseMatrix(
             i = idx[, 1], j = idx[, 2], x = mcol,
             dims = list(length(ugr), dim[[2]])

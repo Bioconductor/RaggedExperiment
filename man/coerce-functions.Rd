@@ -8,9 +8,9 @@
 \title{Create SummarizedExperiment representations by transforming
     ragged assays to rectangular form.}
 \usage{
-sparseSummarizedExperiment(x, i = 1, withDimnames = TRUE, Matrix = FALSE)
+sparseSummarizedExperiment(x, i = 1, withDimnames = TRUE, sparse = FALSE)
 
-compactSummarizedExperiment(x, i = 1L, withDimnames = TRUE, Matrix = FALSE)
+compactSummarizedExperiment(x, i = 1L, withDimnames = TRUE, sparse = FALSE)
 
 disjoinSummarizedExperiment(x, simplifyDisjoin, i = 1L, withDimnames = TRUE)
 
@@ -31,7 +31,7 @@ qreduceSummarizedExperiment(
 \item{withDimnames}{\code{logical(1)} default TRUE. propagate
 dimnames to SummarizedExperiment.}
 
-\item{Matrix}{logical(1) whether to return a
+\item{sparse}{logical(1) whether to return a
 \code{\link[Matrix]{sparseMatrix}} representation}
 
 \item{simplifyDisjoin}{\code{function} of 1 argument, used to
@@ -49,14 +49,14 @@ All functions return \code{RangedSummarizedExperiment}.
 \code{sparseSummarizedExperiment} has \code{rowRanges()}
     identical to the row ranges of \code{x}, and \code{assay()}
     data as \code{sparseAssay()}. This is very space-inefficient
-    representation of ragged data. Use 'Matrix=TRUE' to obtain
+    representation of ragged data. Use 'sparse=TRUE' to obtain
     a \code{\link[Matrix]{sparseMatrix}} assay representation.
 
 \code{compactSummarizedExperiment} has \code{rowRanges()}
     identical to the row ranges of \code{x}, and \code{assay()}
     data as \code{compactAssay()}. This is space-inefficient
     representation of ragged data when samples are primarily
-    composed of different ranges. Use 'Matrix=TRUE' to obtain
+    composed of different ranges. Use 'sparse=TRUE' to obtain
     a \code{\link[Matrix]{sparseMatrix}} assay representation.
 
 \code{disjoinSummarizedExperiment} has \code{rowRanges()}
