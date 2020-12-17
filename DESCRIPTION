@@ -1,6 +1,6 @@
 Package: RaggedExperiment
 Title: Representation of Sparse Experiments and Assays Across Samples
-Version: 1.15.0
+Version: 1.15.1
 Authors@R: c(
     person("Martin", "Morgan", email = "martin.morgan@roswellpark.org",
         role = c("aut", "cre")),
@@ -22,6 +22,7 @@ Imports:
     BiocGenerics,
     GenomeInfoDb,
     IRanges,
+    Matrix,
     MatrixGenerics,
     methods,
     S4Vectors,
@@ -34,3 +35,4 @@ Suggests:
     MultiAssayExperiment
 LazyData: true
 RoxygenNote: 7.1.1
+Encoding: UTF-8

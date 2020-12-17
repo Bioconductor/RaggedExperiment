@@ -8,9 +8,21 @@
 \alias{qreduceAssay}
 \title{Create simplified representation of ragged assay data.}
 \usage{
-sparseAssay(x, i = 1, withDimnames = TRUE, background = NA_integer_)
+sparseAssay(
+  x,
+  i = 1,
+  withDimnames = TRUE,
+  background = NA_integer_,
+  sparse = FALSE
+)
 
-compactAssay(x, i = 1, withDimnames = TRUE, background = NA_integer_)
+compactAssay(
+  x,
+  i = 1,
+  withDimnames = TRUE,
+  background = NA_integer_,
+  sparse = FALSE
+)
 
 disjoinAssay(
   x,
@@ -43,6 +55,9 @@ are always manufactured for \code{compactAssay()} and
 
 \item{background}{A value (default NA) for the returned matrix after
 \code{*Assay} operations}
+
+\item{sparse}{logical(1) whether to return a
+\code{\link[Matrix]{sparseMatrix}} representation}
 
 \item{simplifyDisjoin}{A \code{function} / functional operating on a
     \code{*List}, where the elements of the list are all within-sample
@@ -95,10 +110,13 @@ is to occur.}
 \value{
 \code{sparseAssay()}: A matrix() with dimensions
     \code{dim(x)}. Elements contain the assay value for the \emph{i}th
-    range and \emph{j}th sample.
+    range and \emph{j}th sample. Use 'sparse=TRUE' to obtain
+    a \code{\link[Matrix]{sparseMatrix}} assay representation.
 
 \code{compactAssay()}: Samples with identical range are placed
-    in the same row. Non-disjoint ranges are NOT collapsed.
+    in the same row. Non-disjoint ranges are NOT collapsed. Use
+    'sparse=TRUE' to obtain a \code{\link[Matrix]{sparseMatrix}} assay
+    representation.
 
 \code{disjoinAssay()}: A matrix with number of rows equal
     to number of disjoint ranges across all samples. Elements of
