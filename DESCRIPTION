@@ -31,6 +31,7 @@ Imports:
 Suggests:
     BiocStyle,
     knitr,
+    rmarkdown,
     testthat,
     MultiAssayExperiment
 LazyData: true

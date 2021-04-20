@@ -152,7 +152,8 @@ RaggedExperiment <- function(..., colData=DataFrame()) {
     .RaggedExperiment(
         assays = rowRanges,
         rowidx = seq_len(sum(lengths(rowRanges))),
-        colidx = seq_along(rowRanges))
+        colidx = seq_along(rowRanges)
+    )
 }
 
 .assays <- function(x) {
