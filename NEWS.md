@@ -1,3 +1,10 @@
+## Changes in version 1.16.0
+
+### New features
+
+* `sparseAssay` and `compactAssay` now support `sparseMatrix` outputs from the
+`Matrix` package
+
 ## Changes in version 1.14.0
 
 ### Bug fixes and minor improvements
