@@ -205,6 +205,7 @@ setAs("dgCMatrix", "RaggedExperiment",
         mcols(rgs) <- DataFrame(scores = x)
 
         grls <- GRangesList(split(rgs, j))
+        names(grls) <- colnames(from)[dp > 0]
         RaggedExperiment(grls)
     }
 )
