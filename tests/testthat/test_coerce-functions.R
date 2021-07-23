@@ -60,3 +60,18 @@ test_that("SummarizedExperiment coercion assay selection works", {
     res <- sparseSummarizedExperiment(reA, "score2")
     expect_identical(assay(res), sparseAssay(reA, "score2"))
 })
+
+test_that("sparseMatrix to RaggedExperiment coercion works", {
+    sm <- Matrix::sparseMatrix(
+        i = c(2, 3, 4, 3, 4, 3, 4),
+        j = c(1, 1, 1, 3, 3, 4, 4),
+        x = c(2L, 4L, 2L, 2L, 2L, 4L, 2L),
+        dims = c(4, 4),
+        dimnames = list(
+            c("chr2:1-10", "chr2:2-10", "chr2:3-10", "chr2:4-10"),
+            LETTERS[1:4]
+        )
+    )
+
+    expect_true(is(as(sm, "RaggedExperiment"), "RaggedExperiment"))
+})

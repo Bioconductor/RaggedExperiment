@@ -5,6 +5,8 @@
 \alias{compactSummarizedExperiment}
 \alias{disjoinSummarizedExperiment}
 \alias{qreduceSummarizedExperiment}
+\alias{coerce-RaggedExperiment}
+\alias{coerce,dgCMatrix,RaggedExperiment-method}
 \title{Create SummarizedExperiment representations by transforming
     ragged assays to rectangular form.}
 \usage{
@@ -80,6 +82,15 @@ These methods transform \code{RaggedExperiment}
     \code{RaggedExperiment} objects with a single assay; this is
     currently enforced at time of coercion.
 }
+\section{sparseMatrix}{
+
+Convert a \code{dgCMatrix} to a \code{RaggedExperiment} given that the rownames
+are coercible to \code{GRanges}.
+
+In the following example, \code{x} is a \code{dgCMatrix} from the \code{Matrix} package.\preformatted{`as(x, "RaggedExperiment")`
+}
+}
+
 \examples{
 x <- RaggedExperiment(GRangesList(
     GRanges(c("A:1-5", "A:4-6", "A:10-15"), score=1:3),
@@ -126,4 +137,18 @@ qreduceAssay(x, query, weightedmean)
 qse <- qreduceSummarizedExperiment(x, query, weightedmean)
 assay(qse)
 rowRanges(qse)
+
+sm <- Matrix::sparseMatrix(
+    i = c(2, 3, 4, 3, 4, 3, 4),
+    j = c(1, 1, 1, 3, 3, 4, 4),
+    x = c(2L, 4L, 2L, 2L, 2L, 4L, 2L),
+    dims = c(4, 4),
+    dimnames = list(
+        c("chr2:1-10", "chr2:2-10", "chr2:3-10", "chr2:4-10"),
+        LETTERS[1:4]
+    )
+)
+
+as(sm, "RaggedExperiment")
+
 }

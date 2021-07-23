@@ -153,3 +153,58 @@ qreduceSummarizedExperiment <-
 
     SummarizedExperiment(assay, rowRanges=rowRanges, colData=colData)
 }
+
+
+#' @rdname coerce-functions
+#'
+#' @name coerce-RaggedExperiment
+#'
+#' @aliases coerce,dgCMatrix,RaggedExperiment-method
+#'
+#' @section
+#' sparseMatrix:
+#'   Convert a `dgCMatrix` to a `RaggedExperiment` given that the rownames
+#'   are coercible to `GRanges`.
+#'
+#' In the following example, `x` is a `dgCMatrix` from the `Matrix` package.
+#'
+#'     `as(x, "RaggedExperiment")`
+#'
+#' @md
+#'
+#' @examples
+#'
+#' sm <- Matrix::sparseMatrix(
+#'     i = c(2, 3, 4, 3, 4, 3, 4),
+#'     j = c(1, 1, 1, 3, 3, 4, 4),
+#'     x = c(2L, 4L, 2L, 2L, 2L, 4L, 2L),
+#'     dims = c(4, 4),
+#'     dimnames = list(
+#'         c("chr2:1-10", "chr2:2-10", "chr2:3-10", "chr2:4-10"),
+#'         LETTERS[1:4]
+#'     )
+#' )
+#'
+#' as(sm, "RaggedExperiment")
+#'
+#' @exportMethod coerce
+
+setAs("dgCMatrix", "RaggedExperiment",
+    function(from) {
+        dp <- diff(from@p)
+        j <- rep.int(seq_along(dp), dp)
+        idx <- from@i + 1
+        x <- from@x
+
+        ranges <- rownames(from)
+        if (is.null(ranges) && length(x))
+            stop("'rownames(x)' are NULL and not coercible to 'GRanges'")
+        rgs <- try(GRanges(ranges[idx]), silent = TRUE)
+        if (is(rgs, "try-error"))
+            stop("'rownames(x)' are not coercible to 'GRanges'")
+        mcols(rgs) <- DataFrame(scores = x)
+
+        grls <- GRangesList(split(rgs, j))
+        RaggedExperiment(grls)
+    }
+)

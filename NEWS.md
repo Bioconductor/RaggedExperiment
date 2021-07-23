@@ -1,3 +1,10 @@
+## Changes in version 1.18.0
+
+### New features
+
+* Sparse matrices of `dgCMatrix` type can now be coerced to `RaggedExperiment`
+when `rownames` are coercible to `GRanges`
+
 ## Changes in version 1.16.0
 
 ### New features

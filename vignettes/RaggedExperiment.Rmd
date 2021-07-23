@@ -164,6 +164,19 @@ sparseAssay(ragexp)
 length(sparseAssay(ragexp))
 ```
 
+### Support for sparse matrix output
+
+We provide sparse matrix representations with the help of the `Matrix` package.
+To obtain a sparse representation, the user can use the `sparse = TRUE`
+argument.
+
+```{r}
+sparseAssay(ragexp, sparse = TRUE)
+```
+
+This representation is of class `dgCMatrix` see the `Matrix` documentation for
+more details.
+
 ## compactAssay
 
 Samples with identical ranges are placed in the same row. Non-disjoint ranges
@@ -171,6 +184,14 @@ are **not** collapsed.
 
 ```{r}
 compactAssay(ragexp)
+```
+
+Similarly, to `sparseAssay` the `compactAssay` function provides the option to
+obtain a sparse matrix representation with the `sparse = TRUE` argument. This
+will return a `dgCMatrix` class from the `Matrix` package.
+
+```{r}
+compactAssay(ragexp, sparse = TRUE)
 ```
 
 ## disjoinAssay
@@ -241,8 +262,8 @@ See the schematic for a visual representation.
 # Coercion
 
 The `RaggedExperiment` provides a family of parallel functions for coercing to
-the `SummarizedExperiment` class. By selecting a particular assay index (`i`), a
-parallel assay coercion method can be achieved.
+the `SummarizedExperiment` class. By selecting a particular assay index (`i`),
+a parallel assay coercion method can be achieved.
 
 Here is the list of function names:
 
@@ -252,6 +273,31 @@ Here is the list of function names:
 * `qreduceSummarizedExperiment`
 
 See the documentation for details.
+
+## from dgCMatrix to RaggedExperiment
+
+In the special case where the rownames of a `sparseMatrix` are coercible to
+`GRanges`, `RaggedExperiment` provides the facility to convert sparse matrices
+into `RaggedExperiment`. This can be done using the `as` coercion method.  The
+example below first creates an example sparse `dgCMatrix` class and then shows
+the `as` method usage to this end.
+
+```{r}
+library(Matrix)
+
+sm <- Matrix::sparseMatrix(
+    i = c(2, 3, 4, 3, 4, 3, 4),
+    j = c(1, 1, 1, 3, 3, 4, 4),
+    x = c(2L, 4L, 2L, 2L, 2L, 4L, 2L),
+    dims = c(4, 4),
+    dimnames = list(
+        c("chr2:1-10", "chr2:2-10", "chr2:3-10", "chr2:4-10"),
+        LETTERS[1:4]
+    )
+)
+
+as(sm, "RaggedExperiment")
+```
 
 # Session Information
 

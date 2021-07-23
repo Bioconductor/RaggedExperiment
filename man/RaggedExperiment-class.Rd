@@ -106,10 +106,11 @@ rowRanges must equal the number of rows in colData}
     reorder the "sequence levels" in \code{x}.
 
     \code{new2old} can be \code{NULL} or an integer vector with one element
-    per row in \link[GenomeInfoDb]{Seqinfo} object \code{value} (i.e. \code{new2old} and
+    per entry in \link[GenomeInfoDb]{Seqinfo} object \code{value} (i.e. \code{new2old} and
     \code{value} must have the same length) describing how the "new" sequence
     levels should be mapped to the "old" sequence levels, that is, how the
-    rows in \code{value} should be mapped to the rows in \code{seqinfo(x)}.
+    entries in \code{value} should be mapped to the entries in
+    \code{seqinfo(x)}.
     The values in \code{new2old} must be >= 1 and <= \code{length(seqinfo(x))}.
     \code{NA}s are allowed and indicate sequence levels that are being added.
     Old sequence levels that are not represented in \code{new2old} will be
@@ -119,10 +120,30 @@ rowRanges must equal the number of rows in colData}
     \code{pruning.mode} argument (see below).
 
     If \code{new2old=NULL}, then sequence levels can only be added to the
-    existing ones, that is, \code{value} must have at least as many rows
+    existing ones, that is, \code{value} must have at least as many entries
     as \code{seqinfo(x)} (i.e. \code{length(values) >= length(seqinfo(x))})
     and also \code{seqlevels(values)[seq_len(length(seqlevels(x)))]} must be
     identical to \code{seqlevels(x)}.
+
+    Note that most of the times it's easier to proceed in 2 steps:
+    \enumerate{
+      \item First align the seqlevels on the left (\code{seqlevels(x)})
+            with the seqlevels on the right.
+      \item Then call \code{seqinfo(x) <- value}. Because
+            \code{seqlevels(x)} and \code{seqlevels(value)} now are
+            identical, there's no need to specify \code{new2old}.
+    }
+    This 2-step approach will typically look like this:
+    \preformatted{    seqlevels(x) <- seqlevels(value)  # align seqlevels
+    seqinfo(x) <- seqinfo(value)  # guaranteed to work
+    }
+    Or, if \code{x} has seqlevels not in \code{value}, it will look
+    like this:
+    \preformatted{    seqlevels(x, pruning.mode="coarse") <- seqlevels(value)
+    seqinfo(x) <- seqinfo(value)  # guaranteed to work
+    }
+    The \code{pruning.mode} argument will control what happens to \code{x}
+    when some of its seqlevels get droppped. See below for more information.
   }
 
 \item{pruning.mode}{
@@ -135,43 +156,43 @@ rowRanges must equal the number of rows in colData}
     mode, no pruning is done and an error is raised. The other pruning modes
     do the following:
     \itemize{
-        \item \code{"coarse"}: Remove the elements in \code{x} where the
-              seqlevels to drop are in use. Typically reduces the length of
-              \code{x}. Note that if \code{x} is a list-like object (e.g.
-              \link[GenomicRanges]{GRangesList},
-              \link[GenomicAlignments]{GAlignmentPairs}, or
-              \link[GenomicAlignments]{GAlignmentsList}), then any list
-              element in \code{x} where at least one of the sequence levels
-              to drop is in use is \emph{fully} removed. In other words,
-              when \code{pruning.mode="coarse"}, the \code{seqlevels} setter
-              will keep or remove \emph{full list elements} and not try to
-              change their content. This guarantees that the exact ranges
-              (and their order) inside the individual list elements are
-              preserved. This can be a desirable property when the list
-              elements represent compound features like exons grouped by
-              transcript (stored in a \link[GenomicRanges]{GRangesList}
-              object as returned by
-              \code{\link[GenomicFeatures]{exonsBy}( , by="tx")}),
-              or paired-end or fusion reads, etc...
+      \item \code{"coarse"}: Remove the elements in \code{x} where the
+            seqlevels to drop are in use. Typically reduces the length of
+            \code{x}. Note that if \code{x} is a list-like object (e.g.
+            \link[GenomicRanges]{GRangesList},
+            \link[GenomicAlignments]{GAlignmentPairs}, or
+            \link[GenomicAlignments]{GAlignmentsList}), then any list
+            element in \code{x} where at least one of the sequence levels
+            to drop is in use is \emph{fully} removed. In other words,
+            when \code{pruning.mode="coarse"}, the \code{seqlevels} setter
+            will keep or remove \emph{full list elements} and not try to
+            change their content. This guarantees that the exact ranges
+            (and their order) inside the individual list elements are
+            preserved. This can be a desirable property when the list
+            elements represent compound features like exons grouped by
+            transcript (stored in a \link[GenomicRanges]{GRangesList}
+            object as returned by
+            \code{\link[GenomicFeatures]{exonsBy}( , by="tx")}),
+            or paired-end or fusion reads, etc...
 
-        \item \code{"fine"}: Supported on list-like objects only. Removes
-              the ranges that are on the sequences to drop. This removal is
-              done within each list element of the original object \code{x}
-              and doesn't affect its length or the order of its list elements.
-              In other words, the pruned object is guaranteed to be
-              \emph{parallel} to the original object.
+      \item \code{"fine"}: Supported on list-like objects only. Removes
+            the ranges that are on the sequences to drop. This removal is
+            done within each list element of the original object \code{x}
+            and doesn't affect its length or the order of its list elements.
+            In other words, the pruned object is guaranteed to be
+            \emph{parallel} to the original object.
 
-        \item \code{"tidy"}: Like the \code{"fine"} pruning above but also
-              removes the list elements that become empty as the result of
-              the pruning. Note that this pruning mode is particularly well
-              suited on a \link[GenomicRanges]{GRangesList} object that
-              contains transcripts grouped by gene, as returned by
-              \code{\link[GenomicFeatures]{transcriptsBy}( , by="gene")}.
-              Finally note that, as a convenience, this pruning mode is
-              supported on non list-like objects (e.g.
-              \link[GenomicRanges]{GRanges} or
-              \link[GenomicAlignments]{GAlignments} objects) and, in this
-              case, is equivalent to the \code{"coarse"} mode.
+      \item \code{"tidy"}: Like the \code{"fine"} pruning above but also
+            removes the list elements that become empty as the result of
+            the pruning. Note that this pruning mode is particularly well
+            suited on a \link[GenomicRanges]{GRangesList} object that
+            contains transcripts grouped by gene, as returned by
+            \code{\link[GenomicFeatures]{transcriptsBy}( , by="gene")}.
+            Finally note that, as a convenience, this pruning mode is
+            supported on non list-like objects (e.g.
+            \link[GenomicRanges]{GRanges} or
+            \link[GenomicAlignments]{GAlignments} objects) and, in this
+            case, is equivalent to the \code{"coarse"} mode.
     }
     See the "B. DROP SEQLEVELS FROM A LIST-LIKE OBJECT" section in the examples
     below for an extensive illustration of these pruning modes.
