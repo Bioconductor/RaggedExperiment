@@ -202,7 +202,7 @@ setAs("dgCMatrix", "RaggedExperiment",
         rgs <- try(GRanges(ranges[idx]), silent = TRUE)
         if (is(rgs, "try-error"))
             stop("'rownames(x)' are not coercible to 'GRanges'")
-        mcols(rgs) <- DataFrame(scores = x)
+        mcols(rgs) <- DataFrame(counts = x)
 
         grls <- GRangesList(split(rgs, j))
         names(grls) <- colnames(from)[dp > 0]
