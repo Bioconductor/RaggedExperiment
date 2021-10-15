@@ -5,6 +5,11 @@
 * Sparse matrices of `dgCMatrix` type can now be coerced to `RaggedExperiment`
 when `rownames` are coercible to `GRanges`
 
+### Bug fixes and minor improvements
+
+* 'counts' set as the default name for the values in `mcols` after coercion
+from `dgCMatrix`
+
 ## Changes in version 1.16.0
 
 ### New features
