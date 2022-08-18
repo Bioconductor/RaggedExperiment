@@ -2,10 +2,11 @@ Package: RaggedExperiment
 Title: Representation of Sparse Experiments and Assays Across Samples
 Version: 1.21.0
 Authors@R: c(
-    person("Martin", "Morgan", email = "martin.morgan@roswellpark.org",
-        role = c("aut", "cre")),
-    person("Marcel", "Ramos", email = "marcel.ramos@roswellpark.org",
-        role = "aut"))
+    person("Martin", "Morgan", , "martin.morgan@roswellpark.org",
+        c("aut", "cre")),
+    person("Marcel", "Ramos", , "marcel.ramos@roswellpark.org",
+        "aut", c(ORCID = "0000-0002-3242-0582"))
+    )
 Description: This package provides a flexible representation of copy
     number, mutation, and other data that fit into the ragged array
     schema for genomic location data. The basic representation of such
