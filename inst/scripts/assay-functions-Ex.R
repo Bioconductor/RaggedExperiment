@@ -31,12 +31,13 @@ qreduceAssay(re4, query, weightedmean)
 
     ## TCGA MultiAssayExperiment with RaggedExperiment data
     mae <- curatedTCGAData("ACC", c("RNASeq2GeneNorm", "CNASNP", "Mutation"),
-        dry.run = FALSE)
+        version = "1.1.38", dry.run = FALSE)
 
     ## genomic coordinates
     gn <- genes(TxDb.Hsapiens.UCSC.hg19.knownGene)
     gn <- keepStandardChromosomes(granges(gn), pruning.mode="coarse")
     seqlevelsStyle(gn) <- "NCBI"
+    genome(gn)
     gn <- unstrand(gn)
 
     ## reduce mutations, marking any genomic range with non-silent
@@ -44,21 +45,27 @@ qreduceAssay(re4, query, weightedmean)
     nonsilent <- function(scores, ranges, qranges)
         any(scores != "Silent")
     mre <- mae[["ACC_Mutation-20160128"]]
-    genome(mre) <- translateBuild(genome(re))
+    seqlevelsStyle(rowRanges(mre)) <- "NCBI"
+    ## hack to make genomes match
+    genome(mre) <- paste0(correctBuild(unique(genome(mre)), "NCBI"), ".p13")
     mutations <- qreduceAssay(mre, gn, nonsilent, "Variant_Classification")
+    genome(mre) <- correctBuild(unique(genome(mre)), "NCBI")
 
     ## reduce copy number
     re <- mae[["ACC_CNASNP-20160128"]]
     class(re)
     ## [1] "RaggedExperiment"
-    genome(re) <- "hg19"
+    seqlevelsStyle(re) <- "NCBI"
+    genome(re) <- "GRCh37.p13"
     cn <- qreduceAssay(re, gn, weightedmean, "Segment_Mean")
+    genome(re) <- "GRCh37"
 
     ## ALTERNATIVE
     ##
     ## TCGAutils helper function to convert RaggedExperiment objects to
     ## RangedSummarizedExperiment based on annotated gene ranges
-    mae[[1L]] <- re
-    mae[[2L]] <- mre
-    qreduceTCGA(mae)
+    mae2 <- mae
+    mae2[[1L]] <- re
+    mae2[[2L]] <- mre
+    qreduceTCGA(mae2)
 }
