@@ -87,7 +87,9 @@ These methods transform \code{RaggedExperiment}
 Convert a \code{dgCMatrix} to a \code{RaggedExperiment} given that the rownames
 are coercible to \code{GRanges}.
 
-In the following example, \code{x} is a \code{dgCMatrix} from the \code{Matrix} package.\preformatted{`as(x, "RaggedExperiment")`
+In the following example, \code{x} is a \code{dgCMatrix} from the \code{Matrix} package.
+\preformatted{
+    `as(x, "RaggedExperiment")`
 }
 }
 

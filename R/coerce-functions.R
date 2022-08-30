@@ -167,8 +167,9 @@ qreduceSummarizedExperiment <-
 #'   are coercible to `GRanges`.
 #'
 #' In the following example, `x` is a `dgCMatrix` from the `Matrix` package.
-#'
+#' \preformatted{
 #'     `as(x, "RaggedExperiment")`
+#' }
 #'
 #' @md
 #'
