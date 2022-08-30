@@ -427,6 +427,8 @@ setMethod("as.list", "RaggedExperiment", function(x, ...) {
 
 #' @describeIn RaggedExperiment-class Allow conversion to plain `data.frame`
 #'
+#' @inheritParams base::as.data.frame
+#'
 #' @md
 #' @export
 setMethod("as.data.frame", "RaggedExperiment",
