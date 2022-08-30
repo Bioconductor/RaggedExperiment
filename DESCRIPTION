@@ -36,5 +36,5 @@ Suggests:
     testthat,
     MultiAssayExperiment
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
 Encoding: UTF-8

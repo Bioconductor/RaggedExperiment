@@ -34,7 +34,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Marcel Ramos \email{marcel.ramos@roswellpark.org}
+  \item Marcel Ramos \email{marcel.ramos@roswellpark.org} (\href{https://orcid.org/0000-0002-3242-0582}{ORCID})
 }
 
 }
