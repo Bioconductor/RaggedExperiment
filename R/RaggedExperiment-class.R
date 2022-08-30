@@ -415,3 +415,27 @@ setAs("RaggedExperiment", "GRangesList", function(from) {
 setAs("GRangesList", "RaggedExperiment", function(from) {
     RaggedExperiment(from)
 })
+
+
+#' @describeIn RaggedExperiment-class Allow extraction of metadata columns as a
+#'   plain `list`
+#'
+#' @export
+setMethod("as.list", "RaggedExperiment", function(x, ...) {
+    lapply(as(x, "GRangesList"), mcols)
+})
+
+#' @describeIn RaggedExperiment-class Allow conversion to plain `data.frame`
+#'
+#' @md
+#' @export
+setMethod("as.data.frame", "RaggedExperiment",
+    function(x, row.names = NULL, optional = FALSE, ...) {
+        as.data.frame(
+            as(x, "GRangesList"),
+            row.names = row.names,
+            optional = optional,
+            ...
+        )
+    }
+)
