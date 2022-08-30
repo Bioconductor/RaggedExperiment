@@ -1,3 +1,8 @@
+## Changes in version 1.22.0
+
+* Add `as.list` and `as.data.frame` methods to `RaggedExperiment` to facilitate
+extraction of `mcols` and conversion to table format, respectively.
+
 ## Changes in version 1.18.0
 
 ### New features
