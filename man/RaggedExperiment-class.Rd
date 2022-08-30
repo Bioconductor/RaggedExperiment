@@ -26,6 +26,8 @@
 \alias{assays,RaggedExperiment-method}
 \alias{assayNames,RaggedExperiment-method}
 \alias{show,RaggedExperiment-method}
+\alias{as.list,RaggedExperiment-method}
+\alias{as.data.frame,RaggedExperiment-method}
 \alias{[,RaggedExperiment,ANY,ANY,ANY-method}
 \alias{overlapsAny,RaggedExperiment,Vector-method}
 \alias{subsetByOverlaps,RaggedExperiment,Vector-method}
@@ -70,6 +72,10 @@ RaggedExperiment(..., colData = DataFrame())
 \S4method{assayNames}{RaggedExperiment}(x, ...)
 
 \S4method{show}{RaggedExperiment}(object)
+
+\S4method{as.list}{RaggedExperiment}(x, ...)
+
+\S4method{as.data.frame}{RaggedExperiment}(x, row.names = NULL, optional = FALSE, ...)
 
 \S4method{[}{RaggedExperiment,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
 
@@ -360,59 +366,67 @@ The \code{RaggedExperiment} class is a container for
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{seqinfo}: seqinfo accessor
+\item \code{seqinfo(RaggedExperiment)}: seqinfo accessor
 
-\item \code{seqinfo<-}: Replace seqinfo metadata of the ranges
+\item \code{seqinfo(RaggedExperiment) <- value}: Replace seqinfo metadata of the ranges
 
-\item \code{rowRanges}: rowRanges accessor
+\item \code{rowRanges(RaggedExperiment)}: rowRanges accessor
 
-\item \code{rowRanges<-}: rowRanges replacement
+\item \code{rowRanges(x = RaggedExperiment) <- value}: rowRanges replacement
 
-\item \code{mcols}: get the metadata columns of the ranges,
+\item \code{mcols(RaggedExperiment)}: get the metadata columns of the ranges,
 rectangular representation of the 'assays'
 
-\item \code{mcols<-}: set the metadata columns of the ranges
+\item \code{mcols(RaggedExperiment) <- value}: set the metadata columns of the ranges
 corresponding to the assays
 
-\item \code{rowData}: get the rowData or metadata for the ranges
+\item \code{rowData(RaggedExperiment)}: get the rowData or metadata for the ranges
 
-\item \code{rowData<-}: set the rowData or metadata for the ranges
+\item \code{rowData(RaggedExperiment) <- value}: set the rowData or metadata for the ranges
 
-\item \code{dim}: get dimensions (number of sample-specific row
+\item \code{dim(RaggedExperiment)}: get dimensions (number of sample-specific row
 ranges by number of samples)
 
-\item \code{dimnames}: get row (sample-specific) range names
+\item \code{dimnames(RaggedExperiment)}: get row (sample-specific) range names
 and sample names
 
-\item \code{dimnames<-}: set row (sample-specific) range names
+\item \code{dimnames(x = RaggedExperiment) <- value}: set row (sample-specific) range names
 and sample names
 
-\item \code{length}: get the length of row vectors in the object,
+\item \code{length(RaggedExperiment)}: get the length of row vectors in the object,
 similar to \linkS4class{SummarizedExperiment}
 
-\item \code{colData}: get column data
+\item \code{colData(RaggedExperiment)}: get column data
 
-\item \code{colData<-}: change the colData
+\item \code{colData(x = RaggedExperiment) <- value}: change the colData
 
-\item \code{assay}: assay missing method uses first metadata column
+\item \code{assay(x = RaggedExperiment, i = missing)}: assay missing method uses first metadata column
 
-\item \code{assay}: assay numeric method.
+\item \code{assay(x = RaggedExperiment, i = ANY)}: assay numeric method.
 
-\item \code{assays}: assays
+\item \code{assays(RaggedExperiment)}: assays
 
-\item \code{assayNames}: names in each assay
+\item \code{assayNames(RaggedExperiment)}: names in each assay
 
-\item \code{show}: show method
+\item \code{show(RaggedExperiment)}: show method
 
-\item \code{[}: Subset a RaggedExperiment object
+\item \code{x[i}: Subset a RaggedExperiment object
 
-\item \code{overlapsAny}: Determine whether copy number ranges
+\item \code{overlapsAny(query = RaggedExperiment, subject = Vector)}: Determine whether copy number ranges
 defined by \code{query} overlap ranges of \code{subject}.
 
-\item \code{subsetByOverlaps}: Subset the RaggedExperiment to contain only
+\item \code{subsetByOverlaps(x = RaggedExperiment, ranges = Vector)}: Subset the RaggedExperiment to contain only
 copy number ranges overlapping ranges of \code{subject}.
-}}
 
+}}
+\section{Functions}{
+\itemize{
+\item \code{as.list(RaggedExperiment)}: Allow extraction of metadata columns as a
+plain `list`
+
+\item \code{as.data.frame(RaggedExperiment)}: Allow conversion to plain \code{data.frame}
+
+}}
 \section{Constructors}{
 
 
