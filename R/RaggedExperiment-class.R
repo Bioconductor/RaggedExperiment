@@ -442,6 +442,7 @@ setMethod("as.data.frame", "RaggedExperiment",
     }
 )
 
+#' @importFrom utils .DollarNames
 #' @export
 .DollarNames.RaggedExperiment <- function(x, pattern = "")
     grep(pattern, names(colData(x)), value = TRUE)
