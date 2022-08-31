@@ -239,6 +239,13 @@ in the resulting object}
     meaning of \code{\link[base]{data.frame}(*, check.names = !optional)}.
     See also the \code{make.names} argument of the \code{matrix} method.}
 
+\item{name}{
+    A literal character string or a \link[base]{name} (possibly \link[base]{backtick}
+    quoted).  For extraction, this is normally (see under
+    \sQuote{Environments}) partially matched to the \code{\link[base]{names}}
+    of the object.
+  }
+
 \item{j}{integer(), character(), or logical() index selecting
 columns from RaggedExperiment}
 
@@ -421,6 +428,14 @@ similar to \linkS4class{SummarizedExperiment}
 
 \item \code{show(RaggedExperiment)}: show method
 
+\item \code{as.list(RaggedExperiment)}: Allow extraction of metadata columns as a plain
+\code{list}
+
+\item \code{as.data.frame(RaggedExperiment)}: Allow conversion to plain \code{data.frame}
+
+\item \code{$}: Easily access the \code{colData} columns with
+the dollar sign operator
+
 \item \code{x[i}: Subset a RaggedExperiment object
 
 \item \code{overlapsAny(query = RaggedExperiment, subject = Vector)}: Determine whether copy number ranges
@@ -431,17 +446,6 @@ copy number ranges overlapping ranges of \code{subject}.
 
 \item \code{subset(RaggedExperiment)}: subset helper function for dividing by rowData
 and / or colData values
-
-}}
-\section{Functions}{
-\itemize{
-\item \code{as.list(RaggedExperiment)}: Allow extraction of metadata columns as a
-plain `list`
-
-\item \code{as.data.frame(RaggedExperiment)}: Allow conversion to plain \code{data.frame}
-
-\item \code{$}: Easily access the \code{colData} columns with
-the dollar sign operator
 
 }}
 \section{Constructors}{
