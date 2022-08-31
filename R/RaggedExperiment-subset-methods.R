@@ -86,3 +86,15 @@ setMethod("subsetByOverlaps", c("RaggedExperiment", "Vector"),
         minoverlap = minoverlap, type = match.arg(type), ...)
     x[xor(o, invert),]
 })
+
+#' @describeIn RaggedExperiment subset helper function for dividing by rowData
+#'   and / or colData values
+#' @inheritParams base::subset
+#' @export
+setMethod("subset", "RaggedExperiment",
+    function(x, subset, select, ...) {
+        i <- S4Vectors:::evalqForSubset(subset, mcols(x), ...)
+        j <- S4Vectors:::evalqForSubset(select, colData(x), ...)
+        x[i, j]
+    }
+)
