@@ -1,4 +1,5 @@
 #' @import methods S4Vectors BiocGenerics IRanges
+#' @import S4Vectors GenomicRanges SummarizedExperiment
 #' @importClassesFrom S4Vectors Annotated
 #' @importClassesFrom GenomicRanges GRangesList
 #' @importFrom S4Vectors mcols
@@ -7,6 +8,9 @@
 #' @importFrom MatrixGenerics rowRanges
 #' @importFrom SummarizedExperiment rowRanges<-
 #' @importFrom stats setNames
+NULL
+
+#' @exportClass RaggedExperiment
 .RaggedExperiment <- setClass("RaggedExperiment",
     slots = c(
         assays = "GRangesList",
@@ -29,6 +33,12 @@
 
 setValidity2("RaggedExperiment", .valid.RaggedExperiment)
 
+#' @name RaggedExperiment-class
+#'
+#' @aliases coerce,RaggedExperiment,GRangesList-method
+#' coerce,GRangesList,RaggedExperiment-method RaggedExperiment-class
+#' class:RaggedExperiment RaggedExperiment
+#'
 #' @title RaggedExperiment objects
 #'
 #' @description The \code{RaggedExperiment} class is a container for
@@ -98,9 +108,6 @@ setValidity2("RaggedExperiment", .valid.RaggedExperiment)
 #' Creates a \code{RaggedExperiment} object from a \linkS4class{GRangesList},
 #' or \linkS4class{GRanges} object.
 #'
-#' @aliases coerce,RaggedExperiment,GRangesList-method
-#' coerce,GRangesList,RaggedExperiment-method
-#'
 #' @param ... Constructor: GRanges, list of GRanges, or GRangesList OR
 #'     assay: Additional arguments for assay. See details for more information.
 #' @param colData A \code{\link{DataFrame}} describing samples. Length of
@@ -109,11 +116,7 @@ setValidity2("RaggedExperiment", .valid.RaggedExperiment)
 #'
 #' @example inst/scripts/RaggedExperiment-Ex.R
 #'
-#' @name RaggedExperiment-class
-#' @export RaggedExperiment
-#' @exportClass RaggedExperiment
-#' @aliases RaggedExperiment-class class:RaggedExperiment RaggedExperiment
-#' @import S4Vectors GenomicRanges SummarizedExperiment
+#' @export
 RaggedExperiment <- function(..., colData=DataFrame()) {
     inputs <- list(...)
     if (length(inputs) == 1L && is(inputs[[1L]], "GenomicRangesList")) {
@@ -417,19 +420,18 @@ setAs("GRangesList", "RaggedExperiment", function(from) {
 })
 
 
-#' @describeIn RaggedExperiment-class Allow extraction of metadata columns as a
-#'   plain `list`
+#' @describeIn RaggedExperiment Allow extraction of metadata columns as a plain
+#'   \code{list}
 #'
 #' @export
 setMethod("as.list", "RaggedExperiment", function(x, ...) {
     lapply(as(x, "GRangesList"), mcols)
 })
 
-#' @describeIn RaggedExperiment-class Allow conversion to plain `data.frame`
+#' @describeIn RaggedExperiment Allow conversion to plain \code{data.frame}
 #'
 #' @inheritParams base::as.data.frame
 #'
-#' @md
 #' @export
 setMethod("as.data.frame", "RaggedExperiment",
     function(x, row.names = NULL, optional = FALSE, ...) {
@@ -448,9 +450,9 @@ setMethod("as.data.frame", "RaggedExperiment",
     grep(pattern, names(colData(x)), value = TRUE)
 
 #' @aliases $,RaggedExperiment-method
-#' @describeIn RaggedExperiment-class Easily access the `colData` columns with
+#' @describeIn RaggedExperiment Easily access the \code{colData} columns with
 #'   the dollar sign operator
-#' @md
+#' @inheritParams base::`$`
 #' @exportMethod $
 setMethod("$", "RaggedExperiment", function(x, name) {
     colData(x)[[name]]
