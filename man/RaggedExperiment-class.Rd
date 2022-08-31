@@ -28,9 +28,11 @@
 \alias{show,RaggedExperiment-method}
 \alias{as.list,RaggedExperiment-method}
 \alias{as.data.frame,RaggedExperiment-method}
+\alias{$,RaggedExperiment-method}
 \alias{[,RaggedExperiment,ANY,ANY,ANY-method}
 \alias{overlapsAny,RaggedExperiment,Vector-method}
 \alias{subsetByOverlaps,RaggedExperiment,Vector-method}
+\alias{subset,RaggedExperiment-method}
 \title{RaggedExperiment objects}
 \usage{
 RaggedExperiment(..., colData = DataFrame())
@@ -76,6 +78,8 @@ RaggedExperiment(..., colData = DataFrame())
 \S4method{as.list}{RaggedExperiment}(x, ...)
 
 \S4method{as.data.frame}{RaggedExperiment}(x, row.names = NULL, optional = FALSE, ...)
+
+\S4method{$}{RaggedExperiment}(x, name)
 
 \S4method{[}{RaggedExperiment,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
 
@@ -436,6 +440,9 @@ copy number ranges overlapping ranges of \code{subject}.
 plain `list`
 
 \item \code{as.data.frame(RaggedExperiment)}: Allow conversion to plain \code{data.frame}
+
+\item \code{$}: Easily access the \code{colData} columns with
+the dollar sign operator
 
 }}
 \section{Constructors}{
