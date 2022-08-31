@@ -441,3 +441,17 @@ setMethod("as.data.frame", "RaggedExperiment",
         )
     }
 )
+
+#' @export
+.DollarNames.RaggedExperiment <- function(x, pattern = "")
+    grep(pattern, names(colData(x)), value = TRUE)
+
+#' @aliases $,RaggedExperiment-method
+#' @describeIn RaggedExperiment-class Easily access the `colData` columns with
+#'   the dollar sign operator
+#' @md
+#' @exportMethod $
+setMethod("$", "RaggedExperiment", function(x, name) {
+    colData(x)[[name]]
+})
+
