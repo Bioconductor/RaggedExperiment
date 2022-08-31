@@ -104,8 +104,28 @@ test_that("subsetByOverlaps works", {
         sample2 = sample2,
         colData = colDat)
     range <- GRanges("chr1:3-10")
-    identical(
+    expect_identical(
         subsetByOverlaps(rowRanges(re), range),
         rowRanges(subsetByOverlaps(re, range))
     )
+})
+
+test_that("subset works", {
+    sample1 <- GRanges(
+        c(A = "chr1:1-10:-", B = "chr1:8-14:+", C = "chr2:15-18:+"),
+        score = 3:5)
+    sample2 <- GRanges(
+        c(D = "chr1:1-10:-", E = "chr2:11-18:+"),
+        score = 1:2)
+    colDat <- DataFrame(id = 1:2)
+    re <- RaggedExperiment(
+        sample1 = sample1,
+        sample2 = sample2,
+        colData = colDat)
+    res <- subset(re, subset = score >= 3L)
+    expect_identical(mcols(res), DataFrame(score = 3:5))
+    expect_identical(dim(res), c(3L, 2L))
+    res <- subset(re, select = id == 1)
+    expect_identical(colData(res), DataFrame(id = 1L, row.names = "sample1"))
+    expect_identical(dim(res), c(5L, 1L))
 })

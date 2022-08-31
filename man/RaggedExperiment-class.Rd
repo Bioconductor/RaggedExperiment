@@ -101,6 +101,8 @@ RaggedExperiment(..., colData = DataFrame())
   invert = FALSE,
   ...
 )
+
+\S4method{subset}{RaggedExperiment}(x, subset, select, ...)
 }
 \arguments{
 \item{...}{Constructor: GRanges, list of GRanges, or GRangesList OR
@@ -318,37 +320,31 @@ columns from RaggedExperiment}
     (the default), it's replaced internally by 0.
   }
 
-\item{ranges}{
-    Each of them can be an \link[IRanges]{IntegerRanges} (e.g. \link[IRanges]{IRanges},
-    \link[IRanges]{Views}) or \link[IRanges]{IntegerRangesList} (e.g. \link[IRanges]{IRangesList},
-    \link[IRanges]{ViewsList}) derivative.
-    In addition, if \code{subject} or \code{ranges} is an \link[IRanges]{IntegerRanges}
-    object, \code{query} or \code{x} can be an integer vector to be converted
-    to length-one ranges.
-
-    If \code{query} (or \code{x}) is an \link[IRanges]{IntegerRangesList} object,
-    then \code{subject} (or \code{ranges}) must also be an
-    \link[IRanges]{IntegerRangesList} object.
-
-    If both arguments are list-like objects with names, each list element
-    from the 2nd argument is paired with the list element from the 1st
-    argument with the matching name, if any. Otherwise, list elements are
-    paired by position. The overlap is then computed between the pairs as
-    described below.
-
-    If \code{subject} is omitted, \code{query} is queried against
-    itself. In this case, and only this case, the \code{drop.self}
-    and \code{drop.redundant} arguments are allowed. By default,
-    the result will contain hits for each range against itself, and if
-    there is a hit from A to B, there is also a hit for B to A. If
-    \code{drop.self} is \code{TRUE}, all self matches are dropped. If
-    \code{drop.redundant} is \code{TRUE}, only one of A->B and B->A
-    is returned.
-  }
-
 \item{invert}{
     If \code{TRUE}, keep only the ranges in \code{x} that do \emph{not}
     overlap \code{ranges}.
+  }
+
+\item{subset}{logical expression indicating elements or rows to keep:
+    missing values are taken as false.}
+
+\item{select}{
+    If \code{query} is an \link[IRanges]{IntegerRanges} derivative:
+    When \code{select} is \code{"all"} (the default), the results are
+    returned as a \link[S4Vectors]{Hits} object.
+    Otherwise the returned value is an integer vector \emph{parallel} to
+    \code{query} (i.e. same length) containing the first, last,
+    or arbitrary overlapping interval in \code{subject}, with \code{NA}
+    indicating intervals that did not overlap any intervals in \code{subject}.
+
+    If \code{query} is an \link[IRanges]{IntegerRangesList} derivative:
+    When \code{select} is \code{"all"} (the default), the results are
+    returned as a \link[S4Vectors]{HitsList} object.
+    Otherwise the returned value depends on the \code{drop} argument.
+    When \code{select != "all" && !drop}, an \link[IRanges]{IntegerList} is returned,
+    where each element of the result corresponds to a space in \code{query}.
+    When \code{select != "all" && drop}, an integer vector is returned
+    containing indices that are offset to align with the unlisted \code{query}.
   }
 }
 \value{
@@ -432,6 +428,9 @@ defined by \code{query} overlap ranges of \code{subject}.
 
 \item \code{subsetByOverlaps(x = RaggedExperiment, ranges = Vector)}: Subset the RaggedExperiment to contain only
 copy number ranges overlapping ranges of \code{subject}.
+
+\item \code{subset(RaggedExperiment)}: subset helper function for dividing by rowData
+and / or colData values
 
 }}
 \section{Functions}{
