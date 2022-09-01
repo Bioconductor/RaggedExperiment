@@ -253,33 +253,32 @@ columns from RaggedExperiment}
 
 \item{query}{A RaggedExperiment instance.}
 
-\item{subject}{
-    Each of them can be an \link[IRanges]{IntegerRanges} (e.g. \link[IRanges]{IRanges},
-    \link[IRanges]{Views}) or \link[IRanges]{IntegerRangesList} (e.g. \link[IRanges]{IRangesList},
-    \link[IRanges]{ViewsList}) derivative.
-    In addition, if \code{subject} or \code{ranges} is an \link[IRanges]{IntegerRanges}
-    object, \code{query} or \code{x} can be an integer vector to be converted
-    to length-one ranges.
+\item{subject}{Each of them can be an \link[IRanges]{IntegerRanges} (e.g.
+   \link[IRanges]{IRanges}, \link[IRanges]{Views}) or
+   \link[IRanges]{IntegerRangesList} (e.g. \link[IRanges]{IRangesList},
+   \link[IRanges]{ViewsList}) derivative.
+   In addition, if \code{subject} or \code{ranges} is an
+   \link[IRanges]{IntegerRanges} object, \code{query} or \code{x} can be
+   an integer vector to be converted to length-one ranges.
 
-    If \code{query} (or \code{x}) is an \link[IRanges]{IntegerRangesList} object,
-    then \code{subject} (or \code{ranges}) must also be an
-    \link[IRanges]{IntegerRangesList} object.
+   If \code{query} (or \code{x}) is an \link[IRanges]{IntegerRangesList}
+   object, then \code{subject} (or \code{ranges}) must also be an
+   \link[IRanges]{IntegerRangesList} object.
 
-    If both arguments are list-like objects with names, each list element
-    from the 2nd argument is paired with the list element from the 1st
-    argument with the matching name, if any. Otherwise, list elements are
-    paired by position. The overlap is then computed between the pairs as
-    described below.
+   If both arguments are list-like objects with names, each list element
+   from the 2nd argument is paired with the list element from the 1st
+   argument with the matching name, if any. Otherwise, list elements are
+   paired by position. The overlap is then computed between the pairs as
+   described below.
 
-    If \code{subject} is omitted, \code{query} is queried against
-    itself. In this case, and only this case, the \code{drop.self}
-    and \code{drop.redundant} arguments are allowed. By default,
-    the result will contain hits for each range against itself, and if
-    there is a hit from A to B, there is also a hit for B to A. If
-    \code{drop.self} is \code{TRUE}, all self matches are dropped. If
-    \code{drop.redundant} is \code{TRUE}, only one of A->B and B->A
-    is returned.
-  }
+   If \code{subject} is omitted, \code{query} is queried against
+   itself. In this case, and only this case, the \code{drop.self}
+   and \code{drop.redundant} arguments are allowed. By default,
+   the result will contain hits for each range against itself, and if
+   there is a hit from A to B, there is also a hit for B to A. If
+   \code{drop.self} is \code{TRUE}, all self matches are dropped. If
+   \code{drop.redundant} is \code{TRUE}, only one of A->B and B->A
+   is returned.}
 
 \item{maxgap}{
     A single integer >= -1.
