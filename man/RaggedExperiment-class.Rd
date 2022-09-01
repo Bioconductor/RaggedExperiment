@@ -253,7 +253,7 @@ columns from RaggedExperiment}
 
 \item{query}{A RaggedExperiment instance.}
 
-\item{subject}{Each of them can be an \link[IRanges]{IntegerRanges} (e.g.
+\item{subject, ranges}{Each of them can be an \link[IRanges]{IntegerRanges} (e.g.
    \link[IRanges]{IRanges}, \link[IRanges]{Views}) or
    \link[IRanges]{IntegerRangesList} (e.g. \link[IRanges]{IRangesList},
    \link[IRanges]{ViewsList}) derivative.

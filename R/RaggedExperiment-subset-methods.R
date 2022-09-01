@@ -60,7 +60,7 @@ setMethod("[", c("RaggedExperiment", "ANY", "ANY"), .bracketSubsetRE)
 #' @describeIn RaggedExperiment Determine whether copy number ranges
 #'     defined by \code{query} overlap ranges of \code{subject}.
 #' @param query A RaggedExperiment instance.
-#' @param subject
+#' @param subject,ranges
 #'    Each of them can be an \link[IRanges]{IntegerRanges} (e.g.
 #'    \link[IRanges]{IRanges}, \link[IRanges]{Views}) or
 #'    \link[IRanges]{IntegerRangesList} (e.g. \link[IRanges]{IRangesList},
