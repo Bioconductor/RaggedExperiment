@@ -9,7 +9,8 @@ test_that("sparseAssay() works", {
     re <- RaggedExperiment(sample1, sample2)
 
     m0 <- matrix(
-        c(1L, 2L, NA, NA, NA, NA, 3L, 4L), nrow=length(rowRanges(re))
+        c(1L, 2L, NA, NA, NA, NA, 3L, 4L), nrow=length(rowRanges(re)),
+        dimnames = list(NULL, NULL)
     )
     expect_identical(sparseAssay(re, withDimnames = FALSE), m0)
 
@@ -37,22 +38,28 @@ test_that("compactAssay() works", {
     sample1 <- GRanges(c("chr1:1-10", "chr1:11-18"), score = 1:2)
     sample2 <- GRanges(c("chr1:1-10", "chr2:11-18"), score = 3:4)
     re <- RaggedExperiment(sample1, sample2)
-
+    
+    ddimnames <- list(urownames(re), NULL)
     m0 <- matrix(
         c(1L, 2L, NA, 3L, NA, 4L), ncol=2,
-        dimnames=list(urownames(re), NULL)
+        dimnames=ddimnames
     )
     expect_identical(compactAssay(re), m0)
-    expect_identical(compactAssay(re, withDimnames=FALSE), unname(m0))
+    dimnames(m0) <- list(NULL, NULL)
+    expect_identical(compactAssay(re, withDimnames=FALSE), m0)
 
     ## test compactAssay with sparseMatrix
     M0 <- Matrix::sparseMatrix(
         i = c(1, 2, 1, 3), j = c(1, 1, 2, 2), x = 1:4, dims = c(3, 2)
     )
     expect_identical(compactAssay(re, sparse = TRUE, withDimnames = FALSE), M0)
-    dimnames(M0) <- dimnames(m0)
+    dimnames(M0) <- ddimnames
     expect_identical(compactAssay(re, sparse = TRUE), M0)
 
+    m0 <- matrix(
+        c(1L, 2L, NA, 3L, NA, 4L), ncol=2,
+        dimnames=ddimnames
+    )
     ridx <- 3:1
     expect_identical(compactAssay(re[ridx,]), m0[1:2,])
 

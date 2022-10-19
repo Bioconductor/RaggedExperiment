@@ -65,7 +65,7 @@ sparseAssay <-
         if (is.null(dimnames[[1]]))
             dimnames[[1]] <- as.character(.rowRanges(x))
     } else {
-        dimnames <- NULL
+        dimnames <- list(NULL, NULL)
     }
 
     idx <- cbind(
@@ -102,7 +102,7 @@ compactAssay <-
     i <- .assay_i(x, i)
     mcol <- .mcols(x)[[i]][.rowidx(x)]
     dim <- .dim(x)
-    dimnames <- if (withDimnames) dimnames(x) else NULL
+    dimnames <- if (withDimnames) dimnames(x) else list(NULL, NULL)
 
     gr <- rowRanges(x)
     ugr <- unique(gr)
@@ -122,7 +122,7 @@ compactAssay <-
     if (sparse) {
         M <- Matrix::sparseMatrix(
             i = idx[, 1], j = idx[, 2], x = mcol,
-            dims = list(length(ugr), dim[[2]])
+            dims = c(length(ugr), dim[[2]])
         )
         dimnames(M) <- dimnames
     } else {
