@@ -106,7 +106,7 @@ test_that("disjoinAssay() works", {
     sample2 <- GRanges(c("chr1:1-10"), score=3)
     re <- RaggedExperiment(sample1, sample2)
     expect_identical(
-        disjoinAssay(re, simplify=mean),
+        disjoinAssay(re, simplifyDisjoin=mean),
         matrix(
             c(1, 2, 3, NA), ncol=2,
             dimnames=list(c("chr1:1-10", "chr1:21-30"), NULL)
@@ -115,7 +115,7 @@ test_that("disjoinAssay() works", {
 
     ## withDimnames
     expect_identical(
-        dimnames(disjoinAssay(re, simplify=mean, withDimnames=FALSE)),
+        dimnames(disjoinAssay(re, simplifyDisjoin=mean, withDimnames=FALSE)),
         list(NULL, NULL)
     )
 
@@ -124,7 +124,7 @@ test_that("disjoinAssay() works", {
     sample2 <- GRanges(c("chr1:1-10"), score=3)
     re <- RaggedExperiment(sample1, sample2)
     expect_identical(
-        disjoinAssay(re, simplify=mean),
+        disjoinAssay(re, simplifyDisjoin=mean),
         matrix(
             c(1, 1.5, 2, 3, 3, NA), ncol=2,
             dimnames=list(c("chr1:1-5", "chr1:6-10", "chr1:11-15"), NULL)
@@ -136,7 +136,7 @@ test_that("disjoinAssay() works", {
     sample2 <- GRanges(c("chr1:1-10", "chr1:6-15"), score=3:4)
     re <- RaggedExperiment(sample1, sample2)
     expect_identical(
-        disjoinAssay(re, simplify=mean),
+        disjoinAssay(re, simplifyDisjoin=mean),
         matrix(
             c(1, 1.5, 2, 3, 3.5, 4), ncol=2,
             dimnames=list(c("chr1:1-5", "chr1:6-10", "chr1:11-15"), NULL)
@@ -154,18 +154,18 @@ test_that("disjoinAssay() works", {
             NULL
         )
     )
-    expect_identical(disjoinAssay(re, simplify=mean), m0)
+    expect_identical(disjoinAssay(re, simplifyDisjoin=mean), m0)
 
     ## shuffled columns
     cidx <- c(2, 1, 2)
     expect_identical(
-        disjoinAssay(re[, cidx], simplify=mean),
+        disjoinAssay(re[, cidx], simplifyDisjoin=mean),
         m0[, cidx]
     )
 
     ## shuffle rows
     ridx <- c(1, 4, 2, 3)
-    expect_identical(disjoinAssay(re[ridx, ], simplify=mean), m0)
+    expect_identical(disjoinAssay(re[ridx, ], simplifyDisjoin=mean), m0)
 
     ridx <- c(1, 4, 2)
     m0 <- matrix(
@@ -175,7 +175,7 @@ test_that("disjoinAssay() works", {
             NULL
         )
     )
-    expect_identical(disjoinAssay(re[ridx, ], simplify=mean), m0)
+    expect_identical(disjoinAssay(re[ridx, ], simplifyDisjoin=mean), m0)
 
     ## after subsetting
     lgr <- list(

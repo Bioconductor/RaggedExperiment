@@ -23,24 +23,24 @@ test_that("SummarizedExperiment coercion works", {
     res <- compactSummarizedExperiment(reA, withDimnames=FALSE)
     expect_identical(dimnames(assay(res)), NULL)
 
-    res <- disjoinSummarizedExperiment(reA, simplify=fun1)
-    expect_identical(assay(res), disjoinAssay(reA, simplify=fun1))
+    res <- disjoinSummarizedExperiment(reA, simplifyDisjoin=fun1)
+    expect_identical(assay(res), disjoinAssay(reA, simplifyDisjoin=fun1))
     expect_identical(colData(res), colData)
 
-    res <- disjoinSummarizedExperiment(reA, simplify=fun1, withDimnames=FALSE)
+    res <- disjoinSummarizedExperiment(reA, simplifyDisjoin=fun1, withDimnames=FALSE)
     expect_identical(dimnames(assay(res)), NULL)
 
-    res <- qreduceSummarizedExperiment(reA, simplify=fun1)
+    res <- qreduceSummarizedExperiment(reA, simplifyReduce=fun1)
     expect_identical(
         assay(res),
-        qreduceAssay(reA, rowRanges(reA), simplify=fun1)
+        qreduceAssay(reA, rowRanges(reA), simplifyReduce=fun1)
     )
     expect_identical(colData(res), colData)
 
-    res <- qreduceSummarizedExperiment(reA, simplify=fun1, withDimnames=FALSE)
+    res <- qreduceSummarizedExperiment(reA, simplifyReduce=fun1, withDimnames=FALSE)
     expect_equal(
         assay(res),
-        qreduceAssay(reA, rowRanges(reA), simplify=fun1, withDimnames=FALSE),
+        qreduceAssay(reA, rowRanges(reA), simplifyReduce=fun1, withDimnames=FALSE),
         check.attributes = FALSE
     )
 })
