@@ -92,5 +92,7 @@ test_that("sparseMatrix to RaggedExperiment coercion works", {
 
     ragex <- as(sm, "RaggedExperiment")
 
-    expect_identical(LETTERS[1:4][colSums(sm) > 0], colnames(ragex))
+    expect_identical(
+        LETTERS[1:4][MatrixGenerics::colSums(sm) > 0], colnames(ragex)
+    )
 })
