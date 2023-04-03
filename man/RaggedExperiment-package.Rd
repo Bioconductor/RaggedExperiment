@@ -30,11 +30,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Martin Morgan \email{martin.morgan@roswellpark.org}
+\strong{Maintainer}: Marcel Ramos \email{marcel.ramos@roswellpark.org} (\href{https://orcid.org/0000-0002-3242-0582}{ORCID})
 
 Authors:
 \itemize{
-  \item Marcel Ramos \email{marcel.ramos@roswellpark.org} (\href{https://orcid.org/0000-0002-3242-0582}{ORCID})
+  \item Martin Morgan \email{martin.morgan@roswellpark.org}
 }
 
 }
