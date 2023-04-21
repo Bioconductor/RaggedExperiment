@@ -1,4 +1,13 @@
+## Changes in version 1.24.0
+
+### Bug fixes and minor improvements
+
+* Use full argument names in unit tests.
+* Invoke `colSums` from `MatrixGenerics` in unit tests.
+
 ## Changes in version 1.22.0
+
+### New features
 
 * Add `as.list` and `as.data.frame` methods to `RaggedExperiment` to facilitate
 extraction of `mcols` and conversion to table format, respectively.
