@@ -18,42 +18,59 @@ Package: RaggedExperiment
 
 # Introduction
 
-The [*RaggedExperiment*](https://bioconductor.org/packages/3.16/RaggedExperiment) package provides a flexible data representation for copy number, mutation and other ragged array schema for genomic location data. The output of Allele-Specific Copy number Analysis of Tumors (ASCAT) can be classed as a ragged array and contains whole genome allele-specific copy number information for each sample in the analysis. For further analysis of the ASCAT data, utilizing the functionalities of `RaggedExperiment`, the ASCAT data must undergo a number of operations to get it in the correct format for use with `RaggedExperiment`. 
+The `r Biocpkg("RaggedExperiment")` package provides a flexible data representation for copy number, mutation and other ragged array schema for genomic location data. The output of Allele-Specific Copy number Analysis of Tumors (ASCAT) can be classed as a ragged array and contains whole genome allele-specific copy number information for each sample in the analysis. For more information on ASCAT and guidelines on how to generate ASCAT data please see the ASCAT [website](https://www.crick.ac.uk/research/labs/peter-van-loo/software) and [github](https://github.com/VanLoo-lab/ascat). To carry out further analysis of the ASCAT data, utilising the functionalities of `RaggedExperiment`, the ASCAT data must undergo a number of operations to get it in the correct format for use with `RaggedExperiment`.
 
 # Installation
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, eval = F}
 if (!require("BiocManager"))
-    install.packages("BiocManager")
-BiocManager::install("RaggedExperiment")
+    install.packages("BiocManager") 
+
+BiocManager::install("RaggedExperiment") 
 ```
 
 Loading the package:
 
 ```{r, message = FALSE}
-library(RaggedExperiment)
-library(GenomicRanges)
+library(RaggedExperiment) 
+library(GenomicRanges) 
 ```
 
 # Structure of ASCAT data
 
 The data shown below is the output obtained from ASCAT. ASCAT takes Log R Ratio (LRR) and B Allele Frequency (BAF) files and derives the allele-specific copy number profiles of tumour cells, accounting for normal cell admixture and tumour aneuploidy. It should be noted that if working with raw CEL files, the first step is to preprocess the CEL files using the PennCNV-Affy pipeline described [here](https://penncnv.openbioinformatics.org/en/latest/user-guide/affy/). The PennCNV-Affy pipeline produces the LRR and BAF files used as inputs for ASCAT.  
 
-Let's load up and have a look at the output obtained from ASCAT. Here we look at the first 10 rows of the dataframe. 
+Depending on user preference, the output of ASCAT can be multiple files, each one containing allele-specific copy number information for one of the samples processed in an ASCAT run, or can be a single file containing allele-specific copy number information for all samples processed in an ASCAT run.
+
+Let's load up and have a look at ASCAT data that contains copy number information for just one sample i.e. sample1. Here we load up the data, check that it only contains allele-specific copy number calls for 1 sample and look at the first 10 rows of the dataframe.
 
 ```{r}
-ASCAT_data <- read.csv("../data/ASCAT_Sample_File.txt", sep="\t")
+ASCAT_data_S1 <- read.csv(
+    system.file("extdata", "ASCAT_Sample1.txt", 
+    package = "RaggedExperiment"), 
+    sep="\t"
+)
 
-head(ASCAT_data, n = 10)
+unique(ASCAT_data_S1$sample)
+
+head(ASCAT_data_S1, n = 10)
 ```
 
-From the output above we can see that the ASCAT data has 6 columns named sample, chr, startpos, endpos, nMajor and nMinor. These correspond to the sample ID, chromosome, the start position and end position of the genomic ranges and the copy number of the major and minor alleles i.e. the homologous chromosomes.  
-
-The ASCAT data provides information for all samples processed in an ASCAT run in 1 dataframe. In this case our data contains copy number information for three samples, sample1, sample2 and sample3.
+Now let's load up and have a look at ASCAT data that contains copy number information for the three processed samples i.e. sample1, sample2 and sample3. Here we load up the data, check that it contains allele-specific copy number calls for the 3 samples and look at the first 10 rows of the dataframe. We also note that as expected the copy number calls for sample1 are the same as above.
 
 ```{r}
-unique(ASCAT_data$sample)
+ASCAT_data_All <- read.csv(
+    system.file("extdata", "ASCAT_All_Samples.txt",
+    package = "RaggedExperiment"), 
+    sep="\t"
+)
+
+unique(ASCAT_data_All$sample)
+
+head(ASCAT_data_All, n = 10) 
 ```
+
+From the output above we can see that the ASCAT data has 6 columns named sample, chr, startpos, endpos, nMajor and nMinor. These correspond to the sample ID, chromosome, the start position and end position of the genomic ranges and the copy number of the major and minor alleles i.e. the homologous chromosomes.
 
 # Converting ASCAT data to `GRanges` format
 
@@ -64,15 +81,15 @@ The `RaggedExperiment` class derives from a `GRangesList` representation and can
 In the case where the ASCAT data has only 1 sample it is relatively simple to produce a `GRanges` object.
 
 ```{r}
-ASCAT_data_1sample <- ASCAT_data[ASCAT_data$sample == "sample1",]
-
-sample1_ex1 <- GRanges(seqnames = Rle(paste0("chr", ASCAT_data_1sample$chr)),
-    ranges = IRanges(start = ASCAT_data_1sample$startpos, end = ASCAT_data_1sample$endpos),
-    strand = Rle(strand(c("*"))),
-    nmajor = ASCAT_data_1sample$nMajor,
-    nminor = ASCAT_data_1sample$nMinor)
-
-sample1_ex1
+sample1_ex1 <- GRanges(
+    seqnames = Rle(paste0("chr", ASCAT_data_S1$chr)),
+    ranges = IRanges(start = ASCAT_data_S1$startpos, end = ASCAT_data_S1$endpos), 
+    strand = Rle(strand("*")), 
+    nmajor = ASCAT_data_S1$nMajor, 
+    nminor = ASCAT_data_S1$nMinor
+)
+    
+sample1_ex1 
 ```
 
 Here we create a `GRanges` object by taking each column of the ASCAT data and assigning them to the appropriate argument in the `GRanges` function. From above we can see that the chromosome information is prefixed with "chr" and becomes the seqnames column, the start and end positions are combined into an `IRanges` object and given to the ranges argument, the strand column contains a `*` for each entry as we don't have strand information and the metadata columns contain the allele-specific copy number calls and are called nmajor and nminor. The `GRanges` object we have just created contains 41 ranges (rows) and 2 metadata columns.
@@ -80,94 +97,103 @@ Here we create a `GRanges` object by taking each column of the ASCAT data and as
 Another way that we can easily convert our ASCAT data, containing 1 sample, to a `GRanges` object is to use the `makeGRangesFromDataFrame` function from the `GenomicsRanges` package. Here we indicate what columns in our data correspond to the chromosome (given to the `seqnames` argument), start and end positions (`start.field` and `end.field` arguments), whether to ignore strand information and assign all entries `*` (`ignore.strand`) and also whether to keep the other columns in the dataframe, nmajor and nminor, as metadata columns (`keep.extra.columns`).
 
 ```{r}
-sample1_ex2 <- makeGRangesFromDataFrame(ASCAT_data_1sample[,-c(1)], ignore.strand=TRUE, seqnames.field=c("chr"), start.field="startpos", end.field=c("endpos"), keep.extra.columns=TRUE)
+sample1_ex2 <- makeGRangesFromDataFrame(
+    ASCAT_data_S1[,-c(1)], 
+    ignore.strand=TRUE, 
+    seqnames.field="chr", 
+    start.field="startpos", 
+    end.field="endpos", 
+    keep.extra.columns=TRUE
+)
 
-sample1_ex2
+sample1_ex2 
 ```
 
-In the case where the ASCAT data contains more than 1 sample we must first split the dataframe based on sample and then create a `GRanges` object for each sample. This can be done by splitting the dataframe and subsequently creating a `GRanges` object for each sample, or by using the `makeGRangesListFromDataFrame` function from the `GenomicsRanges` package. Here we show how to split the whole dataframe into a dataframe for each sample and use the `makeGRangesFromDataFrame` to create our `GRanges` objects. In the next section we will show how to use the `makeGRangesListFromDataFrame` function.
+In the case where the ASCAT data contains more than 1 sample you can first use the `split` function to split the whole dataframe into multiple dataframes, one for each sample, and then create a `GRanges` object for each dataframe. Code to split the dataframe, based on sample ID, is given below and then the same procedure used to produce `sample1_ex2` can be implemented to create the `GRanges` object. Alternatively, an easier and more efficient way to do this is to use the `makeGRangesListFromDataFrame` function from the `GenomicsRanges` package. This will be covered in the next section.
 
 ```{r}
-sample_list <- split(ASCAT_data, f = ASCAT_data$sample) 
-
-sample1_ex3 <- makeGRangesFromDataFrame(sample_list[[1]][,-c(1)], ignore.strand=TRUE, seqnames.field=c("chr"), start.field="startpos", end.field=c("endpos"), keep.extra.columns=TRUE)
-
-sample1_ex3
-
-sample2_ex3 <- makeGRangesFromDataFrame(sample_list[[2]][,-c(1)], ignore.strand=TRUE, seqnames.field=c("chr"), start.field="startpos", end.field=c("endpos"), keep.extra.columns=TRUE)
-
-sample2_ex3
-
-sample3_ex3 <- makeGRangesFromDataFrame(sample_list[[3]][,-c(1)], ignore.strand=TRUE, seqnames.field=c("chr"), start.field="startpos", end.field=c("endpos"), keep.extra.columns=TRUE)
-
-sample3_ex3
+sample_list <- split(
+    ASCAT_data_All, 
+    f = ASCAT_data_All$sample
+) 
 ```
 
 ## ASCAT to `GRangesList` instance
 
-To produce a `GRangesList` instance from the ASCAT dataframe we can use the `makeGRangesListFromDataFrame` function. This function can take the same arguments as the `makeGRangesFromDataFrame` function used above, but also has an argument specifying how the rows of the `df` are split (split.field). Here we will split on sample. This function can be used in cases where the ASCAT data contains only 1 sample or where it contains multiple samples.
+To produce a `GRangesList` instance from the ASCAT dataframe we can use the `makeGRangesListFromDataFrame` function. This function takes the same arguments as the `makeGRangesFromDataFrame` function used above, but also has an argument specifying how the rows of the `df` are split (`split.field`). Here we will split on sample. This function can be used in cases where the ASCAT data contains only 1 sample or where it contains multiple samples.
 
-Using `makeGRangesListFromDataFrame` to create a list of `GRanges` objects where ASCAT data only has 1 sample:  
+Using `makeGRangesListFromDataFrame` to create a list of `GRanges` objects where ASCAT data has only 1 sample:  
 
 ```{r}
-sample_list_GRanges_ex1 <- makeGRangesListFromDataFrame(ASCAT_data_1sample, ignore.strand=TRUE, seqnames.field=c("chr"), start.field="startpos", end.field=c("endpos"), keep.extra.columns=TRUE, split.field = "sample")
+sample_list_GRanges_ex1 <- makeGRangesListFromDataFrame(
+    ASCAT_data_S1, 
+    ignore.strand=TRUE, 
+    seqnames.field="chr", 
+    start.field="startpos", 
+    end.field="endpos", 
+    keep.extra.columns=TRUE, 
+    split.field = "sample"
+)
 
-sample_list_GRanges_ex1
+sample_list_GRanges_ex1 
 ```
 
-Using `makeGRangesListFromDataFrame` to create a list of `GRanges` objects where ASCAT data has multiple samples:
+Using `makeGRangesListFromDataFrame` to create a `list` of `GRanges` objects where ASCAT data has multiple samples:
 
 ```{r}
-sample_list_GRanges_ex2 <- makeGRangesListFromDataFrame(ASCAT_data, ignore.strand=TRUE, seqnames.field=c("chr"), start.field="startpos", end.field=c("endpos"), keep.extra.columns=TRUE, split.field = "sample")
+sample_list_GRanges_ex2 <- makeGRangesListFromDataFrame(
+    ASCAT_data_All, 
+    ignore.strand=TRUE, 
+    seqnames.field="chr", 
+    start.field="startpos", 
+    end.field="endpos", 
+    keep.extra.columns=TRUE, 
+    split.field = "sample"
+)
 
-sample_list_GRanges_ex2
+sample_list_GRanges_ex2 
 ```
 
 Each `GRanges` object in the `list` can then be accessed using square bracket notation.
 
 ```{r}
-sample1_ex4 <- sample_list_GRanges_ex2[[1]]
+sample1_ex3 <- sample_list_GRanges_ex2[[1]]
 
-sample1_ex4
+sample1_ex3 
 ```
 
-## ASCAT to `list` of `GRanges`
-
-Another thing we might want to do is create a list that contains all of our `GRanges` objects. This is straightforward in that we use the `list` function with our `GRanges` objects as named or unnamed inputs. Below we have created a list that includes 3 `GRanges` objects, created at the end of section 4.1., corresponding to our 3 samples.
+Another way we can produce a `GRangesList` instance is to use the `GRangesList` function. This function creates a list that contains all our `GRanges` objects. This is straightforward in that we use the `GRangesList` function with our `GRanges` objects as named or unnamed inputs. Below we have created a list that includes 1 `GRanges` objects, created in section 4.1., corresponding to sample1.
 
 ```{r}
-rangeList <- list(sample1 = sample1_ex3, sample2 = sample2_ex3, sample3 = sample3_ex3)
+sample_list_GRanges_ex3 <- GRangesList(
+    sample1 = sample1_ex1
+)
 
-rangeList
+sample_list_GRanges_ex3
 ```
 
 # Constructing a `RaggedExperiment` object from ASCAT output
 
-Now we have created the `GRanges` object, `GRangesList` and `list` of `GRanges` we can easily use `RaggedExperiment`.
+Now we have created the `GRanges` objects and `GRangesList` instances we can easily use `RaggedExperiment`.
 
 ## Using `GRanges` objects
 
-From above we have a `GRanges` object derived from the ASCAT data containing 1 sample i.e. `sample1_ex1` / `sample1_ex2` and the individual `GRanges` objects derived from the ASCAT data containing 3 samples i.e. `sample1_ex3`, `sample2_ex3` and `sample3_ex3`. We can now use these `GRanges` objects as inputs to `RaggedExperiment`. Note that we create column data `colData` to describe the samples.
+From above we have a `GRanges` object derived from the ASCAT data containing 1 sample i.e. `sample1_ex1` / `sample1_ex2` and the capabilities to produce individual `GRanges` objects derived from the ASCAT data containing 3 samples. We can now use these `GRanges` objects as inputs to `RaggedExperiment`. Note that we create column data `colData` to describe the samples.
 
 Using `GRanges` object where ASCAT data only has 1 sample:
 
 ```{r}
-colDat_1 = DataFrame(id = 1)
-ragexp <- RaggedExperiment(sample1 = sample1_ex2, 
-                           colData = colDat_1)
-ragexp
+colDat_1 = DataFrame(id = 1) 
+
+ragexp_1 <- RaggedExperiment(
+    sample1 = sample1_ex2, 
+    colData = colDat_1
+) 
+
+ragexp_1
 ```
 
-Using `GRanges` object where ASCAT data only has multiple samples:
-
-```{r}
-colDat_3 = DataFrame(id = 1:3)
-ragexp <- RaggedExperiment(sample1 = sample1_ex3,
-                           sample2 = sample2_ex3,
-                           sample3 = sample3_ex3, 
-                           colData = colDat_3)
-ragexp
-```
+In the case where you have multiple `GRanges` objects, corresponding to different samples, the code is similar to above. Each sample is inputted into the `RaggedExperiment` function and `colDat_1` corresponds to the id for each sample i.e. 1, 2 and 3, if 3 samples are provided.
 
 ## Using a `GRangesList` instance
 
@@ -176,32 +202,44 @@ From before we have a `GRangesList` derived from the ASCAT data containing 1 sam
 Using `GRangesList` where ASCAT data only has 1 sample:
 
 ```{r}
-RaggedExperiment(sample_list_GRanges_ex1, colData = colDat_1)
+ragexp_2 <- RaggedExperiment(
+    sample_list_GRanges_ex1, 
+    colData = colDat_1
+) 
+
+ragexp_2
 ```
 
 Using `GRangesList` where ASCAT data only has multiple samples:
 
 ```{r}
-RaggedExperiment(sample_list_GRanges_ex2, colData = colDat_3)
+colDat_3 = DataFrame(id = 1:3)
+
+ragexp_3 <- RaggedExperiment(
+    sample_list_GRanges_ex2,
+    colData = colDat_3
+) 
+
+ragexp_3
 ```
 
-## Using a `list` of `GRanges`
-
-From above we have a `list` of `GRanges` i.e. `rangeList` containing 3 `GRanges` objects. We can now use this `list` of `GRanges` as the input to `RaggedExperiment`.
+We can also use the `GRangesList` produced using the `GRangesList` function:
 
 ```{r}
-RaggedExperiment(rangeList, colData = colDat_3)
+ragexp_4  <- RaggedExperiment(
+    sample_list_GRanges_ex3, 
+    colData = colDat_1
+) 
+
+ragexp_4
 ```
 
-## Using a `List` of `GRanges` with metadata
+# Downstream Analysis
 
-There may be cases where a `SimpleGenomicRangesList` is provided that has corresponding metadata (accessed by `mcols`). In these cases the metadata is used as the `colData` for the `RaggedExperiment`. Here we use the `List` function in the same way as we would use the `list` function (shown above), but with the metadata being added using the `mcols` function.
+Now that we have the ASCAT data converted to `RaggedExperiment` objects we can use the \*Assay functions that are described in the `RaggedExperiment` [vignette](https://bioconductor.org/packages/release/bioc/vignettes/RaggedExperiment/inst/doc/RaggedExperiment.html). These functions provide several different functions for representing ranged data in a rectangular matrix. They make it easy to find genomic segments shared/not shared between each sample considered and provide the corresponding allele-specific copy number calls for each sample across each segment.
+
+# Session Information
 
 ```{r}
-grList <- List(sample1 = sample1_ex3, sample2 = sample2_ex3, sample3 = sample3_ex3)
-mcols(grList) <- colDat_3
-
-RaggedExperiment(grList)
+sessionInfo()
 ```
-
-# Common use cases (Applications?)
