@@ -1,3 +1,9 @@
+## Changes in version 1.26.0
+
+### New features
+
+* Added a contributed vignette for ASCAT workflows (@Lydia-King, #28).
+
 ## Changes in version 1.24.0
 
 ### Bug fixes and minor improvements
