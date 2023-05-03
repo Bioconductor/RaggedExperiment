@@ -33,7 +33,7 @@ with `RaggedExperiment`.
 
 # Installation
 
-```{r, message = FALSE, warning = FALSE, eval = F}
+```{r, message = FALSE, warning = FALSE, eval = FALSE}
 if (!require("BiocManager"))
     install.packages("BiocManager") 
 
@@ -68,9 +68,10 @@ that it only contains allele-specific copy number calls for 1 sample and look at
 the first 10 rows of the dataframe.
 
 ```{r}
-ASCAT_data_S1 <- read.csv(
+ASCAT_data_S1 <- read.table(
     system.file("extdata", "ASCAT_Sample1.txt", 
     package = "RaggedExperiment"), 
+    header = T,
     sep="\t"
 )
 
@@ -86,9 +87,10 @@ calls for the 3 samples and look at the first 10 rows of the dataframe. We also
 note that as expected the copy number calls for sample1 are the same as above.
 
 ```{r}
-ASCAT_data_All <- read.csv(
-    system.file("extdata", "ASCAT_All_Samples.txt",
+ASCAT_data_All <- read.table(
+    system.file("extdata", "ASCAT_All_Samples.txt", 
     package = "RaggedExperiment"), 
+    header = T,
     sep="\t"
 )
 
