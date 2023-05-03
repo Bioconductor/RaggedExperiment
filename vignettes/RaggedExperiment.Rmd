@@ -2,9 +2,9 @@
 title: "RaggedExperiment"
 author:
 - name: Martin Morgan
-  affiliation: Roswell Park Cancer Institute, Buffalo, NY
+  affiliation: Roswell Park Comprehensive Cancer Center, Buffalo, NY
 - name: Marcel Ramos
-  affiliation: Roswell Park Cancer Institute, Buffalo, NY
+  affiliation: Roswell Park Comprehensive Cancer Center, Buffalo, NY
 date: "`r BiocStyle::doc_date()`"
 vignette: |
   %\VignetteIndexEntry{RaggedExperiment}
@@ -80,9 +80,11 @@ colDat <- DataFrame(id = 1:2)
 ## Using `GRanges` objects
 
 ```{r}
-ragexp <- RaggedExperiment(sample1 = sample1,
-                           sample2 = sample2,
-                           colData = colDat)
+ragexp <- RaggedExperiment(
+    sample1 = sample1,
+    sample2 = sample2,
+    colData = colDat
+)
 ragexp
 ```
 

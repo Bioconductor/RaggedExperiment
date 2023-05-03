@@ -4,7 +4,7 @@ author:
 - name: Lydia King
   affiliation: University of Galway, Ireland
 - name: Marcel Ramos
-  affiliation: Roswell Park Cancer Institute, Buffalo, NY
+  affiliation: Roswell Park Comprehensive Cancer Center, Buffalo, NY
 date: "`r BiocStyle::doc_date()`"
 vignette: |
   %\VignetteIndexEntry{ASCAT to RaggedExperiment}
@@ -68,11 +68,12 @@ that it only contains allele-specific copy number calls for 1 sample and look at
 the first 10 rows of the dataframe.
 
 ```{r}
-ASCAT_data_S1 <- read.table(
-    system.file("extdata", "ASCAT_Sample1.txt",
-    package = "RaggedExperiment"),
-    header = T,
-    sep="\t"
+ASCAT_data_S1 <- read.delim(
+    system.file(
+        "extdata", "ASCAT_Sample1.txt",
+        package = "RaggedExperiment", mustWork = TRUE
+    ),
+    header = TRUE
 )
 
 unique(ASCAT_data_S1$sample)
@@ -87,11 +88,12 @@ calls for the 3 samples and look at the first 10 rows of the dataframe. We also
 note that as expected the copy number calls for sample1 are the same as above.
 
 ```{r}
-ASCAT_data_All <- read.table(
-    system.file("extdata", "ASCAT_All_Samples.txt",
-    package = "RaggedExperiment"),
-    header = T,
-    sep="\t"
+ASCAT_data_All <- read.delim(
+    system.file(
+        "extdata", "ASCAT_All_Samples.txt",
+        package = "RaggedExperiment", mustWork = TRUE
+    ),
+    header = TRUE
 )
 
 unique(ASCAT_data_All$sample)
