@@ -4,7 +4,8 @@ Version: 1.25.0
 Authors@R: c(
     person("Martin", "Morgan", , "martin.morgan@roswellpark.org", "aut"),
     person("Marcel", "Ramos", , "marcel.ramos@roswellpark.org",
-        c("aut", "cre"), c(ORCID = "0000-0002-3242-0582"))
+        c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")),
+    person("Lydia", "King", , "L.King18@nuigalway.ie", "ctb")
     )
 Description: This package provides a flexible representation of copy
     number, mutation, and other data that fit into the ragged array
