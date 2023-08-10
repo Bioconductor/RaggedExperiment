@@ -212,6 +212,10 @@ test_that("dimnames() and dimnames<-() work", {
     rownames(re) <-  LETTERS[1:4]
     expect_identical(dimnames(re), list(LETTERS[1:4], LETTERS[1:2]))
     expect_identical(colnames(re), rownames(colData(re)))
+
+    re <- RaggedExperiment(sample1, sample2)[4:1]
+    rownames(re) <- letters[1:4]
+    expect_identical(rownames(re), letters[1:4])
 })
 
 test_that("Dollar sign operator ($) works", {

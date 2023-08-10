@@ -300,15 +300,23 @@ setMethod("dimnames", "RaggedExperiment", function(x) {
 setReplaceMethod("dimnames", c("RaggedExperiment", "list"),
     function(x, value)
 {
-    assays <- .assays(x)
-    rowRanges <- unlist(assays, use.names = FALSE)
-    names(rowRanges) <- value[[1]]
-    assays <- relist(rowRanges, assays)
-    names(assays)[.colidx(x)] <- value[[2]]
+    new_rownames <- value[[1L]]
+    new_colnames <- value[[2L]]
+    x_assays <- .assays(x)
+    if (is.null(new_colnames))
+        names(x_assays) <- NULL
+    else
+        names(x_assays)[.colidx(x)] <- new_colnames
+    unlisted_assays <- unlist(x_assays, use.names = FALSE)
+    if (is.null(new_rownames))
+        names(unlisted_assays) <- NULL
+    else
+        names(unlisted_assays)[.rowidx(x)] <- new_rownames
 
-    colData <- colData(x)
-    rownames(colData) <- value[[2]]
-    mcols(assays)[.colidx(x), ] <- colData
+    new_assays <- relist(unlisted_assays, x_assays)
+    mcols(new_assays) <- mcols(x_assays)
+    BiocGenerics:::replaceSlots(x, assays = new_assays, check = FALSE)
+})
 
     BiocGenerics:::replaceSlots(x, assays = assays, check = FALSE)
 })
