@@ -37,4 +37,9 @@ Authors:
   \item Martin Morgan \email{martin.morgan@roswellpark.org}
 }
 
+Other contributors:
+\itemize{
+  \item Lydia King \email{L.King18@nuigalway.ie} [contributor]
+}
+
 }
