@@ -211,7 +211,7 @@ setReplaceMethod("seqinfo", "RaggedExperiment",
         value) {
         newAssay <- `seqinfo<-`(.assays(x), new2old = new2old,
             pruning.mode = pruning.mode, value = value)
-        BiocGenerics:::replaceSlots(x, assays = newAssay)
+        BiocBaseUtils::setSlots(x, assays = newAssay)
 })
 
 #' @describeIn RaggedExperiment rowRanges accessor
@@ -231,7 +231,7 @@ setReplaceMethod("rowRanges", c("RaggedExperiment", "GRanges"),
         if (isEmpty(mcols(value)))
             mcols(value) <- .mcols(x)
         value <- relist(value, .assays(x))
-        BiocGenerics:::replaceSlots(x, assays = value, check = FALSE)
+        BiocBaseUtils::setSlots(x, assays = value, check = FALSE)
     }
 )
 
@@ -264,7 +264,7 @@ setReplaceMethod("mcols", "RaggedExperiment", function(x, ..., value) {
     mcols(ranges) <- value
     assays <- relist(ranges, assays)
 
-    BiocGenerics:::replaceSlots(x, assays = assays, check = FALSE)
+    BiocBaseUtils::setSlots(x, assays = assays, check = FALSE)
 })
 
 #' @describeIn RaggedExperiment get the rowData or metadata for the ranges
@@ -315,7 +315,7 @@ setReplaceMethod("dimnames", c("RaggedExperiment", "list"),
 
     new_assays <- relist(unlisted_assays, x_assays)
     mcols(new_assays) <- mcols(x_assays)
-    BiocGenerics:::replaceSlots(x, assays = new_assays, check = FALSE)
+    BiocBaseUtils::setSlots(x, assays = new_assays, check = FALSE)
 })
 
 #' @describeIn RaggedExperiment set row range names and sample names to NULL
@@ -331,7 +331,7 @@ setReplaceMethod("dimnames", c("RaggedExperiment", "ANY"),
     names(unlisted_assays) <- NULL
     new_assays <- relist(unlisted_assays, x_assays)
     mcols(new_assays) <- mcols(x_assays)
-    BiocGenerics:::replaceSlots(x, assays = new_assays, check = FALSE)
+    BiocBaseUtils::setSlots(x, assays = new_assays, check = FALSE)
 })
 
 #' @describeIn RaggedExperiment get the length of row vectors in the object,
@@ -400,10 +400,9 @@ setMethod("assayNames", "RaggedExperiment", function(x, ...) {
 #' @param object A RaggedExperiment object.
 #' @exportMethod show
 setMethod("show", "RaggedExperiment", function(object) {
-    selectSome <- S4Vectors:::selectSome
     scat <- function(fmt, vals = character(), exdent = 2, ...) {
         vals <- ifelse(nzchar(vals), vals, "''")
-        lbls <- paste(S4Vectors:::selectSome(vals), collapse = " ")
+        lbls <- paste(BiocBaseUtils::selectSome(vals), collapse = " ")
         txt <- sprintf(fmt, length(vals), lbls)
         cat(strwrap(txt, exdent = exdent, ...), sep = "\n")
     }

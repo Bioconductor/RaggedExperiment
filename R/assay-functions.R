@@ -9,7 +9,7 @@
     } else if (is.logical(i)) {
         i <- which(i)
     }
-    if (!isSingleNumber(i))
+    if (!BiocBaseUtils::isScalarNumber(i))
         stop("'i' must be a single number")
     if (ncol(mcols) < i)
         stop("'i' is greater than 'length(assays(x))'")
