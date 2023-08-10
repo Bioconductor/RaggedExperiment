@@ -318,6 +318,7 @@ setReplaceMethod("dimnames", c("RaggedExperiment", "list"),
     BiocGenerics:::replaceSlots(x, assays = new_assays, check = FALSE)
 })
 
+#' @describeIn RaggedExperiment set row range names and sample names to NULL
 setReplaceMethod("dimnames", c("RaggedExperiment", "ANY"),
     function(x, value)
 {

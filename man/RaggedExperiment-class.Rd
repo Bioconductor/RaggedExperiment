@@ -18,6 +18,7 @@
 \alias{dim,RaggedExperiment-method}
 \alias{dimnames,RaggedExperiment-method}
 \alias{dimnames<-,RaggedExperiment,list-method}
+\alias{dimnames<-,RaggedExperiment,ANY-method}
 \alias{length,RaggedExperiment-method}
 \alias{colData,RaggedExperiment-method}
 \alias{colData<-,RaggedExperiment,DataFrame-method}
@@ -58,6 +59,8 @@ RaggedExperiment(..., colData = DataFrame())
 \S4method{dimnames}{RaggedExperiment}(x)
 
 \S4method{dimnames}{RaggedExperiment,list}(x) <- value
+
+\S4method{dimnames}{RaggedExperiment,ANY}(x) <- value
 
 \S4method{length}{RaggedExperiment}(x)
 
@@ -409,6 +412,8 @@ and sample names
 
 \item \code{dimnames(x = RaggedExperiment) <- value}: set row (sample-specific) range names
 and sample names
+
+\item \code{dimnames(x = RaggedExperiment) <- value}: set row range names and sample names to NULL
 
 \item \code{length(RaggedExperiment)}: get the length of row vectors in the object,
 similar to \linkS4class{SummarizedExperiment}
