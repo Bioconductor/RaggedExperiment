@@ -318,7 +318,19 @@ setReplaceMethod("dimnames", c("RaggedExperiment", "list"),
     BiocGenerics:::replaceSlots(x, assays = new_assays, check = FALSE)
 })
 
-    BiocGenerics:::replaceSlots(x, assays = assays, check = FALSE)
+setReplaceMethod("dimnames", c("RaggedExperiment", "ANY"),
+    function(x, value)
+{
+    if (!is.null(value))
+        stop("'dimnames' must be a list")
+
+    x_assays <- .assays(x)
+    names(x_assays) <- NULL
+    unlisted_assays <- unlist(x_assays, use.names=FALSE)
+    names(unlisted_assays) <- NULL
+    new_assays <- relist(unlisted_assays, x_assays)
+    mcols(new_assays) <- mcols(x_assays)
+    BiocGenerics:::replaceSlots(x, assays = new_assays, check = FALSE)
 })
 
 #' @describeIn RaggedExperiment get the length of row vectors in the object,
