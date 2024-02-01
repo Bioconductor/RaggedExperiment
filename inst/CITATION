@@ -1,0 +1,36 @@
+citHeader("To cite RaggedExperiment in publications use:")
+
+bibentry(
+    bibtype = "Article",
+    title = paste0(
+        "RaggedExperiment: the missing link between genomic ranges ",
+        "and matrices in Bioconductor"
+    ),
+    author = c(
+          person(
+              "Marcel", "Ramos", role = c("aut", "cre"),
+              comment = c(ORCID = "0000-0002-3242-0582")
+          ),
+          person(
+              "Martin", "Morgan", role = "aut",
+              comment = c(ORCID = "0000-0002-5874-8148")
+          ),
+          person(
+              "Ludwig", "Geistlinger", role = "aut",
+              comment = c(ORCID = "0000-0002-2495-5464")
+          ),
+          person(
+              "Vincent J", "Carey", role = "aut",
+              comment = c(ORCID = "0000-0003-4046-0063")
+          ),
+          person(
+              "Levi", "Waldron", role = "aut",
+              comment = c(ORCID = "0000-0003-2725-0694")
+          )
+    ),
+    journal = "Bioinformatics",
+    year = "2023",
+    volume = "39",
+    number = "6",
+    doi = "10.1093/bioinformatics/btad330"
+)

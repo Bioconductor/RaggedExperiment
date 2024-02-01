@@ -14,6 +14,7 @@ output:
   BiocStyle::html_document:
     toc_float: true
 Package: RaggedExperiment
+bibliography: ../inst/REFERENCES.bib
 ---
 
 # Introduction
@@ -42,6 +43,15 @@ Loading the package:
 library(RaggedExperiment)
 library(GenomicRanges)
 ```
+
+# Citing RaggedExperiment
+
+Your citations are crucial in keeping our software free and open source. To
+cite our package see the citation (@Ramos2023-og) in the Reference section.
+You may also browse to the publication at the link [here][1].
+
+[1]: https://doi.org/10.1093/bioinformatics/btad330
+
 
 # `RaggedExperiment` class overview
 
@@ -307,3 +317,4 @@ as(sm, "RaggedExperiment")
 sessionInfo()
 ```
 
+# References
