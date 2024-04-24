@@ -1,3 +1,10 @@
+## Changes in version 1.28.0
+
+### New features
+
+* Added citation information to the vignette and package. See
+`citation(package = "RaggedExperiment")`
+
 ## Changes in version 1.26.0
 
 ### New features
