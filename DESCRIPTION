@@ -1,6 +1,6 @@
 Package: RaggedExperiment
 Title: Representation of Sparse Experiments and Assays Across Samples
-Version: 1.29.0
+Version: 1.29.1
 Authors@R: c(
     person("Martin", "Morgan", , "martin.morgan@roswellpark.org", "aut"),
     person("Marcel", "Ramos", , "marcel.ramos@roswellpark.org",
@@ -41,4 +41,4 @@ Suggests:
     MultiAssayExperiment
 RoxygenNote: 7.3.2
 Encoding: UTF-8
-Date: 2024-04-24
+Date: 2024-07-08
