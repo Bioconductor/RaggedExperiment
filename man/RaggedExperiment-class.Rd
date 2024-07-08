@@ -243,7 +243,7 @@ in the resulting object}
     See also the \code{make.names} argument of the \code{matrix} method.}
 
 \item{name}{
-    A literal character string or a \link[base]{name} (possibly \link[base]{backtick}
+    a literal character string or a \link[base]{name} (possibly \link[base]{backtick}
     quoted).  For extraction, this is normally (see under
     \sQuote{Environments}) partially matched to the \code{\link[base]{names}}
     of the object.
