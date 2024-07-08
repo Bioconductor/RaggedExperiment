@@ -1,4 +1,9 @@
-## Changes in version 1.28.0
+## Changes in version 1.28.1
+
+### Bug fixes and minor improvements
+
+* Ensure order is the same in both sparse and dense outputs of compactAssay
+(@csoneson, #30)
 
 ### New features
 
