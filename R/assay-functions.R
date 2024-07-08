@@ -132,9 +132,8 @@ compactAssay <-
             dimnames=dimnames
         )
         M[idx] <- mcol
-        M <- M[order(ugr), .colidx(x), drop=FALSE]
     }
-    M
+    M[order(ugr), .colidx(x), drop=FALSE]
 }
 
 #' @rdname assay-functions
