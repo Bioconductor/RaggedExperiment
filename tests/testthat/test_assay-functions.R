@@ -26,6 +26,17 @@ test_that("sparseAssay() works", {
     expect_identical(sparseAssay(re, sparse = TRUE, withDimnames = FALSE), M0)
     dimnames(M0) <- dimnames(m0)
     expect_identical(sparseAssay(re, sparse = TRUE), M0)
+
+    ## ensure order is the same in both sparse and dense matrices
+    sample1 <- GRanges(c(a = "chr1:1-10:-", b = "chr1:11-18:+"), score = 1:2)
+    sample2 <- GRanges(c(c = "chr2:1-10:-", d = "chr2:11-18:+"), score = 3:4)
+    colDat <- DataFrame(id = 1:2)
+    re1 <- RaggedExperiment(sample1=sample1, sample2=sample2, colData = colDat)
+    coords <- matrix(c(1, 1, 2, 1, 3, 2, 4, 2), ncol=2, byrow=TRUE)
+    expect_equal(
+        compactAssay(re1, sparse = FALSE)[coords],
+        compactAssay(re1, sparse = TRUE)[coords]
+    )
 })
 
 
@@ -38,7 +49,7 @@ test_that("compactAssay() works", {
     sample1 <- GRanges(c("chr1:1-10", "chr1:11-18"), score = 1:2)
     sample2 <- GRanges(c("chr1:1-10", "chr2:11-18"), score = 3:4)
     re <- RaggedExperiment(sample1, sample2)
-    
+
     ddimnames <- list(urownames(re), NULL)
     m0 <- matrix(
         c(1L, 2L, NA, 3L, NA, 4L), ncol=2,
