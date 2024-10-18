@@ -36,7 +36,7 @@
 \alias{subset,RaggedExperiment-method}
 \title{RaggedExperiment objects}
 \usage{
-RaggedExperiment(..., colData = DataFrame())
+RaggedExperiment(..., colData = DataFrame(), metadata = list())
 
 \S4method{seqinfo}{RaggedExperiment}(x)
 
@@ -113,6 +113,9 @@ assay: Additional arguments for assay. See details for more information.}
 
 \item{colData}{A \code{\link{DataFrame}} describing samples. Length of
 rowRanges must equal the number of rows in colData}
+
+\item{metadata}{A \code{list} to include in the metadata. Any metadata
+included in the input objects are lost.}
 
 \item{x}{A RaggedExperiment object.}
 

@@ -11,12 +11,15 @@
 NULL
 
 #' @exportClass RaggedExperiment
-.RaggedExperiment <- setClass("RaggedExperiment",
+.RaggedExperiment <- setClass(
+    "RaggedExperiment",
     slots = c(
         assays = "GRangesList",
         rowidx = "integer",
-        colidx = "integer"),
-    contains = "Annotated")
+        colidx = "integer"
+    ),
+    contains = "Annotated"
+)
 
 .valid.RaggedExperiment.idx <- function(x) {
     txt <- character()
@@ -110,14 +113,19 @@ setValidity2("RaggedExperiment", .valid.RaggedExperiment)
 #'
 #' @param ... Constructor: GRanges, list of GRanges, or GRangesList OR
 #'     assay: Additional arguments for assay. See details for more information.
+#'
 #' @param colData A \code{\link{DataFrame}} describing samples. Length of
 #'     rowRanges must equal the number of rows in colData
+#'
+#' @param metadata A \code{list} to include in the metadata. Any metadata
+#'   included in the input objects are lost.
+#'
 #' @return constructor returns a \code{RaggedExperiment} object
 #'
 #' @example inst/scripts/RaggedExperiment-Ex.R
 #'
 #' @export
-RaggedExperiment <- function(..., colData=DataFrame()) {
+RaggedExperiment <- function(..., colData=DataFrame(), metadata = list()) {
     inputs <- list(...)
     if (length(inputs) == 1L && is(inputs[[1L]], "GenomicRangesList")) {
         GRList <- inputs[[1L]]
@@ -155,7 +163,8 @@ RaggedExperiment <- function(..., colData=DataFrame()) {
     .RaggedExperiment(
         assays = rowRanges,
         rowidx = seq_len(sum(lengths(rowRanges))),
-        colidx = seq_along(rowRanges)
+        colidx = seq_along(rowRanges),
+        metadata = metadata
     )
 }
 
