@@ -1,5 +1,10 @@
 ## Changes in version 1.30.0
 
+### New features
+
+* `metadata` argument added to `RaggedExperiment` constructor function
+(@LiNk-NY).
+
 ### Bug fixes and minor improvements
 
 * Ensure order is the same in both sparse and dense outputs of `compactAssay`
