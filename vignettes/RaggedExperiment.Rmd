@@ -298,7 +298,7 @@ into `RaggedExperiment`. This can be done using the `as` coercion method.  The
 example below first creates an example sparse `dgCMatrix` class and then shows
 the `as` method usage to this end.
 
-```{r}
+```{r as-ragged-exp, echo=TRUE, eval = TRUE}
 library(Matrix)
 
 sm <- Matrix::sparseMatrix(
@@ -317,7 +317,7 @@ as(sm, "RaggedExperiment")
 
 # Session Information
 
-```{r}
+```{r session-info}
 sessionInfo()
 ```
 
