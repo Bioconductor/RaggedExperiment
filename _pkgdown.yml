@@ -1,0 +1,7 @@
+title: RaggedExperiment
+url: https://Biconductor.github.io/RaggedExperiment/
+
+template:
+  bootstrap: 5
+  params:
+    bootswatch: flatly
