@@ -17,6 +17,10 @@ package: RaggedExperiment
 bibliography: ../inst/REFERENCES.bib
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(dev = 'svg')
+```
+
 # Introduction
 
 The `r BiocStyle::Biocpkg("RaggedExperiment")` package provides a flexible data
@@ -64,7 +68,7 @@ transforming the `RaggedExperiment` representation:
 3) `qreduceAssay`
 
 ```{r, echo = FALSE, fig.cap = "RaggedExperiment object schematic. Rows and columns represent genomic ranges and samples, respectively. Assay operations can be performed with (from left to right) compactAssay, qreduceAssay, and sparseAssay.", out.width = "\\maxwidth"}
-knitr::include_graphics("RaggedExperiment.svg")
+knitr::include_graphics("../man/figures/RaggedExperiment.svg")
 ```
 
 # Constructing a `RaggedExperiment` object
