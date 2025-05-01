@@ -17,6 +17,8 @@ Description: This package provides a flexible representation of copy
 License: Artistic-2.0
 biocViews: Infrastructure, DataRepresentation
 BugReports: https://github.com/Bioconductor/RaggedExperiment/issues
+URL: https://bioconductor.github.io/RaggedExperiment,
+    https://bioconductor.org/packages/RaggedExperiment
 VignetteBuilder: knitr
 Depends:
     R (>= 4.2.0),
