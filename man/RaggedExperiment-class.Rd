@@ -124,7 +124,7 @@ included in the input objects are lost.}
     reorder the "sequence levels" in \code{x}.
 
     \code{new2old} can be \code{NULL} or an integer vector with one element
-    per entry in \link[GenomeInfoDb]{Seqinfo} object \code{value} (i.e. \code{new2old} and
+    per entry in \link[Seqinfo]{Seqinfo} object \code{value} (i.e. \code{new2old} and
     \code{value} must have the same length) describing how the "new" sequence
     levels should be mapped to the "old" sequence levels, that is, how the
     entries in \code{value} should be mapped to the entries in

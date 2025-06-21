@@ -1,6 +1,6 @@
 Package: RaggedExperiment
 Title: Representation of Sparse Experiments and Assays Across Samples
-Version: 1.33.2
+Version: 1.33.3
 Authors@R: c(
     person("Martin", "Morgan", , "martin.morgan@roswellpark.org", "aut"),
     person("Marcel", "Ramos", , "marcel.ramos@sph.cuny.edu",
@@ -22,24 +22,25 @@ URL: https://bioconductor.github.io/RaggedExperiment,
 VignetteBuilder: knitr
 Depends:
     R (>= 4.2.0),
-    GenomicRanges (>= 1.37.17)
+    GenomicRanges (>= 1.61.1)
 Imports:
     BiocBaseUtils,
     BiocGenerics,
-    GenomeInfoDb,
+    Seqinfo,
     IRanges,
     Matrix,
     MatrixGenerics,
     methods,
     S4Vectors,
     stats,
-    SummarizedExperiment,
+    SummarizedExperiment (>= 1.39.1),
     utils
 Suggests:
     BiocStyle,
     knitr,
     rmarkdown,
     testthat,
+    GenomeInfoDb,
     MultiAssayExperiment
 RoxygenNote: 7.3.2
 Encoding: UTF-8

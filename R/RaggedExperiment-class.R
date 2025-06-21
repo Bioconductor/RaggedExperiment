@@ -4,7 +4,7 @@
 #' @importClassesFrom GenomicRanges GRangesList
 #' @importFrom S4Vectors mcols
 #' @importFrom BiocGenerics relist
-#' @importFrom GenomeInfoDb seqinfo seqinfo<-
+#' @importFrom Seqinfo seqinfo seqinfo<-
 #' @importFrom MatrixGenerics rowRanges
 #' @importFrom SummarizedExperiment rowRanges<-
 #' @importFrom stats setNames
@@ -215,7 +215,7 @@ setMethod("seqinfo", "RaggedExperiment", function(x) {
 
 #' @describeIn RaggedExperiment Replace seqinfo metadata of the ranges
 #' @exportMethod seqinfo<-
-#' @inheritParams GenomeInfoDb::`seqinfo<-`
+#' @inheritParams Seqinfo::`seqinfo<-`
 setReplaceMethod("seqinfo", "RaggedExperiment",
     function(x, new2old=NULL, pruning.mode=c("error", "coarse", "fine", "tidy"),
         value) {
