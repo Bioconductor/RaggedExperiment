@@ -322,13 +322,15 @@ ragexp_4
 
 # Downstream Analysis
 
-Now that we have the ASCAT data converted to `RaggedExperiment` objects we can
-use the \*Assay functions that are described in the `RaggedExperiment`
-[vignette](https://bioconductor.org/packages/release/bioc/vignettes/RaggedExperiment/inst/doc/RaggedExperiment.html).
-These functions provide several different functions for representing ranged data
-in a rectangular matrix. They make it easy to find genomic segments shared/not
-shared between each sample considered and provide the corresponding
-allele-specific copy number calls for each sample across each segment.
+Now that we have the ASCAT data converted to `RaggedExperiment` objects, we can
+use the \*Assay functions that are described in the `RaggedExperiment` vignette
+found in the [landing page][]. These functions provide several different
+functions for representing ranged data in a rectangular matrix. They make it
+easy to find genomic segments shared/not shared between each sample considered
+and provide the corresponding allele-specific copy number calls for each sample
+across each segment.
+
+[landing page]: https://bioconductor.org/packages/RaggedExperiment/
 
 # Session Information
 
