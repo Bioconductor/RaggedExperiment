@@ -67,7 +67,7 @@ transforming the `RaggedExperiment` representation:
 2) `compactAssay`
 3) `qreduceAssay`
 
-```{r class-schematic, echo = FALSE, fig.cap = "RaggedExperiment object schematic. Rows and columns represent genomic ranges and samples, respectively. Assay operations can be performed with (from left to right) compactAssay, qreduceAssay, and sparseAssay.", out.width = "\maxwidth"}
+```{r class-schematic, echo = FALSE, fig.cap = "RaggedExperiment object schematic. Rows and columns represent genomic ranges and samples, respectively. Assay operations can be performed with (from left to right) compactAssay, qreduceAssay, and sparseAssay.", out.width = "maxwidth"}
 knitr::include_graphics("../man/figures/RaggedExperiment.svg")
 ```
 
