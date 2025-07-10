@@ -18,7 +18,7 @@ package: RaggedExperiment
 
 # Introduction
 
-The `r Biocpkg("RaggedExperiment")` package provides a flexible data
+The `r BiocStyle::Biocpkg("RaggedExperiment")` package provides a flexible data
 representation for copy number, mutation and other ragged array schema for
 genomic location data. The output of Allele-Specific Copy number Analysis of
 Tumors (ASCAT) can be classed as a ragged array and contains whole genome
