@@ -1,3 +1,9 @@
+## Changes in version 1.34.0
+
+### Bug fixes and minor improvements
+
+* Added vignette chunk labels to both vignettes for easier debugging.
+
 ## Changes in version 1.32.0
 
 ### Bug fixes and minor improvements
