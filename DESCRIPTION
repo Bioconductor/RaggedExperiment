@@ -21,7 +21,7 @@ URL: https://bioconductor.github.io/RaggedExperiment,
     https://bioconductor.org/packages/RaggedExperiment
 VignetteBuilder: knitr
 Depends:
-    R (>= 4.2.0),
+    R (>= 4.5.0),
     GenomicRanges (>= 1.61.1)
 Imports:
     BiocBaseUtils,
