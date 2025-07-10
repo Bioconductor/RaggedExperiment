@@ -2,6 +2,8 @@ name: PR CMD check & build site
 
 on:
   pull_request:
+    branches:
+      - devel
   push:
     paths:
       - 'DESCRIPTION'
