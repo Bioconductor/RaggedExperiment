@@ -26,6 +26,8 @@
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://bioconductor.github.io/RaggedExperiment}
+  \item \url{https://bioconductor.org/packages/RaggedExperiment}
   \item Report bugs at \url{https://github.com/Bioconductor/RaggedExperiment/issues}
 }
 
