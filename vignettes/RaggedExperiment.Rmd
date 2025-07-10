@@ -35,7 +35,7 @@ and the number of samples represented in the data, respectively.
 
 # Installation
 
-```{r, eval = FALSE}
+```{r installation, eval = FALSE}
 if (!require("BiocManager"))
     install.packages("BiocManager")
 BiocManager::install("RaggedExperiment")
@@ -43,7 +43,7 @@ BiocManager::install("RaggedExperiment")
 
 Loading the package:
 
-```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
+```{r libs, include=TRUE,results="hide",message=FALSE,warning=FALSE}
 library(RaggedExperiment)
 library(GenomicRanges)
 ```
@@ -67,7 +67,7 @@ transforming the `RaggedExperiment` representation:
 2) `compactAssay`
 3) `qreduceAssay`
 
-```{r, echo = FALSE, fig.cap = "RaggedExperiment object schematic. Rows and columns represent genomic ranges and samples, respectively. Assay operations can be performed with (from left to right) compactAssay, qreduceAssay, and sparseAssay.", out.width = "\\maxwidth"}
+```{r class-schematic, echo = FALSE, fig.cap = "RaggedExperiment object schematic. Rows and columns represent genomic ranges and samples, respectively. Assay operations can be performed with (from left to right) compactAssay, qreduceAssay, and sparseAssay.", out.width = "\maxwidth"}
 knitr::include_graphics("../man/figures/RaggedExperiment.svg")
 ```
 
@@ -76,7 +76,7 @@ knitr::include_graphics("../man/figures/RaggedExperiment.svg")
 We start with a couple of `GRanges` objects, each representing an individual
 sample:
 
-```{r}
+```{r granges-objects}
 sample1 <- GRanges(
     c(A = "chr1:1-10:-", B = "chr1:8-14:+", C = "chr2:15-18:+"),
     score = 3:5)
@@ -87,13 +87,13 @@ sample2 <- GRanges(
 
 Include column data `colData` to describe the samples:
 
-```{r}
+```{r coldata}
 colDat <- DataFrame(id = 1:2)
 ```
 
 ## Using `GRanges` objects
 
-```{r}
+```{r ragexp-from-granges}
 ragexp <- RaggedExperiment(
     sample1 = sample1,
     sample2 = sample2,
@@ -104,14 +104,14 @@ ragexp
 
 ## Using a `GRangesList` instance
 
-```{r}
+```{r ragexp-from-grangeslist}
 grl <- GRangesList(sample1 = sample1, sample2 = sample2)
 RaggedExperiment(grl, colData = colDat)
 ```
 
 ## Using a `list` of `GRanges`
 
-```{r}
+```{r ragexp-from-list}
 rangeList <- list(sample1 = sample1, sample2 = sample2)
 RaggedExperiment(rangeList, colData = colDat)
 ```
@@ -122,7 +122,7 @@ __Note__: In cases where a `SimpleGenomicRangesList` is provided along with
 accompanying metadata (accessed by `mcols`), the metadata is used as the
 `colData` for the `RaggedExperiment`.
 
-```{r}
+```{r ragexp-from-list-mcols}
 grList <- List(sample1 = sample1, sample2 = sample2)
 mcols(grList) <- colDat
 RaggedExperiment(grList)
@@ -132,19 +132,19 @@ RaggedExperiment(grList)
 
 ## Range data
 
-```{r}
+```{r accessor-rowranges}
 rowRanges(ragexp)
 ```
 
 ## Dimension names
 
-```{r}
+```{r accessor-dimnames}
 dimnames(ragexp)
 ```
 
 ## `colData`
 
-```{r}
+```{r accessor-coldata}
 colData(ragexp)
 ```
 
@@ -173,7 +173,7 @@ The most straightforward matrix representation of a `RaggedExperiment` will
 return a matrix of dimensions equal to the product of the number of ranges and
 samples.
 
-```{r}
+```{r sparseassay-dim}
 dim(ragexp)
 Reduce(`*`, dim(ragexp))
 sparseAssay(ragexp)
@@ -186,7 +186,7 @@ We provide sparse matrix representations with the help of the `Matrix` package.
 To obtain a sparse representation, the user can use the `sparse = TRUE`
 argument.
 
-```{r}
+```{r sparseassay-sparse}
 sparseAssay(ragexp, sparse = TRUE)
 ```
 
@@ -198,7 +198,7 @@ more details.
 Samples with identical ranges are placed in the same row. Non-disjoint ranges
 are **not** collapsed.
 
-```{r}
+```{r compactassay}
 compactAssay(ragexp)
 ```
 
@@ -206,7 +206,7 @@ Similarly, to `sparseAssay` the `compactAssay` function provides the option to
 obtain a sparse matrix representation with the `sparse = TRUE` argument. This
 will return a `dgCMatrix` class from the `Matrix` package.
 
-```{r}
+```{r compactassay-sparse}
 compactAssay(ragexp, sparse = TRUE)
 ```
 
@@ -216,7 +216,7 @@ This function returns a matrix of disjoint ranges across all samples. Elements
 of the matrix are summarized by applying the `simplifyDisjoin` functional
 argument to assay values of overlapping ranges.
 
-```{r}
+```{r disjoinassay}
 disjoinAssay(ragexp, simplifyDisjoin = mean)
 ```
 
@@ -231,20 +231,20 @@ _i_ th query range and the _j_ th sample, summarized according to the
 For demonstration purposes, we can have a look at the original `GRangesList`
 and the associated scores from which the current `ragexp` object is derived:
 
-```{r}
+```{r qreduceassay-unlist}
 unlist(grl, use.names = FALSE)
 ```
 
 This data is represented as `rowRanges` and `assays` in `RaggedExperiment`:
 
-```{r}
+```{r qreduceassay-rowranges}
 rowRanges(ragexp)
 assay(ragexp, "score")
 ```
 
 Here we provide the "query" region of interest:
 
-```{r}
+```{r qreduceassay-query}
 (query <- GRanges(c("chr1:1-14:-", "chr2:11-18:+")))
 ```
 
@@ -257,7 +257,7 @@ overlapping ranges and a query range.
 _Note_ that there are three arguments to this function. See the documentation
 for additional details.
 
-```{r}
+```{r qreduceassay-weightedmean}
 weightedmean <- function(scores, ranges, qranges)
 {
     isects <- pintersect(ranges, qranges)
@@ -268,7 +268,7 @@ weightedmean <- function(scores, ranges, qranges)
 A call to `qreduceAssay` involves the `RaggedExperiment`, the `GRanges` query
 and the `simplifyReduce` functional argument.
 
-```{r}
+```{r qreduceassay-call}
 qreduceAssay(ragexp, query, simplifyReduce = weightedmean)
 ```
 
@@ -298,7 +298,7 @@ into `RaggedExperiment`. This can be done using the `as` coercion method.  The
 example below first creates an example sparse `dgCMatrix` class and then shows
 the `as` method usage to this end.
 
-```{r}
+```{r dgcmatrix-to-ragexp}
 library(Matrix)
 
 sm <- Matrix::sparseMatrix(
@@ -317,8 +317,9 @@ as(sm, "RaggedExperiment")
 
 # Session Information
 
-```{r}
+```{r sessioninfo}
 sessionInfo()
 ```
 
 # References
+
