@@ -122,7 +122,9 @@ produce a `GRanges` object.
 ```{r ascat-to-granges-manual}
 sample1_ex1 <- GRanges(
     seqnames = Rle(paste0("chr", ASCAT_data_S1$chr)),
-    ranges = IRanges(start = ASCAT_data_S1$startpos, end = ASCAT_data_S1$endpos),
+    ranges = IRanges(
+        start = ASCAT_data_S1$startpos, end = ASCAT_data_S1$endpos
+    ),
     strand = Rle(strand("*")),
     nmajor = ASCAT_data_S1$nMajor,
     nminor = ASCAT_data_S1$nMinor
