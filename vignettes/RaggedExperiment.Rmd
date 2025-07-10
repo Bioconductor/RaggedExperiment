@@ -248,7 +248,7 @@ Here we provide the "query" region of interest:
 (query <- GRanges(c("chr1:1-14:-", "chr2:11-18:+")))
 ```
 
- The `simplifyReduce` argument in `qreduceAssay` allows the user to summarize
+The `simplifyReduce` argument in `qreduceAssay` allows the user to summarize
 overlapping regions with a custom method for the given "query" region of
 interest. We provide one for calculating a weighted average score per
 query range, where the weight is proportional to the overlap widths between
